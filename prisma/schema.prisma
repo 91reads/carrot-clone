@@ -18,13 +18,13 @@ datasource db {
 model User {
   // @id = 유니크, 자동 증가
   id        Int      @id @default(autoincrement())
-  phone     Int?     @unique
+  phone     BigInt?  @unique
   email     String?  @unique
   name      String
   avatar    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  tokens     Token[]
+  tokens    Token[]
 }
 
 // 유저 모델 생성
@@ -32,7 +32,7 @@ model Token {
   // @id = 유니크, 자동 증가
   id        Int      @id @default(autoincrement())
   payload   String   @unique
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
