@@ -3,6 +3,17 @@ import { NextApiRequest, NextApiResponse } from "next";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/client/client";
 
+// nomailer 설정
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.GMAIL_ID,
+    pass: process.env.GMAIL_PWD,
+  },
+});
+
 const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN)
 
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
@@ -28,19 +39,33 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     }
   });
   if (phone) {
-    const message = await twilioClient.messages.create({
-      messagingServiceSid: process.env.TWILIO_MSID,
-      to: process.env.MY_PHONE!, // Variables that definitely exist
-      body: `Your login token is ${payload}`,
-    })
-    console.log(message);
+    // const message = await twilioClient.messages.create({
+    //   messagingServiceSid: process.env.TWILIO_MSID,
+    //   to: process.env.MY_PHONE!, // Variables that definitely exist
+    //   body: `Your login token is ${payload}`,
+    // })
+    // console.log(message);
+  } else if (email) {
+    // const sendEmail = await transporter.sendMail({
+    //   from: `ABC <priscolatrans@gmail.com>`,
+    //   to: email,
+    //   subject: 'token',
+    //   text: `your login token is ${payload}`,
+    //   html: `
+    //     <div style="text-align: center;">
+    //       <h3 style="color: #FA5882>ABC</h3>
+    //       <br />
+    //       <p>your login token is ${payload}</p>
+    //     </div>
+    //   `
+    // })
+    // .then((res: any) => console.log(res))
+    // .catch((e: any) => console.log(e))
   }
-  return res.json({
-    ok: true,
-  })
-  console.log(token)
+  return res.json({ ok: true })
 }
 
+// Method 를 확인하는 함수 (일종의 미들웨어)
 export default withHandler("POST", handler);
 
 // 1. 폰 번호 전송
