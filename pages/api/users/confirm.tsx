@@ -1,17 +1,28 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/client/client";
+import { withApiSession } from '@libs/server/withSession';
 
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
+
   const { token } = req.body;
-  console.log(token);
-  res.status(200).end();
+  const foundToken = await client.token.findUnique({
+    where: {
+      payload: token,
+    },
+    // include: { user: true }
+  });
+  if (!foundToken) return res.status(404).end();
+  req.session.user = {
+    id: foundToken.userId
+  }
+  await req.session.save();
+  await client.token.deleteMany({
+    where: {
+      userId: foundToken.userId
+    }
+  })
+  res.json({ ok: true })
 }
 
-// Method 를 확인하는 함수 (일종의 미들웨어)
-export default withHandler("POST", handler);
-
-// 1. 폰 번호 전송
-// 2. 유저 확인
-// 3. 없다면 회원가입 있다면 DB 정보를 가져온다
-// 4. 유저 토큰을 받아온다.
+export default withApiSession(withHandler({ method: "POST", handler, isPrivate: false }))
