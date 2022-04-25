@@ -66,7 +66,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
 }
 
 // Method 를 확인하는 함수 (일종의 미들웨어)
-export default withHandler("POST", handler);
+export default withHandler({ method: "POST", handler, isPrivate: false });
 
 // 1. 폰 번호 전송
 // 2. 유저 확인
