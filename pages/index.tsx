@@ -2,23 +2,37 @@ import type { NextPage } from "next";
 import FloatingButton from "@components/FloattingButton";
 import Item from "@components/Item";
 import Layout from "@components/Layout";
-import useUser from '@libs/client/useUser'
+import useUser from '@libs/client/useUser';
+import useSWR from 'swr';
+import { Product } from "@prisma/client";
+interface ProductWithCount extends Product {
+  _count: {
+    Fav: number;
+  }
+}
+interface ProductResponse {
+  ok: boolean;
+  products: ProductWithCount[];
+}
 
 const Home: NextPage = () => {
   const { user, isLoading } = useUser();
+  const { data } = useSWR<ProductResponse>('/api/products');
+  console.log(data);
+
   if(isLoading) return <div>...loading</div>
   console.log(user);
   return (
     <Layout title="홈" hasTabBar>
       <div className="flex flex-col space-y-5 divide-y">
-        {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, i) => (
+        {data?.products.map((product) => (
           <Item
-            id={i}
-            key={i}
-            title="iPhone 14"
-            price={99}
+            id={product.id}
+            key={product.id}
+            title={product.name}
+            price={product.price}
             comments={1}
-            hearts={1}
+            hearts={product._count.Fav}
           />
         ))}
         <FloatingButton href="/products/upload">
