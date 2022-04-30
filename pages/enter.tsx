@@ -1,10 +1,11 @@
 import type { NextPage } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "@components/Button";
 import Input from "@components/Input";
 import { cls } from "@libs/server/utils";
 import { useForm } from 'react-hook-form';
 import useMutation from "@libs/client/useMutation";
+import { useRouter } from "next/router";
 
 interface EnterForm {
   email?: string;
@@ -39,6 +40,13 @@ const Enter: NextPage = () => {
     if(tokenLoading) return;
     confirmToken(data);
   };
+
+  const router = useRouter();
+  useEffect(() => {
+    if(tokenData?.ok) {
+      router.push('/')
+    }
+  }, [tokenData, router])
 
   return (
     <div className="mt-16 px-4">
