@@ -5,7 +5,6 @@ import { withApiSession } from '@libs/server/withSession';
 
 // 디테일 페이지 데이터 주는 API 
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
-  console.log(req.query);
   const {
     query: { id },
     session: { user }
@@ -44,7 +43,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
   });
 
   const isLiked = Boolean(
-    await client.fav.findFirst({
+    await client.favs.findFirst({
       where: {
         productId: product?.id,
         userId: user?.id
