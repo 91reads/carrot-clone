@@ -17,16 +17,19 @@ datasource db {
 // 유저 모델 생성
 model User {
   // @id = 유니크, 자동 증가
-  id        Int       @id @default(autoincrement())
-  phone     String?   @unique
-  email     String?   @unique
-  name      String
-  avatar    String?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  tokens    Token[]
-  products  Product[]
-  Fav       Fav[]
+  id         Int         @id @default(autoincrement())
+  phone      String?     @unique
+  email      String?     @unique
+  name       String
+  avatar     String?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  tokens     Token[]
+  products   Product[]
+  favs       favs[]
+  posts      Post[]
+  answers    Answer[]
+  wonderings Wondering[]
 }
 
 // 유저 모델 생성
@@ -51,11 +54,11 @@ model Product {
   name        String
   price       Int
   description String   @db.MediumText
-  Fav         Fav[]
+  favs        favs[]
 }
 
 // 관계 설정을 해줘 user, product 에서 접근이 가능하다.
-model Fav {
+model favs {
   id        Int      @id @default(autoincrement())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
@@ -63,4 +66,41 @@ model Fav {
   productId Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+// 동네 생활
+model Post {
+  id        Int         @id @default(autoincrement())
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  question  String      @db.MediumText
+  longitude Float?
+  latitude  Float?
+  answers   Answer[]
+  wondering Wondering[]
+}
+
+model Answer {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    Int
+  answer    String   @db.MediumText
+}
+
+// 궁금해요
+model Wondering {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    Int
+
 }
