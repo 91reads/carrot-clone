@@ -1,24 +1,24 @@
-import twilio from 'twilio';
+// import twilio from 'twilio';
 import { NextApiRequest, NextApiResponse } from "next";
 import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/client/client";
 
 // nomailer 설정
-const nodemailer = require('nodemailer');
+// const nodemailer = require('nodemailer');
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.GMAIL_ID,
-    pass: process.env.GMAIL_PWD,
-  },
-});
+// const transporter = nodemailer.createTransport({
+//   service: "gmail",
+//   auth: {
+//     user: process.env.GMAIL_ID,
+//     pass: process.env.GMAIL_PWD,
+//   },
+// });
 
-const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN)
+// const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_TOKEN)
 
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
   const { phone, email } = req.body;
-  const user = phone ? { phone: +phone } : email ? { email } : null;
+  const user = phone ? { phone } : email ? { email } : null;
   if (!user) return res.status(400).json({ ok: false })
 
   const payload = Math.floor(100000 + Math.random() * 900000) + '';
@@ -28,11 +28,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       user: {
         connectOrCreate: {
           where: {
-            ...user
+            ...user,
           },
           create: {
             name: 'anonymous',
-            ...user
+            ...user,
           },
         }
       }
