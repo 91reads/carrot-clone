@@ -126,7 +126,7 @@ export default function Layout({
               <span>채팅</span>
             </a>
           </Link>
-          <Link href="/streams">
+          {/* <Link href="/streams">
             <a
               className={cls(
                 "flex flex-col items-center space-y-2 ",
@@ -151,7 +151,7 @@ export default function Layout({
               </svg>
               <span>라이브</span>
             </a>
-          </Link>
+          </Link> */}
           <Link href="/profile">
             <a
               className={cls(
