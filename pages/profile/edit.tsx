@@ -2,6 +2,7 @@ import type { NextPage } from "next";
 import useUser from "@libs/client/useUser";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
+import Image from 'next/image';
 import Layout from "@components/Layout";
 import Input from "@components/Input";
 import Button from "@components/Button";
@@ -90,7 +91,7 @@ const EditProfile: NextPage = () => {
       <form onSubmit={handleSubmit(onValid)} className="py-10 px-4 space-y-4">
         <div className="flex items-center space-x-3">
           {avatar_priveiw
-            ? <img src={`https://imagedelivery.net/PvvqDlv-2VYHUsYbyy-DlQ/${avatar_priveiw}/avatar`} className="w-14 h-14 rounded-full bg-slate-500" alt="" />
+            ? <Image src={`https://imagedelivery.net/PvvqDlv-2VYHUsYbyy-DlQ/${avatar_priveiw}/avatar`} className="w-14 h-14 rounded-full bg-slate-500" alt="" layout="fill"/>
             : <div className="w-14 h-14 rounded-full bg-slate-500" />
           }
           <label

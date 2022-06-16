@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import Image from "next/image";
 import Button from "@components/Button";
 import Input from "@components/Input";
 import Layout from "@components/Layout";
@@ -50,10 +51,10 @@ const Upload: NextPage = () => {
   }, [data, router])
 
   const photo = watch("photo");
-  const [photo_priview, set_photo_priview] = useState('');
+  const [photo_priview, set_photo_priview] = useState("");
   useEffect(() => {
     if (photo && photo.length > 0) {
-      const file = photo[0];
+      const file = photo[0] as any;
       set_photo_priview(URL.createObjectURL(file))
     }
   }, [photo]);
@@ -64,7 +65,7 @@ const Upload: NextPage = () => {
         <div>
           {
             photo_priview
-              ? (<img src={photo_priview} className="w-full text-gray-600  h-46 rounded-md"></img>)
+              ? (<Image src={photo_priview} className="w-full text-gray-600  h-46 rounded-md" alt="" layout="fill" />)
               : (<label className="w-full cursor-pointer text-gray-600 hover:border-orange-500 hover:text-orange-500 flex items-center justify-center border-2 border-dashed border-gray-300 h-48 rounded-md">
                 <svg
                   className="h-12 w-12"

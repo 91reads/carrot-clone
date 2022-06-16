@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import Image from 'next/image';
 import Link from "next/link";
 import Layout from "@components/Layout";
 import useUser from "@libs/client/useUser";
@@ -22,7 +23,7 @@ const Profile: NextPage = () => {
       <div className="px-4">
         <div className="flex items-center mt-4 space-x-3">
           { user?.avatar 
-            ? <img src={`https://imagedelivery.net/PvvqDlv-2VYHUsYbyy-DlQ/${user?.avatar}/avatar`} className="w-16 h-16 bg-slate-500 rounded-full" />
+            ? <Image src={`https://imagedelivery.net/PvvqDlv-2VYHUsYbyy-DlQ/${user?.avatar}/avatar`} className="w-16 h-16 bg-slate-500 rounded-full" alt="" layout="fill" />
             : <div className="w-16 h-16 bg-slate-500 rounded-full" />
           }
           <div className="flex flex-col">
