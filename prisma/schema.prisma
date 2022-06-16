@@ -49,8 +49,9 @@ model Token {
   updatedAt DateTime @updatedAt
   payload   String   @unique
   userId    Int
-  // token 생성시 User 의 userId 가 있어야 한다.
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 // Home
@@ -68,6 +69,8 @@ model Product {
   sales       Sale[]
   purchases   Purchase[]
   records     Record[]
+
+  @@index([userId])
 }
 
 // 동네 생활
@@ -82,6 +85,8 @@ model Post {
   user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   answers   Answer[]
   wondering Wondering[]
+
+  @@index([userId])
 }
 
 model Answer {
@@ -93,6 +98,9 @@ model Answer {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   postId    Int
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([postId])
 }
 
 // 궁금해요
@@ -104,6 +112,9 @@ model Wondering {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   postId    Int
   post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([postId])
 }
 
 // 리뷰
@@ -117,6 +128,9 @@ model Review {
   createdForId Int
   createdFor   User     @relation(name: "receivedReviews", fields: [createdForId], references: [id], onDelete: Cascade)
   score        Int      @default(5)
+
+  @@index([createdById])
+  @@index([createdForId])
 }
 
 // 관계 설정을 해줘 user, product 에서 접근이 가능하다.
@@ -128,6 +142,9 @@ model favs {
   productId Int
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([productId])
 }
 
 model Sale {
@@ -138,6 +155,9 @@ model Sale {
   productId Int
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([productId])
 }
 
 model Purchase {
@@ -148,6 +168,9 @@ model Purchase {
   productId Int
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([productId])
 }
 
 model Record {
@@ -159,6 +182,10 @@ model Record {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   kind      Kind
+
+
+  @@index([userId])
+  @@index([productId])
 }
 
 enum Kind {
@@ -177,6 +204,8 @@ model Stream {
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      Int
   messages    Message[]
+
+  @@index([userId])
 }
 
 model Message {
@@ -188,4 +217,7 @@ model Message {
   message   String   @db.MediumText
   stream    Stream   @relation(fields: [streamId], references: [id], onDelete: Cascade)
   streamId  Int
+
+  @@index([userId])
+  @@index([streamId])
 }
