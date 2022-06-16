@@ -11,3 +11,9 @@
 //   }
 //   //  return NextResponse.json({ ok: true });
 // }
+
+const test = () => {
+  return <div>test</div>
+}
+
+export default test;
