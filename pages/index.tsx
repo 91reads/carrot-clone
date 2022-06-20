@@ -1,32 +1,25 @@
-import type { NextPage } from "next";
 import FloatingButton from "@components/FloattingButton";
 import Item from "@components/Item";
 import Layout from "@components/Layout";
-import useUser from '@libs/client/useUser';
-import useSWR from 'swr';
+import useSWRImmutable from 'swr/immutable';
 import { Product } from "@prisma/client";
 
-import client from '@libs/server/client';
+import { getProductList } from "@libs/front-api/product";
 export interface ProductWithCount extends Product {
   _count: {
     favs: number;
   }
 }
-interface ProductResponse {
-  ok: boolean;
-  products: ProductWithCount[];
-}
+const Home = () => {
+  const product_data = useSWRImmutable<Array<ProductWithCount>>('/api/products', getProductList);
 
-const Home: NextPage<{ products: ProductWithCount[] }> = ({ products }) => {
-  const { user, isLoading } = useUser();
-  const { data } = useSWR<ProductResponse>('/api/products');
+  if (product_data.error) return <div>error</div>;
+  if (!product_data.data) return <div>...loading</div>;
 
-  if (isLoading) return <div>...loading</div>
-  
   return (
     <Layout title="홈" hasTabBar>
       <div className="flex flex-col space-y-5 divide-y">
-        {data?.products?.map((product) => (
+        {product_data?.data?.map((product) => (
           <Item
             id={product.id}
             key={product.id}

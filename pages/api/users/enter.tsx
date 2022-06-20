@@ -62,7 +62,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     // .then((res: any) => console.log(res))
     // .catch((e: any) => console.log(e))
   }
-  return res.json({ ok: true })
+  return res.json({ ok: true, data: token, })
 }
 
 // Method 를 확인하는 함수 (일종의 미들웨어)

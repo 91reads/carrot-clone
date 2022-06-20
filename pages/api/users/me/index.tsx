@@ -12,7 +12,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       }
     })
 
-    res.json({ ok: true, profile })
+    res.json({ ok: true, data: profile })
   }
 
   if (req.method === "POST") {

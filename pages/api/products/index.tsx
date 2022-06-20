@@ -3,8 +3,10 @@ import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/client/client";
 import { withApiSession } from '@libs/server/withSession';
 
-// 상품 업로드 mutation
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
+  console.log('REQ', req.method);
+
+  // 상품 목록 가져오기
   if (req.method === 'GET') {
     const products = await client.product.findMany({
       include: {
@@ -17,9 +19,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     });
     res.json({
       ok: true,
-      products
+      data: products,
     })
   }
+
+  // 상품 등록
   if (req.method === 'POST') {
     const {
       body: { name, price, description, photoId },

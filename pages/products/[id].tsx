@@ -2,19 +2,22 @@ import type { NextPage } from "next";
 import Button from "@components/Button";
 import Layout from "@components/Layout";
 import { useRouter } from "next/router";
-import useSWR, { useSWRConfig } from "swr";
+import { mutate } from "swr";
 import Link from "next/link";
 import { Product, User } from "@prisma/client";
 import useMutation from "@libs/client/useMutation";
 import { cls } from "@libs/server/utils";
 import useUser from "@libs/client/useUser";
 import Image from "next/image";
+import useSWRImmutable from 'swr/immutable';
+import { getProductDetail } from "@libs/front-api/product";
+import { updateFavorite } from "@libs/front-api/favorite";
+import { useState } from "react";
 
 interface ProductWithuser extends Product {
   user: User;
 }
 interface ItemDetailResponse {
-  ok: boolean;
   product: ProductWithuser;
   relatedProducts: Product[];
   isLiked: boolean;
@@ -22,44 +25,50 @@ interface ItemDetailResponse {
 
 const ItemDetail: NextPage = () => {
   const router = useRouter();
-  const { user, isLoading } = useUser();
-  // useSWR Optional Query
-  const { mutate } = useSWRConfig();
-  const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(router.query.id ? `/api/products/${router.query.id}` : null);
-  const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`);
-  const onFavClick = () => {
-    toggleFav({});
-    if(!data) return;
-    boundMutate((prev) => prev && { ...data, isLiked: !data?.isLiked }, false);
-    // mutate({ ...data, isLiked: !data?.isLiked }, false);
-    // mutate('/api/users/me', (prev:any) => ({ ok: !prev.ok }), false)
-  }
+  const product_detail = useSWRImmutable<ItemDetailResponse>(`/api/products/${router.query.id}`, () => getProductDetail(router.query.id as string));
+  const [toggle_fav, set_toggle_fav] = useState(product_detail.data ? product_detail.data.isLiked : false);
 
-  if (!data) return <div>...loading</div>;
+  if (product_detail.error) return <div>...error</div>
+  if (!product_detail.data) return <div>...loading</div>
+
+  console.log(product_detail.data)
+
+  const onFavClick = () => {
+    // toggleFav({});
+    updateFavorite(router.query.id as string)
+      .then(() => {
+        set_toggle_fav(!toggle_fav);
+        mutate(`/api/products/${router.query.id}/fav`);
+      })
+      .catch((e) => {
+        console.error(e);
+        alert('Failed to Favorite');
+      })
+  }
 
   return (
     <Layout canGoBack>
       <div className="px-4  py-4">
         <div className="mb-8">
           <div className="relative pb-80">
-            <Image 
-              src={`https://imagedelivery.net/PvvqDlv-2VYHUsYbyy-DlQ/${data?.product?.image}/public`} 
-              className="h-96 bg-slate-300 object-fit" 
-              alt=""  
+            <Image
+              src={`https://imagedelivery.net/PvvqDlv-2VYHUsYbyy-DlQ/${product_detail.data?.product?.image}/public`}
+              className="h-96 bg-slate-300 object-fit"
+              alt=""
               layout="fill"
-              />
+            />
           </div>
           <div className="flex cursor-pointer py-3 border-t border-b items-center space-x-3">
-            <Image 
-              src={`https://imagedelivery.net/PvvqDlv-2VYHUsYbyy-DlQ/${data?.product?.user?.avatar}/avatar`} 
-              className="w-12 h-12 rounded-full bg-slate-300" 
+            <Image
+              src={`https://imagedelivery.net/PvvqDlv-2VYHUsYbyy-DlQ/${product_detail.data?.product?.user?.avatar}/avatar`}
+              className="w-12 h-12 rounded-full bg-slate-300"
               alt=""
               width={48}
               height={48}
             />
             <div>
-              <p className="text-sm font-medium text-gray-700">{data.product.user.name}</p>
-              <Link passHref href={`/users/profiles/${data.product.user.id}`}>
+              <p className="text-sm font-medium text-gray-700">{product_detail.data.product.user.name}</p>
+              <Link passHref href={`/users/profiles/${product_detail.data.product.user.id}`}>
                 <p className="text-xs font-medium text-gray-500">
                   View profile &rarr;
                 </p>
@@ -67,10 +76,10 @@ const ItemDetail: NextPage = () => {
             </div>
           </div>
           <div className="mt-5">
-            <h1 className="text-3xl font-bold text-gray-900">{data.product.name}</h1>
-            <span className="text-2xl block mt-3 text-gray-900">${data.product.price}</span>
+            <h1 className="text-3xl font-bold text-gray-900">{product_detail.data.product.name}</h1>
+            <span className="text-2xl block mt-3 text-gray-900">${product_detail.data.product.price}</span>
             <p className=" my-6 text-gray-700">
-              {data.product.description}
+              {product_detail.data.product.description}
             </p>
             <div className="flex items-center justify-between space-x-2">
               <Button large text="Talk to seller" />
@@ -78,13 +87,13 @@ const ItemDetail: NextPage = () => {
                 onClick={onFavClick}
                 className={cls(
                   "p-3 rounded-md flex items-center justify-center",
-                  data.isLiked ? "text-red-500 hover:text-red-600" : "text-gray-400 hover:text-gray-500"
+                  toggle_fav ? "text-red-500 hover:text-red-600" : "text-gray-400 hover:text-gray-500"
                 )}>
-                {data.isLiked
+                {toggle_fav
                   ? (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-                  </svg>) 
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                    </svg>)
                   : (
                     <svg
                       className="h-6 w-6 "
@@ -109,7 +118,7 @@ const ItemDetail: NextPage = () => {
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Similar items</h2>
           <div className=" mt-6 grid grid-cols-2 gap-4">
-            {data.relatedProducts.map((product) => (
+            {product_detail.data.relatedProducts.map((product) => (
               <Link key={product.id} passHref href={`/products/${product.id}`}>
                 <div>
                   <div className="h-56 w-full mb-4 bg-slate-300" />
