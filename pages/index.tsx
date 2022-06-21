@@ -1,17 +1,20 @@
+import useSWRImmutable from 'swr/immutable';
+// prisma
+import { Product } from "@prisma/client";
+// components
 import FloatingButton from "@components/FloattingButton";
 import Item from "@components/Item";
 import Layout from "@components/Layout";
-import useSWRImmutable from 'swr/immutable';
-import { Product } from "@prisma/client";
-
+// api
 import { getProductList } from "@libs/front-api/product";
+import useSWR from 'swr';
 export interface ProductWithCount extends Product {
   _count: {
     favs: number;
   }
 }
 const Home = () => {
-  const product_data = useSWRImmutable<Array<ProductWithCount>>('/api/products', getProductList);
+  const product_data = useSWR<Array<ProductWithCount>>('/api/products', getProductList);
 
   if (product_data.error) return <div>error</div>;
   if (!product_data.data) return <div>...loading</div>;

@@ -1,14 +1,17 @@
+import { useEffect, useState } from "react";
 import type { NextPage } from "next";
 import Image from "next/image";
+import { useForm } from "react-hook-form";
+// components
 import Button from "@components/Button";
 import Input from "@components/Input";
 import Layout from "@components/Layout";
 import TextArea from "@components/Textarea";
-import { useForm } from "react-hook-form";
-import useMutation from "@libs/client/useMutation";
-import { useEffect, useState } from "react";
-import { Product } from "@prisma/client";
+// lib
 import { useRouter } from "next/router";
+import { getCFToken } from "@libs/front-api/cloudflare";
+import { createProduct } from "@libs/front-api/product";
+import { useSWRConfig } from "swr";
 
 interface UploadProductForm {
   name: string;
@@ -17,38 +20,41 @@ interface UploadProductForm {
   photo: string;
 }
 
-interface UploadProductMutation {
-  ok: boolean;
-  product: Product;
-}
-
 const Upload: NextPage = () => {
   const router = useRouter();
   const { register, handleSubmit, watch } = useForm<UploadProductForm>();
-  const [uploadProduct, { loading, data }] = useMutation<UploadProductMutation>("/api/products");
+  const { mutate } = useSWRConfig();
 
   const onVaild = async ({ name, price, description }: UploadProductForm) => {
-    if (loading) return;
     if (photo && photo.length > 0) {
-      const { uploadURL } = await (await fetch(`/api/files`)).json();
+      const { uploadURL } = await (getCFToken());
       const form = new FormData();
       form.append("file", photo[0], name);
+
       const { result: { id } } = await (await fetch(uploadURL, {
         method: "POST",
         body: form,
       })).json();
 
-      uploadProduct({ name, price, description, photoId: id });
-    } else {
-      uploadProduct({ name, price, description });
+      createProduct({ name, price, description, photoId: id })
+        .then(() => {
+          mutate(`/api/products`);
+          router.push(`/`)
+        })
+        .catch((e) => {
+          console.error(e);
+        })
+      } else {
+        createProduct({ name, price, description })
+        .then(() => {
+          router.push(`/`)
+          mutate(`/api/products`);
+      })
+      .catch((e) => {
+        console.error(e);
+      });
     }
   }
-
-  useEffect(() => {
-    if (data?.ok) {
-      router.push(`/products/${data.product.id}`);
-    }
-  }, [data, router])
 
   const photo = watch("photo");
   const [photo_priview, set_photo_priview] = useState("");
@@ -65,7 +71,7 @@ const Upload: NextPage = () => {
         <div>
           {
             photo_priview
-              ? (<Image src={photo_priview} className="w-full text-gray-600  h-46 rounded-md" alt="" layout="fill" />)
+              ? (<Image src={photo_priview} className="w-full text-gray-600  h-46 rounded-md" alt="" width={100} height={100} />)
               : (<label className="w-full cursor-pointer text-gray-600 hover:border-orange-500 hover:text-orange-500 flex items-center justify-center border-2 border-dashed border-gray-300 h-48 rounded-md">
                 <svg
                   className="h-12 w-12"
@@ -98,7 +104,7 @@ const Upload: NextPage = () => {
           kind="price"
         />
         <TextArea register={register("description", { required: true })} required name="description" label="Description" />
-        <Button text={loading ? 'loading...' : 'Upload Item'} />
+        <Button text={'Upload Item'} />
       </form>
     </Layout>
   );

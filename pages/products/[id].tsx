@@ -1,18 +1,20 @@
+import React, { useEffect, useState } from 'react';
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
+import { useSWRConfig } from "swr";
+import useSWRImmutable from 'swr/immutable';
+import Link from "next/link";
+import Image from "next/image";
+// prisma
+import { Product, User } from "@prisma/client";
+// components
 import Button from "@components/Button";
 import Layout from "@components/Layout";
-import { useRouter } from "next/router";
-import { mutate } from "swr";
-import Link from "next/link";
-import { Product, User } from "@prisma/client";
-import useMutation from "@libs/client/useMutation";
-import { cls } from "@libs/server/utils";
-import useUser from "@libs/client/useUser";
-import Image from "next/image";
-import useSWRImmutable from 'swr/immutable';
+// api
 import { getProductDetail } from "@libs/front-api/product";
 import { updateFavorite } from "@libs/front-api/favorite";
-import { useState } from "react";
+// lib
+import { cls } from "@libs/server/utils";
 
 interface ProductWithuser extends Product {
   user: User;
@@ -26,19 +28,24 @@ interface ItemDetailResponse {
 const ItemDetail: NextPage = () => {
   const router = useRouter();
   const product_detail = useSWRImmutable<ItemDetailResponse>(`/api/products/${router.query.id}`, () => getProductDetail(router.query.id as string));
+  const { mutate } = useSWRConfig();
   const [toggle_fav, set_toggle_fav] = useState(product_detail.data ? product_detail.data.isLiked : false);
 
+  useEffect(() => {
+    if(!product_detail.data) return;
+
+    set_toggle_fav(product_detail.data.isLiked);
+  }, [product_detail.data])
+  
   if (product_detail.error) return <div>...error</div>
   if (!product_detail.data) return <div>...loading</div>
 
-  console.log(product_detail.data)
 
   const onFavClick = () => {
-    // toggleFav({});
     updateFavorite(router.query.id as string)
       .then(() => {
         set_toggle_fav(!toggle_fav);
-        mutate(`/api/products/${router.query.id}/fav`);
+        mutate(`/api/products`);
       })
       .catch((e) => {
         console.error(e);
