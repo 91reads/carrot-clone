@@ -1,3 +1,5 @@
+import Router from "next/router";
+
 interface HeaderParams {
   "Content-Type": string;
   Authorization: string;
@@ -11,6 +13,11 @@ interface APIParams {
 
 export const callAPI = async ({ uri, headers, method, body }: APIParams) => {
   console.log("callAPI:", uri, method, body);
+
+  const login_check = sessionStorage.getItem('userId')
+  if(!login_check) {
+    Router.push('/enter')
+  }
   
   const fetch_result = await fetch(uri, {
     headers: { "Content-Type": "application/json; charset=UTF-8" },
