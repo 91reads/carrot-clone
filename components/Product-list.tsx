@@ -1,3 +1,4 @@
+import { getUserHistory } from "@libs/front-api/user";
 import { ProductWithCount } from "pages";
 import useSWR from "swr"
 import Item from "./Item";
@@ -10,22 +11,23 @@ interface Record {
   id: number;
   product: ProductWithCount;
 }
-interface ProductListResponse {
-  [key: string]: Record[];
-}
-
 
 export default function ProductList({ kind }: ProductListProps) {
-  const { data } = useSWR<ProductListResponse>(`/api/users/me/${kind}`)
+  const history_data = useSWR(kind && `/api/users/me/${kind}`, kind ? () => getUserHistory(kind) : null)
 
-  return data ? <>{data[kind]?.map((record) => (
-    <Item
-      id={record.product.id}
-      key={record.id}
-      title={record.product.name}
-      price={record.product.price}
-      comments={1}
-      hearts={record.product._count.favs}
-    />
-  ))} </> : null;
+  if(history_data.error) return <div>...에러</div>;
+  if(!history_data.data) return <div>...로딩중</div>;
+
+  return (
+    <>{history_data.data?.map((record: any) => (
+      <Item
+        id={record.product.id}
+        key={record.id}
+        title={record.product.name}
+        price={record.product.price}
+        comments={1}
+        hearts={record.product._count.favs}
+      />
+    ))}</>
+  )
 };
