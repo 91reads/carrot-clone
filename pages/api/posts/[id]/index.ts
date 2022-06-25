@@ -12,7 +12,6 @@ async function handler(
     session: { user }
   } = req;
 
-
   const post = await client.post.findUnique({
     where: {
       id: +id.toString(),
@@ -59,7 +58,11 @@ async function handler(
     })
   )
 
-  res.json({ ok: true, post, isWondering });
+  res.json({ 
+    ok: true, 
+    data: {
+      post, isWondering 
+    }});
 }
 
 export default withApiSession(

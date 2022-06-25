@@ -10,7 +10,7 @@ async function handler(
   const {
     query: { id },
     session: { user },
-    body: { answer }
+    body
   } = req;
 
   const newAnswer = await client.answer.create({
@@ -25,13 +25,16 @@ async function handler(
           id: +id.toString(),
         },
       },
-      answer,
+      answer: body,
     }
   });
 
   console.log(newAnswer)
 
-  res.json({ ok: true, answer: newAnswer });
+  res.json({ 
+    ok: true, 
+    answer: newAnswer 
+  });
 }
 
 export default withApiSession(
