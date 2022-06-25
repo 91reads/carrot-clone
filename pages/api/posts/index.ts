@@ -3,10 +3,7 @@ import withHandler, { ResponseType } from "@libs/server/withHandler";
 import client from "@libs/client/client";
 import { withApiSession } from "@libs/server/withSession";
 
-async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<ResponseType>
-) {
+async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
   if (req.method === "POST") {
     const {
       body: { question, latitude, longitude },
@@ -24,18 +21,18 @@ async function handler(
     });
     res.json({
       ok: true,
-      post,
+      data: post,
     });
   }
 
   if (req.method === "GET") {
-    const {
-      query: { latitude, longitude },
-    } = req;
+    // const {
+    //   query: { latitude, longitude },
+    // } = req;
 
-    const parsedLatitude = parseFloat(latitude.toString());
-    const parsedLongitude = parseFloat(longitude.toString());
-    
+    // const parsedLatitude = parseFloat(latitude.toString());
+    // const parsedLongitude = parseFloat(longitude.toString());
+
     const posts = await client.post.findMany({
       include: {
         user: {
@@ -52,20 +49,20 @@ async function handler(
           },
         },
       },
-      where: {
-        latitude: {
-          gte: parsedLatitude - 0.01,
-          lte: parsedLatitude + 0.01
-        },
-        longitude: {
-          gte: parsedLongitude - 0.01,
-          lte: parsedLongitude + 0.01,
-        }
-      }
+      // where: {
+      //   latitude: {
+      //     gte: parsedLatitude - 0.01,
+      //     lte: parsedLatitude + 0.01
+      //   },
+      //   longitude: {
+      //     gte: parsedLongitude - 0.01,
+      //     lte: parsedLongitude + 0.01,
+      //   }
+      // }
     });
     res.json({
       ok: true,
-      posts,
+      data: posts,
     });
   }
 }
