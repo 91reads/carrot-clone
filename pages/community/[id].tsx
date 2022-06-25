@@ -8,10 +8,6 @@ import { cls } from "@libs/server/utils";
 import { useForm } from "react-hook-form";
 import { AnswerStructureType, createAnswer, getPostDetail, updateWonder } from "@libs/front-api/community";
 
-interface AnswerWithUser extends Answer {
-  user: User;
-}
-
 interface AnswerForm {
   answer: string;
 }
