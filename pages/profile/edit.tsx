@@ -1,28 +1,23 @@
 import type { NextPage } from "next";
-import useUser from "@libs/client/useUser";
 import { useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import Image from 'next/image';
 import Layout from "@components/Layout";
 import Input from "@components/Input";
 import Button from "@components/Button";
-import useMutation from "@libs/client/useMutation";
+import { getUserDetail, updateUser } from "@libs/front-api/user";
+import useSWR from "swr";
 
 interface EditProfileForm {
-  email?: string;
+  name: string;
+  email: string;
   phone?: string;
-  name?: string;
   avatar?: FileList;
   formErrors?: string;
 }
 
-interface EditProfileResponse {
-  ok: boolean;
-  error?: string;
-}
-
 const EditProfile: NextPage = () => {
-  const { user } = useUser();
+  const user_data = useSWR('/api/users/me', getUserDetail);
   const {
     register,
     setValue,
@@ -31,18 +26,31 @@ const EditProfile: NextPage = () => {
     watch,
     formState: { errors }
   } = useForm<EditProfileForm>();
+  const avatar = watch("avatar");
+  const [avatar_priveiw, set_avatar_priview] = useState("");
 
   useEffect(() => {
-    if (user?.name) setValue("name", user.name);
-    if (user?.email) setValue("email", user.email);
-    if (user?.phone) setValue("phone", user.phone);
-    if (user?.avatar) set_avatar_priview(user.avatar);
-  }, [user, setValue]);
+    if (!user_data.data) return;
+    setValue("name", user_data.data.name);
+    setValue("email", user_data.data.email);
+    setValue("phone", user_data.data.phone);
+    set_avatar_priview(user_data.data.avatar);
+  }, [setValue, user_data.data]);
 
-  const [editProfile, { data, loading }] = useMutation<EditProfileResponse>(`/api/users/me`);
+  useEffect(() => {
+    if (avatar && avatar.length > 0) {
+      const file = avatar[0];
+      set_avatar_priview(URL.createObjectURL(file));
+    }
+  }, [avatar])
 
-  const onValid = async ({ email, phone, name, avatar }: EditProfileForm) => {
-    if (loading) return;
+  if (user_data.error) return <div>...에러</div>
+  if (!user_data.data) return <div>...로딩중</div>
+
+
+  // const [editProfile, { data, loading }] = useMutation<EditProfileResponse>(`/api/users/me`);
+
+  const onUpdateUser = async ({ email, phone, name, avatar }: EditProfileForm) => {
     if (email === "" && phone === "" && name === "") {
       return setError("formErrors", {
         message: "Email OR Phone number are required. You need to choose one.",
@@ -53,45 +61,35 @@ const EditProfile: NextPage = () => {
       const { uploadURL } = await (await fetch(`/api/files`)).json()
 
       const form = new FormData();
-      form.append("file", avatar[0], user?.id + "")
+      form.append("file", avatar[0], user_data.data?.id + "")
       const { result: { id } } = await (await fetch(uploadURL, {
         method: 'POST',
         body: form,
       })).json();
-      editProfile({
+
+      updateUser({
+        name,
         email,
         phone,
-        name,
         avatarId: id,
-      });
+      })
+        .then(() => {
+          alert('Profile Update Success');
+        }).catch(() => {
+          alert('Profile Update Failure, Retry Update Please')
+        })
     } else {
-      editProfile({ email, phone, name });
+      updateUser({ email, phone, name });
     }
 
   };
 
-  useEffect(() => {
-    if (data && !data.ok) {
-      setError("formErrors", { message: data.error });
-    }
-  }, [data, setError])
-
-  const avatar = watch("avatar");
-  const [avatar_priveiw, set_avatar_priview] = useState("");
-
-  useEffect(() => {
-    if (avatar && avatar.length > 0) {
-      const file = avatar[0];
-      set_avatar_priview(URL.createObjectURL(file));
-    }
-  }, [avatar])
-
   return (
     <Layout canGoBack title="Edit Profile">
-      <form onSubmit={handleSubmit(onValid)} className="py-10 px-4 space-y-4">
+      <form onSubmit={handleSubmit(onUpdateUser)} className="py-10 px-4 space-y-4">
         <div className="flex items-center space-x-3">
           {avatar_priveiw
-            ? <Image src={`https://imagedelivery.net/PvvqDlv-2VYHUsYbyy-DlQ/${avatar_priveiw}/avatar`} className="w-14 h-14 rounded-full bg-slate-500" alt="" layout="fill"/>
+            ? <Image src={`https://imagedelivery.net/PvvqDlv-2VYHUsYbyy-DlQ/${avatar_priveiw}/avatar`} className="w-14 h-14 rounded-full bg-slate-500" alt="" layout="fill" />
             : <div className="w-14 h-14 rounded-full bg-slate-500" />
           }
           <label
@@ -109,14 +107,14 @@ const EditProfile: NextPage = () => {
           </label>
         </div>
         <Input
-          register={register("name")}
+          register={register("name", { required: true })}
           required={false}
           label="Name"
           name="name"
           type="text"
         />
         <Input
-          register={register("email")}
+          register={register("email", { required: true })}
           required={false}
           label="Email address"
           name="email"
@@ -135,7 +133,7 @@ const EditProfile: NextPage = () => {
             {errors.formErrors.message}
           </span>
         ) : null}
-        <Button text={loading ? "Loading" : "Update profile"} />
+        <Button text={"Update profile"} />
       </form>
     </Layout>
   );

@@ -6,6 +6,8 @@ import useUser from "@libs/client/useUser";
 import useSWR from "swr";
 import { Review, User } from "@prisma/client";
 import { cls } from "@libs/server/utils";
+import { getUserDetail, getUserReview } from "@libs/front-api/user";
+import { Key, ReactChild, ReactFragment, ReactPortal } from "react";
 
 interface ReviewWithUser extends Review {
   createdBy: User;
@@ -16,18 +18,26 @@ interface ReviewsResponse {
 }
 
 const Profile: NextPage = () => {
-  const { user } = useUser();
-  const { data } = useSWR<ReviewsResponse>("/api/reviews")
+  const user_data = useSWR(`/api/users/me`, getUserDetail);
+  const user_review = useSWR('/api/reviews', getUserReview);
+
+  if(user_data.error || user_review.error) return <div>...에러</div>
+  if(!user_data.data && !user_review.data) return <div>...로딩중</div>
+
+  console.log('user_data:', user_data)
+  console.log('review_data:', user_review)
+
+
   return (
     <Layout hasTabBar title="나의 캐럿">
       <div className="px-4">
         <div className="flex items-center mt-4 space-x-3">
-          { user?.avatar 
-            ? <Image src={`https://imagedelivery.net/PvvqDlv-2VYHUsYbyy-DlQ/${user?.avatar}/avatar`} className="w-16 h-16 bg-slate-500 rounded-full" alt="" layout="fill" />
+          { user_data.data?.avatar 
+            ? <Image src={`https://imagedelivery.net/PvvqDlv-2VYHUsYbyy-DlQ/${user_data.data?.avatar}/avatar`} className="w-16 h-16 bg-slate-500 rounded-full" alt="" layout="fill" />
             : <div className="w-16 h-16 bg-slate-500 rounded-full" />
           }
           <div className="flex flex-col">
-            <span className="font-medium text-gray-900">{user?.name}</span>
+            <span className="font-medium text-gray-900">{user_data.data?.name}</span>
             <Link href="/profile/edit">
               <a className="text-sm text-gray-700">Edit profile &rarr;</a>
             </Link>
@@ -104,7 +114,7 @@ const Profile: NextPage = () => {
             </a>
           </Link>
         </div>
-{data?.reviews.map(review => 
+{user_review.data?.reviews.map((review: any) => 
         <div className="mt-12" key={review.id}>
           <div className="flex space-x-4 items-center">
             <div className="w-12 h-12 rounded-full bg-slate-500" />
