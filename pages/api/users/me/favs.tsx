@@ -26,7 +26,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     }
   });
 
-  res.json({ ok: true, favs })
+  res.json({ 
+    ok: true, 
+    data: favs 
+  })
 }
 
 
