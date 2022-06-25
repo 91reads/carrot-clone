@@ -47,9 +47,6 @@ const EditProfile: NextPage = () => {
   if (user_data.error) return <div>...에러</div>
   if (!user_data.data) return <div>...로딩중</div>
 
-
-  // const [editProfile, { data, loading }] = useMutation<EditProfileResponse>(`/api/users/me`);
-
   const onUpdateUser = async ({ email, phone, name, avatar }: EditProfileForm) => {
     if (email === "" && phone === "" && name === "") {
       return setError("formErrors", {

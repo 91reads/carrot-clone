@@ -37,7 +37,6 @@ model User {
   sales           Sale[]
   purchases       Purchase[]
   Record          Record[]
-  streams         Stream[]
   messages        Message[]
 }
 
@@ -194,20 +193,6 @@ enum Kind {
   Fav
 }
 
-model Stream {
-  id          Int       @id @default(autoincrement())
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  name        String
-  description String    @db.MediumText
-  price       Int
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId      Int
-  messages    Message[]
-
-  @@index([userId])
-}
-
 model Message {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
@@ -215,9 +200,6 @@ model Message {
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int
   message   String   @db.MediumText
-  stream    Stream   @relation(fields: [streamId], references: [id], onDelete: Cascade)
-  streamId  Int
 
   @@index([userId])
-  @@index([streamId])
 }
