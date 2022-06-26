@@ -54,7 +54,7 @@ const ItemDetail: NextPage = () => {
   }
 
   const onCreateChat = () => {
-    createChat(product_detail.data?.product.id)
+    createChat(product_detail.data?.product.id as number)
     .then(() => {
       alert('Success Create ChatRoom');
     })

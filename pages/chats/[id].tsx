@@ -8,7 +8,7 @@ import useSWR from "swr";
 const ChatDetail = () => {
   const router = useRouter();
   const { register, handleSubmit, reset } = useForm();
-  const room_message_data = useSWR(router.query.id && `/api/chats/${router.query.id}/message`, router.query.id ? () => getRoomMessage(router.query.id) : null);
+  const room_message_data = useSWR(router.query.id && `/api/chats/${router.query.id}/message`, router.query.id ? () => getRoomMessage(router.query.id as string) : null);
 
   if(room_message_data.error) return <div>에러</div>
   if(!room_message_data.data) return <div>로디중</div>
@@ -16,7 +16,7 @@ const ChatDetail = () => {
   const onCreateMessage = (data: any) => {
     if(!router.query.id || !router.query.product_id) return;
 
-    createMessage(router.query.chat_id, router.query.product_id, data.message)
+    createMessage(router.query.chat_id as string, router.query.product_id as string, data.message)
     .then(() => {
       alert('Success Sending Message');
       reset();

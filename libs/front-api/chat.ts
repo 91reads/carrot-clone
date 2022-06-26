@@ -12,7 +12,7 @@ export const getChatList = async () => {
   return result;
 }
 
-export const createChat = async (product_id: string) => {
+export const createChat = async (product_id: number) => {
   const uri = `/api/chats`;
 
   const result = await callAPI({
