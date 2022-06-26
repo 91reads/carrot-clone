@@ -1,10 +1,19 @@
-import type { NextPage } from "next";
-import { useState } from "react";
-import Button from "src/components/Button";
-import Input from "src/components/Input";
+import { useEffect, useState } from "react";
 import { useForm } from 'react-hook-form';
 import { useRouter } from "next/router";
+import Image from 'next/image';
+// components
+import Button from "src/components/Button";
+// api
 import { requestOTP, verifyOTP } from "src/api/auth";
+// assets
+import Logo from 'public/logo.png';
+// styles
+import {
+  EnterContainer,
+  EnterTitle,
+  CustomInput,
+} from 'assets/pages/enter/styles';
 
 interface EnterForm {
   email: string;
@@ -13,16 +22,32 @@ interface TokenForm {
   token: string;
 }
 
-const Enter: NextPage = () => {
+
+const Enter = () => {
   const router = useRouter();
 
-  const { register, handleSubmit } = useForm<EnterForm>();
+  const { register, handleSubmit, watch } = useForm<EnterForm>();
   const { register: tokenRegister, handleSubmit: tokenHandleSubmit, setValue } = useForm<TokenForm>();
 
   const [token_valid, set_token_vaild] = useState(false);
+  const [active_color, set_active_color] = useState(false);
+
+  const watch_email = watch("email");
+
+  useEffect(() => {
+    if(!watch_email) return;
+
+    if(watch_email.includes('com')) {
+      set_active_color(true);
+    } else {
+      set_active_color(false)
+    }
+  }, [watch_email])
 
   // 로그인 이메일 작성
   const onValid = (data: EnterForm) => {
+    if(token_valid || !active_color) return;
+
     requestOTP(data)
       .then((data) => {
         set_token_vaild(true);
@@ -49,37 +74,28 @@ const Enter: NextPage = () => {
   };
 
   return (
-    <div className="mt-16 px-4">
-      <h3 className="text-3xl font-bold text-center">Enter to Carrot</h3>
-      <div className="mt-12">
-        {token_valid ? <form onSubmit={tokenHandleSubmit(onTokenValid)} className="flex flex-col mt-8 space-y-4">
-          <Input
-            register={tokenRegister("token", {
-              required: true,
-            })}
-            name="token"
-            label="Confirmation token"
-            type="number"
-            required
-          />
-          <Button text={"Confirm Token"} />
-        </form> : <>        <div className="flex flex-col items-center">
-          <h5 className="text-sm text-gray-500 font-medium">Enter using:</h5>
-        </div>
-          <form onSubmit={handleSubmit(onValid)} className="flex flex-col mt-8 space-y-4">
-            <Input
-              register={register("email", {
-                required: true,
-              })}
-              name="email"
-              label="Email address"
-              type="email"
-              required
-            />
-            <Button text={"Get login link"} />
-          </form></>}
+    <EnterContainer>
+      <Image src={Logo} width="140" height="146" alt="" />
+      <EnterTitle>
+        <h3>안녕하세요!</h3>
+        <h3>이메일을 입력해 주세요.</h3>
+        <p>이메일 번호는 안전하게 보관되며 이웃들에게 공개되지 않아요.</p>
+      </EnterTitle>
+      <div>
+        <form onSubmit={handleSubmit(onValid)}>
+          <CustomInput {...register("email", { required: true })} type="email" />
+          <Button content={"인증번호 받기"} marginTop={1} active={active_color} activeColor={'var(--gray-4)'} normalColor={'var(--gray-2)'}/>
+        </form>
+
+        {token_valid &&
+          <form onSubmit={tokenHandleSubmit(onTokenValid)}>
+            <CustomInput {...tokenRegister("token", { required: true })} type="text" />
+            <p>어떤 경우에도 타인에게 공유하지 마세요!</p>
+            <Button content={"인증번호 확인"} marginTop={1} normalColor={'white'} backgroundColor={'var(--primary)'} borderDisabled={true}/>
+          </form>
+        }
       </div>
-    </div>
+    </EnterContainer>
   );
 };
 export default Enter;

@@ -1,5 +1,3 @@
-import useSWRImmutable from 'swr/immutable';
-// prisma
 import { Product } from "@prisma/client";
 // components
 import FloatingButton from "src/components/FloattingButton";
@@ -8,11 +6,22 @@ import Layout from "src/components/Layout";
 // api
 import { getProductList } from "src/api/product";
 import useSWR from 'swr';
+
+import styled from 'styled-components';
+import Appbar from "src/components/Layout/Appbar";
+import Tabbar from "src/components/Layout/Tabbar";
 export interface ProductWithCount extends Product {
   _count: {
     favs: number;
   }
 }
+
+const HomeContainer = styled.div`
+padding-top: 5rem;
+/* overflow: scroll; */
+  /* padding: 2rem; */
+`;
+
 const Home = () => {
   const product_data = useSWR<Array<ProductWithCount>>('/api/products', getProductList);
 
@@ -20,8 +29,10 @@ const Home = () => {
   if (!product_data.data) return <div>...loading</div>;
 
   return (
-    <Layout title="홈" hasTabBar>
-      <div className="flex flex-col space-y-5 divide-y">
+    // <Layout title="홈" hasTabBar>
+    <>
+      <Appbar title="home" />
+      <HomeContainer>
         {product_data?.data?.map((product) => (
           <Item
             id={product.id}
@@ -33,24 +44,25 @@ const Home = () => {
           />
         ))}
         <FloatingButton href="/products/upload">
-          <svg
+          {/* <svg
             className="h-6 w-6"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
             aria-hidden="true"
-          >
+            >
             <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
             />
-          </svg>
+          </svg> */}
         </FloatingButton>
-      </div>
-    </Layout>
+      </HomeContainer>
+    </>
+    // </Layout>
   );
 };
 
