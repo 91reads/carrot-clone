@@ -8,13 +8,13 @@ import Image from "next/image";
 // prisma
 import { Product, User } from "@prisma/client";
 // components
-import Button from "@components/Button";
 import Layout from "@components/Layout";
 // api
 import { getProductDetail } from "@libs/front-api/product";
 import { updateFavorite } from "@libs/front-api/favorite";
 // lib
 import { cls } from "@libs/server/utils";
+import { createChat } from '@libs/front-api/chat';
 
 interface ProductWithuser extends Product {
   user: User;
@@ -41,7 +41,7 @@ const ItemDetail: NextPage = () => {
   if (!product_detail.data) return <div>...loading</div>
 
 
-  const onFavClick = () => {
+  const onUpdateLike = () => {
     updateFavorite(router.query.id as string)
       .then(() => {
         set_toggle_fav(!toggle_fav);
@@ -51,6 +51,16 @@ const ItemDetail: NextPage = () => {
         console.error(e);
         alert('Failed to Favorite');
       })
+  }
+
+  const onCreateChat = () => {
+    createChat(product_detail.data?.product.id)
+    .then(() => {
+      alert('Success Create ChatRoom');
+    })
+    .catch(() => {
+      alert('Failed to Create ChatRoom')
+    })
   }
 
   return (
@@ -89,9 +99,11 @@ const ItemDetail: NextPage = () => {
               {product_detail.data.product.description}
             </p>
             <div className="flex items-center justify-between space-x-2">
-              <Button large text="Talk to seller" />
+              <button style={{width: '140px', height: '40px'}} onClick={onCreateChat}>
+                Talk To Seller
+              </button>
               <button
-                onClick={onFavClick}
+                onClick={onUpdateLike}
                 className={cls(
                   "p-3 rounded-md flex items-center justify-center",
                   toggle_fav ? "text-red-500 hover:text-red-600" : "text-gray-400 hover:text-gray-500"
