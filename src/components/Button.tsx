@@ -1,26 +1,64 @@
-import { cls } from "src/libs/server/utils";
+import styled from 'styled-components';
+
+interface ButtonStyleProps {
+  marginTop: number;
+  active?: boolean;
+  activeColor?: string;
+  normalColor?: string;
+  backgroundColor?: string;
+  borderDisabled?: boolean;
+}
+
+const ButtonContainer = styled.button<ButtonStyleProps>`
+  background: none;
+  border: ${({ borderDisabled }) => borderDisabled ? 'none' : '1px solid var(--gray-2);'};
+  border-radius: var(--br-6);
+  padding: 1rem;
+  margin-top: ${({ marginTop }) => marginTop ? `${marginTop}rem` : '0'};
+
+  font-size: 1.8rem;
+  line-height: 3rem;
+  font-weight: var(--weight-600);
+
+  background-color: ${({ backgroundColor }) => backgroundColor && `${backgroundColor}`};
+  color: ${( props ) => props.active ? `${props.activeColor}` : `${props.normalColor}`};
+`;
 
 interface ButtonProps {
   large?: boolean;
-  text: string;
+  content: string;
+  active?: boolean;
+  activeColor?: string;
+  normarColor?: string;
+  marginTop: number;
+  backgroundColor?: string;
+  borderDisabled?: boolean;
   [key: string]: any;
 }
 
 export default function Button({
   large = false,
   onClick,
-  text,
+  content,
+  active,
+  activeColor,
+  normalColor,
+  marginTop,
+  backgroundColor,
+  borderDisabled,
   ...rest
 }: ButtonProps) {
   return (
-    <button
-      {...rest}
-      className={cls(
-        "w-full bg-orange-500 hover:bg-orange-600 text-white  px-4 border border-transparent rounded-md shadow-sm font-medium focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 focus:outline-none",
-        large ? "py-3 text-base" : "py-2 text-sm "
-      )}
+    <ButtonContainer 
+      {...rest} 
+      marginTop={marginTop} 
+      active={active} 
+      activeColor={activeColor} 
+      normalColor={normalColor}
+      backgroundColor={backgroundColor}
+      borderDisabled={borderDisabled}
     >
-      {text}
-    </button>
+      {content}
+    </ButtonContainer>
   );
 }
