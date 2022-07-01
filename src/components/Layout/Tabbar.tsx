@@ -13,20 +13,11 @@ const TabbarContainer = styled.div`
   right: 0;
   left: 0;
 
-  height: 6rem;
+  height: 6.6rem;
   width: 100%;
-  
+
   background-color: white;
-  
-  h3 {
-    font-size: 2rem;
-    line-height: 2.8rem;
-    
-    font-weight: 600;
-    
-    color: var(--gray-4);
-  }
-  `;
+`;
 
 interface InnerWrapStyle {
   width: number;
@@ -44,7 +35,8 @@ const TabbarWrap = styled.div`
   justify-content: space-between;
   align-items: center;
   height: 100%;
-  padding:0 2rem;
+  padding: 0 1rem 0 1.2rem;
+  margin-left: 1rem;
 `;
 
 const TabbarItemBox = styled.div`
@@ -56,8 +48,8 @@ const TabbarItemBox = styled.div`
   height: 4rem;
 
   strong {
-    padding-top: 1rem;
-    font-size: 1.4rem;
+    padding-top: 0.8rem;
+    font-size: 1.2rem;
   }
 `;
 
@@ -70,39 +62,39 @@ const Tabbar = () => {
   useEffect(() => {
     if (!ref.current) return;
 
-    set_parent_width(ref.current.offsetWidth)
-  }, [])
+    set_parent_width(ref.current.offsetWidth);
+  }, []);
 
   const ICON_TABLE = [
     {
       id: 1,
-      icon: <HomeIcon style={{ fontSize: '2.8rem', fill: 'black' }} />,
-      text: "홈",
-      link: '/'
+      icon: <HomeIcon style={{ fontSize: '2.6rem', fill: 'black' }} />,
+      text: '홈',
+      link: '/',
     },
     {
       id: 2,
-      icon: <MapsHomeWorkIcon style={{ fontSize: '2.6rem', fill: 'black' }} />,
-      text: "동네생활",
-      link: '/community'
+      icon: <MapsHomeWorkIcon style={{ fontSize: '2.4rem', fill: 'black' }} />,
+      text: '동네생활',
+      link: '/community',
     },
     {
       id: 3,
-      icon: <ChatIcon style={{ fontSize: '2.4rem', fill: 'black' }} />,
-      text: "채팅",
-      link: '/chats'
+      icon: <ChatIcon style={{ fontSize: '2.2rem', fill: 'black' }} />,
+      text: '채팅',
+      link: '/chats',
     },
     {
       id: 4,
-      icon: <PersonIcon style={{ fontSize: '2.8rem', fill: 'black' }} />,
-      text: "나의 캐럿",
-      link: '/profile'
+      icon: <PersonIcon style={{ fontSize: '2.6rem', fill: 'black' }} />,
+      text: '나의 캐럿',
+      link: '/profile',
     },
   ];
 
   const moveRouter = (link: string) => {
     router.push(link);
-  }
+  };
 
   return (
     <TabbarContainer ref={ref}>
@@ -114,12 +106,12 @@ const Tabbar = () => {
                 {item.icon}
                 <strong>{item.text}</strong>
               </TabbarItemBox>
-            )
+            );
           })}
         </TabbarWrap>
       </TabbarInnerWrap>
     </TabbarContainer>
-  )
+  );
 };
 
 export default Tabbar;
