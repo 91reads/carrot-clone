@@ -32,11 +32,8 @@ const Enter = () => {
   useEffect(() => {
     if (!watch_email) return;
 
-    if (watch_email.includes('com')) {
-      set_active_color(true);
-    } else {
-      set_active_color(false);
-    }
+    if (watch_email.includes('com')) set_active_color(true);
+    else set_active_color(false);
   }, [watch_email]);
 
   // 로그인 이메일 작성
@@ -52,7 +49,6 @@ const Enter = () => {
       .catch((e) => {
         console.error(e);
       });
-    return;
   };
 
   // 토큰 검증
@@ -77,6 +73,7 @@ const Enter = () => {
         <p>이메일 번호는 안전하게 보관되며 이웃들에게 공개되지 않아요.</p>
       </EnterTitle>
       <div>
+        {/* 이메일 입력 폼 */}
         <form onSubmit={handleSubmit(onValid)}>
           <CustomInput {...register('email', { required: true })} type="email" />
           <Button
@@ -89,6 +86,7 @@ const Enter = () => {
           />
         </form>
 
+        {/* 토큰 검증 폼 */}
         {token_valid && (
           <form onSubmit={tokenHandleSubmit(onTokenValid)}>
             <CustomInput {...tokenRegister('token', { required: true })} type="text" />
