@@ -1,22 +1,22 @@
-import { Product } from "@prisma/client";
-// components
-import FloatingButton from "src/components/FloattingButton";
-import Item from "src/components/Item";
-// api
-import { getProductList } from "src/api/product";
-import useSWR from 'swr';
-
+import { Product } from '@prisma/client';
 import styled from 'styled-components';
-import Appbar from "src/components/Layout/Appbar";
-import Tabbar from "src/components/Layout/Tabbar";
+import useSWR from 'swr';
+// components
+import FloatingButton from 'src/components/FloattingButton';
+import ProductCard from '@components/Card/Product/ProductCard';
+// api
+import { getProductList } from 'src/api/product';
+// assets
+import Appbar from 'src/components/Layout/Appbar';
+import Tabbar from 'src/components/Layout/Tabbar';
 export interface ProductWithCount extends Product {
   _count: {
     favs: number;
-  }
+  };
 }
 
 const HomeContainer = styled.div`
-padding-top: 5rem;
+  padding-top: 5rem;
 `;
 
 const Home = () => {
@@ -29,20 +29,20 @@ const Home = () => {
     <>
       <Appbar title="home" />
       <HomeContainer>
-        {product_data?.data?.map((product) => (
-          <Item
+        {product_data.data.map((product) => (
+          <ProductCard
             id={product.id}
             key={product.id}
             title={product.name}
             price={product.price}
+            image={product.image}
             comments={1}
             hearts={product._count?.favs}
           />
         ))}
-        <FloatingButton href="/products/upload">
-          <Tabbar />
-        </FloatingButton>
       </HomeContainer>
+      <Tabbar />
+      <FloatingButton href="/products/upload" />
     </>
   );
 };

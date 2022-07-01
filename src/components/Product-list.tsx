@@ -1,6 +1,6 @@
 import { getUserHistory } from 'src/api/user';
 import useSWR from 'swr';
-import Item from './Item';
+import Item from './Card/Product/ProductCard';
 
 interface ProductListProps {
   kind: 'favs' | 'sales' | 'purchase';
@@ -22,6 +22,7 @@ export default function ProductList({ kind }: ProductListProps) {
           price={record.product.price}
           comments={1}
           hearts={record.product._count.favs}
+          image={''}
         />
       ))}
     </>
