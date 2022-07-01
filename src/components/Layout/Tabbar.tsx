@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { useRouter } from 'next/router';
+// assets
 import HomeIcon from '@mui/icons-material/Home';
-import MapsHomeWorkIcon from '@mui/icons-material/MapsHomeWork';
 import ChatIcon from '@mui/icons-material/Chat';
 import PersonIcon from '@mui/icons-material/Person';
-import { useRouter } from 'next/router';
+import MapsHomeWorkIcon from '@mui/icons-material/MapsHomeWork';
 
 const TabbarContainer = styled.div`
   position: absolute;
@@ -14,7 +15,6 @@ const TabbarContainer = styled.div`
 
   height: 6rem;
   width: 100%;
-  
   
   background-color: white;
   
@@ -33,12 +33,10 @@ interface InnerWrapStyle {
 }
 
 const TabbarInnerWrap = styled.div<InnerWrapStyle>`
-  background-color: red;
   position: fixed;
   padding: 1rem 2rem;
   width: ${({ width }) => width && `${width}px`};
   border-top: 1px solid var(--gray-2);
-  /* background-color: white; */
 `;
 
 const TabbarWrap = styled.div`
