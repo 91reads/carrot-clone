@@ -2,8 +2,6 @@ import type { AppProps } from 'next/app'
 import { SWRConfig } from 'swr';
 import styled, { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
-import Tabbar from 'src/components/Layout/Tabbar';
-import Appbar from 'src/components/Layout/Appbar';
 
 const GlobalStyles = createGlobalStyle`
   :root {
@@ -42,7 +40,6 @@ const AppInnerLayout = styled.div`
   position: relative;
   max-height: 91.5rem;
   max-width: 41.2rem;
-  /* padding: 2rem; */
   overflow: scroll;
 
   padding-bottom: 6rem;
@@ -62,9 +59,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <GlobalStyles />
       <AppLayout>
         <AppInnerLayout>
-          {/* <Appbar /> */}
           <Component {...pageProps} />
-          {/* <Tabbar /> */}
         </AppInnerLayout>
       </AppLayout>
     </SWRConfig>

@@ -1,41 +1,35 @@
-import type { NextPage } from "next";
+import type { NextPage } from 'next';
 import Image from 'next/image';
-import Link from "next/link";
-import Layout from "src/components/Layout";
-import useUser from "src/libs/client/useUser";
-import useSWR from "swr";
-import { Review, User } from "@prisma/client";
-import { cls } from "src/libs/server/utils";
-import { getUserDetail, getUserReview } from "src/api/user";
-import { Key, ReactChild, ReactFragment, ReactPortal } from "react";
-
-interface ReviewWithUser extends Review {
-  createdBy: User;
-}
-interface ReviewsResponse {
-  ok: boolean;
-  reviews: ReviewWithUser[]
-}
+import Link from 'next/link';
+import Layout from 'src/components/Layout';
+import useSWR from 'swr';
+import { cls } from 'src/libs/server/utils';
+import { getUserDetail, getUserReview } from 'src/api/user';
 
 const Profile: NextPage = () => {
   const user_data = useSWR(`/api/users/me`, getUserDetail);
   const user_review = useSWR('/api/reviews', getUserReview);
 
-  if (user_data.error || user_review.error) return <div>...에러</div>
-  if (!user_data.data && !user_review.data) return <div>...로딩중</div>
+  if (user_data.error || user_review.error) return <div>...에러</div>;
+  if (!user_data.data && !user_review.data) return <div>...로딩중</div>;
 
-  console.log('user_data:', user_data)
-  console.log('review_data:', user_review)
-
+  console.log('user_data:', user_data);
+  console.log('review_data:', user_review);
 
   return (
     <Layout hasTabBar title="나의 캐럿">
       <div className="px-4">
         <div className="flex items-center mt-4 space-x-3">
-          {user_data.data?.avatar
-            ? <Image src={`https://imagedelivery.net/PvvqDlv-2VYHUsYbyy-DlQ/${user_data.data?.avatar}/avatar`} className="w-16 h-16 bg-slate-500 rounded-full" alt="" layout="fill" />
-            : <div className="w-16 h-16 bg-slate-500 rounded-full" />
-          }
+          {user_data.data?.avatar ? (
+            <Image
+              src={`https://imagedelivery.net/PvvqDlv-2VYHUsYbyy-DlQ/${user_data.data?.avatar}/avatar`}
+              className="w-16 h-16 bg-slate-500 rounded-full"
+              alt=""
+              layout="fill"
+            />
+          ) : (
+            <div className="w-16 h-16 bg-slate-500 rounded-full" />
+          )}
           <div className="flex flex-col">
             <span className="font-medium text-gray-900">{user_data.data?.name}</span>
             <Link href="/profile/edit">
@@ -62,9 +56,7 @@ const Profile: NextPage = () => {
                   ></path>
                 </svg>
               </div>
-              <span className="text-sm mt-2 font-medium text-gray-700">
-                판매내역
-              </span>
+              <span className="text-sm mt-2 font-medium text-gray-700">판매내역</span>
             </a>
           </Link>
           <Link href="/profile/bought">
@@ -85,9 +77,7 @@ const Profile: NextPage = () => {
                   ></path>
                 </svg>
               </div>
-              <span className="text-sm mt-2 font-medium text-gray-700">
-                구매내역
-              </span>
+              <span className="text-sm mt-2 font-medium text-gray-700">구매내역</span>
             </a>
           </Link>
           <Link href="/profile/loved">
@@ -108,39 +98,37 @@ const Profile: NextPage = () => {
                   ></path>
                 </svg>
               </div>
-              <span className="text-sm mt-2 font-medium text-gray-700">
-                관심목록
-              </span>
+              <span className="text-sm mt-2 font-medium text-gray-700">관심목록</span>
             </a>
           </Link>
         </div>
-        {user_review.data?.reviews.map((review: any) =>
+        {user_review.data?.reviews.map((review: any) => (
           <div className="mt-12" key={review.id}>
             <div className="flex space-x-4 items-center">
               <div className="w-12 h-12 rounded-full bg-slate-500" />
               <div>
                 <h4 className="text-sm font-bold text-gray-800">{review.createdBy.name}</h4>
                 <div className="flex items-center">
-                  {[1, 2, 3, 4, 5].map(star =>
+                  {[1, 2, 3, 4, 5].map((star) => (
                     <svg
                       key={star}
-                      className={cls("h-5 w-5", review.score >= star ? "text-yellow-400" : "text-gray-400")}
+                      className={cls('h-5 w-5', review.score >= star ? 'text-yellow-400' : 'text-gray-400')}
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 20 20"
                       fill="currentColor"
                       aria-hidden="true"
                     >
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>)}
+                    </svg>
+                  ))}
                 </div>
               </div>
             </div>
             <div className="mt-4 text-gray-600 text-sm">
-              <p>
-                {review.review}
-              </p>
+              <p>{review.review}</p>
             </div>
-          </div>)}
+          </div>
+        ))}
       </div>
     </Layout>
   );

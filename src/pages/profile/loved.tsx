@@ -1,5 +1,4 @@
 import type { NextPage } from "next";
-import Item from "src/components/Item";
 import Layout from "src/components/Layout";
 import ProductList from "src/components/Product-list";
 

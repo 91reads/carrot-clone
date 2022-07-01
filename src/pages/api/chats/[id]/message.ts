@@ -1,14 +1,12 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import withHandler, { ResponseType } from "src/libs/server/withHandler";
-import client from "src/libs/client/client";
+import { NextApiRequest, NextApiResponse } from 'next';
+import withHandler, { ResponseType } from 'src/libs/server/withHandler';
+import client from 'src/libs/client/client';
 import { withApiSession } from 'src/libs/server/withSession';
 
-async function handler (req: NextApiRequest, res: NextApiResponse<ResponseType>) {
-  
-  
+async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
   if (req.method === 'GET') {
-    const { 
-      query: { id }, 
+    const {
+      query: { id },
     } = req;
     const room_message = await client.chat.findUnique({
       where: {
@@ -20,7 +18,7 @@ async function handler (req: NextApiRequest, res: NextApiResponse<ResponseType>)
             id: true,
             name: true,
             avatar: true,
-          }
+          },
         },
         messages: {
           select: {
@@ -30,23 +28,23 @@ async function handler (req: NextApiRequest, res: NextApiResponse<ResponseType>)
                 id: true,
                 name: true,
                 avatar: true,
-              }
-            }
-          }
-        }
-      }
-    })
-    
+              },
+            },
+          },
+        },
+      },
+    });
+
     res.json({
       ok: true,
       data: room_message,
-    })
+    });
   }
-  
+
   if (req.method === 'POST') {
-    const { 
+    const {
       session: { user },
-      body: { chat_id, message, product_id }
+      body: { chat_id, message, product_id },
     } = req;
 
     const newMessage = await client.message.create({
@@ -60,27 +58,27 @@ async function handler (req: NextApiRequest, res: NextApiResponse<ResponseType>)
         product: {
           connect: {
             id: Number(product_id),
-          }
+          },
         },
         user: {
           connect: {
             id: user?.id,
           },
         },
-      }
+      },
     });
 
     res.json({
       ok: true,
       data: newMessage,
-    })
+    });
   }
 }
 
 export default withApiSession(
   withHandler({
-    methods: ["GET", "POST"],
+    methods: ['GET', 'POST'],
     handler,
     isPrivate: true,
-  })
-)
+  }),
+);

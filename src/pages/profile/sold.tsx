@@ -1,8 +1,5 @@
 import type { NextPage } from "next";
-import Item from "src/components/Item";
 import Layout from "src/components/Layout";
-import useSWR from "swr";
-import { Product } from "@prisma/client";
 import ProductList from "src/components/Product-list";
 
 const Sold: NextPage = () => {

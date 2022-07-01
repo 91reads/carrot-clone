@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Layout from "src/components/Layout";
 import useSWR from "swr";
 import { getChatList } from "src/api/chat";

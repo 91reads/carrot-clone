@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 interface ButtonStyleProps {
-  marginTop: number;
+  marginTop?: number;
   active?: boolean;
   activeColor?: string;
   normalColor?: string;
@@ -31,15 +31,13 @@ interface ButtonProps {
   active?: boolean;
   activeColor?: string;
   normarColor?: string;
-  marginTop: number;
+  marginTop?: number;
   backgroundColor?: string;
   borderDisabled?: boolean;
   [key: string]: any;
 }
 
-export default function Button({
-  large = false,
-  onClick,
+export default function xButton({
   content,
   active,
   activeColor,
