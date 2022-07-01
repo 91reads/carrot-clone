@@ -84,7 +84,13 @@ const Enter = () => {
       <div>
         <form onSubmit={handleSubmit(onValid)}>
           <CustomInput {...register("email", { required: true })} type="email" />
-          <Button content={"인증번호 받기"} marginTop={1} active={active_color} activeColor={'var(--gray-4)'} normalColor={'var(--gray-2)'}/>
+          <Button 
+            content={token_valid ? "인증번호 확인중" : "인증번호 받기"} 
+            marginTop={1} 
+            active={active_color} 
+            activeColor={token_valid ? 'var(--gray-2)' : 'var(--gray-4)'} 
+            normalColor={'var(--gray-2)'} 
+            disabled={token_valid}/>
         </form>
 
         {token_valid &&
