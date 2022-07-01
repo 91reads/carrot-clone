@@ -7,6 +7,7 @@ interface ButtonStyleProps {
   normalColor?: string;
   backgroundColor?: string;
   borderDisabled?: boolean;
+  disabled?: boolean;
 }
 
 const ButtonContainer = styled.button<ButtonStyleProps>`
@@ -46,6 +47,7 @@ export default function Button({
   marginTop,
   backgroundColor,
   borderDisabled,
+  disabled,
   ...rest
 }: ButtonProps) {
   return (
@@ -57,6 +59,7 @@ export default function Button({
       normalColor={normalColor}
       backgroundColor={backgroundColor}
       borderDisabled={borderDisabled}
+      disabled={disabled}
     >
       {content}
     </ButtonContainer>
