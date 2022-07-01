@@ -11,7 +11,7 @@ interface APIParams {
   body: any;
 }
 
-export const callAPI = async ({ uri, headers, method, body }: APIParams) => {
+export const callAPI = async ({ uri, method, body }: APIParams) => {
 
   const login_check = sessionStorage.getItem("userId");
   if (!login_check) {
@@ -32,7 +32,6 @@ export const callAPI = async ({ uri, headers, method, body }: APIParams) => {
 
 export const callCloudFlareAPI = async ({
   uri,
-  headers,
   method,
   body,
 }: APIParams) => {
