@@ -64,7 +64,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <AppInnerLayout>
           {/* <Appbar /> */}
           <Component {...pageProps} />
-          <Tabbar />
+          {/* <Tabbar /> */}
         </AppInnerLayout>
       </AppLayout>
     </SWRConfig>
