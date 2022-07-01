@@ -42,7 +42,7 @@ const Home = () => {
         ))}
       </HomeContainer>
       <Tabbar />
-      <FloatingButton href="/products/upload" />
+      <FloatingButton href="/products/register" />
     </>
   );
 };
