@@ -15,7 +15,6 @@ export const ProductImage = styled.div`
   width: 10rem;
   height: 10rem;
   border-radius: var(--br-6);
-  /* border: 1px solid red; */
   margin-right: 2rem;
 `;
 
