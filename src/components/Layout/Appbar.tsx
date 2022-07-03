@@ -7,7 +7,9 @@ const AppbarContainer = styled.div`
   top: 0;
   left: 0;
   right: 0;
-  height: 5rem;
+  min-height: 5rem;
+  max-height: 5rem;
+  z-index: 100;
 
   font-size: 1.4rem;
   h3 {
@@ -27,6 +29,7 @@ interface InnerWrapStyle {
 const AppbarInnerWrap = styled.div<InnerWrapStyle>`
   position: fixed;
   padding: 1rem 2rem;
+  min-height: 5rem;
   width: ${({ width }) => width && `${width}px`};
   border-bottom: 1px solid var(--gray-2);
   background-color: white;
@@ -42,12 +45,13 @@ const AppbarInnerWrap = styled.div<InnerWrapStyle>`
 `;
 
 interface AppbarProps {
-  title: string;
+  title?: string;
   onClick?: () => void;
   onClickTitle?: string;
+  backButtonDisable?: boolean;
 }
 
-const Appbar = ({ title, onClick, onClickTitle }: AppbarProps) => {
+const Appbar = ({ backButtonDisable, title, onClick, onClickTitle }: AppbarProps) => {
   // HACK: 웹에서 모바일 처럼 보이기 위한 처리.
   const router = useRouter();
   const ref = useRef<HTMLHeadingElement>(null);
@@ -72,7 +76,7 @@ const Appbar = ({ title, onClick, onClickTitle }: AppbarProps) => {
   return (
     <AppbarContainer ref={ref}>
       <AppbarInnerWrap width={parent_width}>
-        {isFilterRouter() ? <div onClick={() => router.back()}>뒤로</div> : <div/>}
+        {!backButtonDisable && isFilterRouter() ? <div onClick={() => router.back()}>뒤로</div> : <div/>}
         {title && <h3>{title}</h3>}
         <div onClick={_onClick}>{onClickTitle}</div>
       </AppbarInnerWrap>
