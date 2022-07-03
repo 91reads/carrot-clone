@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import type { NextPage } from "next";
-import { useRouter } from "next/router";
-import { useSWRConfig } from "swr";
+import React, { useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
+import { useRouter } from 'next/router';
+import { useSWRConfig } from 'swr';
 import useSWRImmutable from 'swr/immutable';
-import Link from "next/link";
-import Image from "next/image";
+import Link from 'next/link';
+import Image from 'next/image';
 // prisma
-import { Product, User } from "@prisma/client";
+import { Product, User } from '@prisma/client';
 // components
-import Layout from "src/components/Layout";
 // api
-import { getProductDetail } from "src/api/product";
-import { updateFavorite } from "src/api/favorite";
+import { getProductDetail } from 'src/api/product';
+import { updateFavorite } from 'src/api/favorite';
 // lib
-import { cls } from "src/libs/server/utils";
 import { createChat } from 'src/api/chat';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import Appbar from '@components/Layout/Appbar';
 
 interface ProductWithuser extends Product {
   user: User;
@@ -25,21 +25,130 @@ interface ItemDetailResponse {
   isLiked: boolean;
 }
 
-const ItemDetail: NextPage = () => {
+export const DetailContainer = styled.div`
+  padding-top: 5rem;
+`;
+
+export const RegisterContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  font-size: 1.4rem;
+  line-height: 2.8rem;
+`;
+
+const RegisterProfileContainer = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 2rem;
+  border-bottom: 1px solid var(--gray-1);
+  div {
+    display: flex;
+    flex-direction: column;
+    padding-left: 1rem;
+    font-size: 1.6rem;
+    p {
+      font-size: 1.2rem;
+      line-height: 2rem;
+      color: var(--gray-2);
+    }
+  }
+`;
+
+export const RegisterInfoContent = styled.div`
+  display: flex;
+  padding: 1rem 2rem;
+  border-top: 1px solid var(--gray-1);
+  border-bottom: 1px solid var(--gray-1);
+  div {
+    display: flex;
+    align-items: center;
+    p {
+      padding: 0 0.4rem 0 0.4rem;
+      font-size: 1.2rem;
+    }
+  }
+`;
+
+const RegisterImage = styled.div`
+  width: 100%;
+  padding-bottom: 2rem;
+`;
+
+const TabbarContainer = styled.div`
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+
+  height: 6.6rem;
+  width: 100%;
+
+  background-color: white;
+`;
+
+interface InnerWrapStyle {
+  width: number;
+}
+
+const TabbarInnerWrap = styled.div<InnerWrapStyle>`
+  position: fixed;
+  padding: 1rem 0rem;
+  width: ${({ width }) => width && `${width}px`};
+  border-top: 1px solid var(--gray-2);
+`;
+
+const TabbarWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  margin-left: 1rem;
+`;
+
+const TabbarItemBox = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 4rem;
+
+  button {
+    border: none;
+    background-color: transparent;
+  }
+
+  strong {
+    padding-top: 0.8rem;
+    font-size: 1.2rem;
+  }
+`;
+
+const ItemDetail = () => {
   const router = useRouter();
-  const product_detail = useSWRImmutable<ItemDetailResponse>(`/api/products/${router.query.id}`, () => getProductDetail(router.query.id as string));
+  const product_detail = useSWRImmutable<ItemDetailResponse>(`/api/products/${router.query.id}`, () =>
+    getProductDetail(router.query.id as string),
+  );
   const { mutate } = useSWRConfig();
   const [toggle_fav, set_toggle_fav] = useState(product_detail.data ? product_detail.data.isLiked : false);
+
+  const ref = useRef<HTMLHeadingElement>(null);
+  const [parent_width, set_parent_width] = useState(0);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    set_parent_width(ref.current.offsetWidth);
+  }, []);
 
   useEffect(() => {
     if (!product_detail.data) return;
 
     set_toggle_fav(product_detail.data.isLiked);
-  }, [product_detail.data])
+  }, [product_detail]);
 
-  if (product_detail.error) return <div>...error</div>
-  if (!product_detail.data) return <div>...loading</div>
-
+  if (product_detail.error) return <div>...error</div>;
+  if (!product_detail.data) return <div>...loading</div>;
 
   const onUpdateLike = () => {
     updateFavorite(router.query.id as string)
@@ -50,8 +159,8 @@ const ItemDetail: NextPage = () => {
       .catch((e) => {
         console.error(e);
         alert('Failed to Favorite');
-      })
-  }
+      });
+  };
 
   const onCreateChat = () => {
     createChat(product_detail.data?.product.id as number)
@@ -59,82 +168,49 @@ const ItemDetail: NextPage = () => {
         alert('Success Create ChatRoom');
       })
       .catch(() => {
-        alert('Failed to Create ChatRoom')
-      })
-  }
+        alert('Failed to Create ChatRoom');
+      });
+  };
 
   return (
-    <Layout canGoBack>
-      <div className="px-4  py-4">
+    <>
+      <Appbar />
+      <DetailContainer className="px-4  py-4">
         <div className="mb-8">
-          <div className="relative pb-80">
+          <RegisterImage>
             <Image
               src={`https://imagedelivery.net/PvvqDlv-2VYHUsYbyy-DlQ/${product_detail.data?.product?.image}/public`}
-              className="h-96 bg-slate-300 object-fit"
+              width={280}
+              height={280}
               alt=""
-              layout="fill"
+              layout="responsive"
             />
-          </div>
-          <div className="flex cursor-pointer py-3 border-t border-b items-center space-x-3">
-            <Image
-              src={`https://imagedelivery.net/PvvqDlv-2VYHUsYbyy-DlQ/${product_detail.data?.product?.user?.avatar}/avatar`}
-              className="w-12 h-12 rounded-full bg-slate-300"
-              alt=""
-              width={48}
-              height={48}
-            />
+          </RegisterImage>
+          <RegisterProfileContainer>
+            {product_detail.data.product.user.avatar ? (
+              <Image
+                src={`https://imagedelivery.net/PvvqDlv-2VYHUsYbyy-DlQ/${product_detail.data?.product?.user?.avatar}/avatar`}
+                className="w-12 h-12 rounded-full bg-slate-300"
+                alt=""
+                width={48}
+                height={48}
+              />
+            ) : (
+              <div style={{ width: '6rem', height: '6rem', backgroundColor: 'red' }}></div>
+            )}
             <div>
-              <p className="text-sm font-medium text-gray-700">{product_detail.data.product.user.name}</p>
+              <strong>{product_detail.data.product.user.name}</strong>
               <Link passHref href={`/users/profiles/${product_detail.data.product.user.id}`}>
-                <p className="text-xs font-medium text-gray-500">
-                  View profile &rarr;
-                </p>
+                <p>View profile &rarr;</p>
               </Link>
             </div>
-          </div>
-          <div className="mt-5">
+          </RegisterProfileContainer>
+          <RegisterContent className="mt-5">
             <h1 className="text-3xl font-bold text-gray-900">{product_detail.data.product.name}</h1>
-            <span className="text-2xl block mt-3 text-gray-900">${product_detail.data.product.price}</span>
-            <p className=" my-6 text-gray-700">
-              {product_detail.data.product.description}
-            </p>
-            <div className="flex items-center justify-between space-x-2">
-              <button style={{ width: '140px', height: '40px' }} onClick={onCreateChat}>
-                Talk To Seller
-              </button>
-              <button
-                onClick={onUpdateLike}
-                className={cls(
-                  "p-3 rounded-md flex items-center justify-center",
-                  toggle_fav ? "text-red-500 hover:text-red-600" : "text-gray-400 hover:text-gray-500"
-                )}>
-                {toggle_fav
-                  ? (
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
-                    </svg>)
-                  : (
-                    <svg
-                      className="h-6 w-6 "
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 28 28"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                      />
-                    </svg>
-                  )}
-              </button>
-            </div>
-          </div>
+            <p className=" my-6 text-gray-700">{product_detail.data.product.description}</p>
+          </RegisterContent>
         </div>
-        <div>
+        {/* <div>
           <h2 className="text-2xl font-bold text-gray-900">Similar items</h2>
           <div className=" mt-6 grid grid-cols-2 gap-4">
             {product_detail.data.relatedProducts.map((product) => (
@@ -147,9 +223,26 @@ const ItemDetail: NextPage = () => {
               </Link>
             ))}
           </div>
-        </div>
-      </div>
-    </Layout >
+        </div> */}
+      </DetailContainer>
+      <TabbarContainer ref={ref}>
+        <TabbarInnerWrap width={parent_width}>
+          <TabbarWrap>
+            <TabbarItemBox>
+              <button onClick={onUpdateLike}>
+                <FavoriteBorderIcon style={{ fill: toggle_fav ? 'red' : 'black' }} />
+              </button>
+              <span className="text-2xl block mt-3 text-gray-900">{product_detail.data.product.price}만원</span>
+            </TabbarItemBox>
+            <TabbarItemBox>
+              <button style={{ width: '140px', height: '40px' }} onClick={onCreateChat}>
+                채팅하기
+              </button>
+            </TabbarItemBox>
+          </TabbarWrap>
+        </TabbarInnerWrap>
+      </TabbarContainer>
+    </>
   );
 };
 

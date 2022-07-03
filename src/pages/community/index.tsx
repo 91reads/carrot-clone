@@ -1,9 +1,9 @@
-import FloatingButton from "src/components/FloattingButton";
+import FloatingButton from 'src/components/FloattingButton';
 import useSWR from 'swr';
 // components
 import Appbar from '@components/Layout/Appbar';
 import Tabbar from '@components/Layout/Tabbar';
-// api 
+// api
 import { getPostList, PostStructureType } from 'src/api/community';
 // assets
 import ChatIcon from '@mui/icons-material/Chat';
@@ -32,7 +32,7 @@ const Community = () => {
 
   return (
     <>
-      <Appbar title="동네생활" />
+      <Appbar title="동네생활" backButtonDisable={true} />
       <CommunityContainer>
         {community_data?.data?.map((post) => (
           <PostContainer key={post.id} onClick={() => onMoveRouter(post.id)}>

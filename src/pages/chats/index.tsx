@@ -1,7 +1,9 @@
-import Layout from "src/components/Layout";
-import useSWR from "swr";
-import { getChatList } from "src/api/chat";
-import { useRouter } from "next/router";
+import styled from 'styled-components';
+import useSWR from 'swr';
+import { getChatList } from 'src/api/chat';
+import { useRouter } from 'next/router';
+import Tabbar from '@components/Layout/Tabbar';
+import Appbar from '@components/Layout/Appbar';
 
 interface MessageStructureType {
   chatId: number;
@@ -15,16 +17,48 @@ interface MessageStructureType {
 interface ChatStructureType {
   createdAt: string;
   id: string;
-  messages: Array<MessageStructureType>
+  messages: Array<MessageStructureType>;
   productId: string;
   updatedAt: string;
   user: {
     id: number;
     name: string;
     avatar?: string;
-  }
+  };
   userId: number;
 }
+
+const ChatContainer = styled.div`
+  padding-top: 5rem;
+`;
+
+const ChatItemBox = styled.div`
+  display: flex;
+  padding: 2rem;
+  border-bottom: 1px solid var(--gray-1);
+`;
+
+const ChatItemImage = styled.div`
+  width: 3rem;
+  height: 3rem;
+  background-color: green;
+`;
+
+const ChatItemContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 1rem;
+
+  font-size: 1.4rem;
+  strong {
+    font-weight: var(--weight-500);
+  }
+  p {
+    font-weight: var(--weight-400);
+    line-height: 2.2rem;
+  }
+`;
 
 const Chats = () => {
   const router = useRouter();
@@ -36,31 +70,29 @@ const Chats = () => {
       query: {
         chat_id,
         product_id,
-      }
-    })
-  }
+      },
+    });
+  };
 
-  if (chat_data.error) return <div>...에러</div>
-  if (!chat_data.data) return <div>...로딩중</div>
+  if (chat_data.error) return <div>...에러</div>;
+  if (!chat_data.data) return <div>...로딩중</div>;
 
   return (
-    <Layout hasTabBar title="채팅">
-      <div className="divide-y-[1px] ">
+    <>
+      <Appbar title="채팅" backButtonDisable={true} />
+      <ChatContainer className="divide-y-[1px] ">
         {chat_data.data.map((chat_info, i) => (
-          <div onClick={() => moveRouter(chat_info.id, chat_info.productId)} key={i}>
-            <a className="flex px-4 cursor-pointer py-3 items-center space-x-3">
-              <div className="w-12 h-12 rounded-full bg-slate-300" />
-              <div>
-                <p className="text-gray-700">{chat_info.user.name}</p>
-                <p className="text-sm  text-gray-500">
-                  {chat_info.messages[0]?.message}
-                </p>
-              </div>
-            </a>
-          </div>
+          <ChatItemBox onClick={() => moveRouter(chat_info.id, chat_info.productId)} key={i}>
+            <ChatItemImage className="w-12 h-12 rounded-full bg-slate-300" />
+            <ChatItemContent>
+              <strong className="text-gray-700">{chat_info.user.name}</strong>
+              <p className="text-sm  text-gray-500">{chat_info.messages[0]?.message}</p>
+            </ChatItemContent>
+          </ChatItemBox>
         ))}
-      </div>
-    </Layout>
+      </ChatContainer>
+      <Tabbar />
+    </>
   );
 };
 
