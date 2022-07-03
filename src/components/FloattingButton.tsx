@@ -20,10 +20,6 @@ const FloattingInner = styled.div`
   position: absolute;
   right: 2rem;
   bottom: 8rem;
-  /* right: 8rem; */
-  /* right: 0; */
-  /* right: 2rem; */
-  /* bottom: 8rem; */
 
   display: flex;
   justify-content: center;
