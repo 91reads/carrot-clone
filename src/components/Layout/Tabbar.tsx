@@ -28,6 +28,7 @@ const TabbarInnerWrap = styled.div<InnerWrapStyle>`
   padding: 1rem 2rem;
   width: ${({ width }) => width && `${width}px`};
   border-top: 1px solid var(--gray-2);
+  z-index: 99999;
 `;
 
 const TabbarWrap = styled.div`
@@ -44,8 +45,7 @@ const TabbarItemBox = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  height: 4rem;
+  cursor: pointer;
 
   strong {
     padding-top: 0.8rem;
@@ -93,6 +93,7 @@ const Tabbar = () => {
   ];
 
   const moveRouter = (link: string) => {
+    console.log('click');
     router.push(link);
   };
 
