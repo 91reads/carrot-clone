@@ -6,7 +6,13 @@ import ChatIcon from '@mui/icons-material/Chat';
 // styles
 import { ProductContainer, ProductBox, ProductImage, ProductContent, ProductInfo, ProductInfoContent } from './styles';
 
-const ProductCard = ({ title, price, comments, hearts, image }: ProductStructure) => {
+const   ProductCard = ({ title, price, comments, hearts, image, onClick }: ProductStructure) => {
+  
+  const _onClick = () => {
+    if(!onClick) return;
+    onClick();
+  };
+
   const ICON_TABLE = [
     {
       id: 1,
@@ -21,7 +27,7 @@ const ProductCard = ({ title, price, comments, hearts, image }: ProductStructure
   ];
 
   return (
-    <ProductContainer>
+    <ProductContainer onClick={_onClick}>
       <ProductBox>
         <ProductImage>
           <Image 
