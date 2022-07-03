@@ -9,6 +9,7 @@ import { getProductList } from 'src/api/product';
 // assets
 import Appbar from 'src/components/Layout/Appbar';
 import Tabbar from 'src/components/Layout/Tabbar';
+import { useRouter } from 'next/router';
 export interface ProductWithCount extends Product {
   _count: {
     favs: number;
@@ -21,9 +22,14 @@ const HomeContainer = styled.div`
 
 const Home = () => {
   const product_data = useSWR<Array<ProductWithCount>>('/api/products', getProductList);
+  const router = useRouter();
 
   if (product_data.error) return <div>error</div>;
   if (!product_data.data) return <div>...loading</div>;
+
+  const onMoveRouter = (id: number) => {
+    router.push(`/products/${id}`)
+  }
 
   return (
     <>
@@ -38,6 +44,7 @@ const Home = () => {
             image={product.image}
             comments={1}
             hearts={product._count?.favs}
+            onClick={() => onMoveRouter(product.id)}
           />
         ))}
       </HomeContainer>
