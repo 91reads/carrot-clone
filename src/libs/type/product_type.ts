@@ -6,4 +6,5 @@ export interface ProductStructure {
   comments: number;
   hearts: number;
   image: string;
+  onClick?: () => void;
 }
