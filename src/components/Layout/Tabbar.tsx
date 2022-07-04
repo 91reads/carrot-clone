@@ -29,9 +29,11 @@ const TabbarInnerWrap = styled.div<InnerWrapStyle>`
   width: ${({ width }) => width && `${width}px`};
   border-top: 1px solid var(--gray-2);
   z-index: 99999;
+  background-color: white;
 `;
 
 const TabbarWrap = styled.div`
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -57,10 +59,36 @@ const Tabbar = () => {
   const router = useRouter();
   // HACK: 웹에서 모바일 처럼 보이기 위한 처리.
   const ref = useRef<HTMLHeadingElement>(null);
-  const [parent_width, set_parent_width] = useState(0);
+  const [parent_width, set_parent_width] = useState<any>(0);
+
+  const throttle = (callback: { (): void; call?: any; }, limit: number | undefined) => {
+    let wait = false;
+    return function () {
+      if (!wait) {
+        callback.call();
+        wait = true;
+        setTimeout(function () {
+          wait = false;
+        }, limit);
+      }
+    };
+  };
+
+  const checkParentOffset = () => {
+    set_parent_width((prev: any) => {
+      if (prev !== ref.current?.offsetWidth) {
+        console.log('new');
+        return ref.current?.offsetWidth;
+      }
+      console.log('not new');
+      return prev;
+    });
+  };
 
   useEffect(() => {
     if (!ref.current) return;
+
+    window.addEventListener('resize', throttle(checkParentOffset, 100));
 
     set_parent_width(ref.current.offsetWidth);
   }, []);
