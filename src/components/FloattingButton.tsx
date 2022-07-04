@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import AddIcon from '@mui/icons-material/Add';
 
@@ -9,17 +9,20 @@ interface FloatingButtonType {
 
 const FloattingContainer = styled.div`
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  bottom: 8rem;
+  left: 84%;
+  /* right: -8rem; */
   height: 5rem;
 
   width: 100%;
 `;
-const FloattingInner = styled.div`
-  position: absolute;
-  right: 2rem;
-  bottom: 8rem;
+interface InnerWrapStyle {
+  width: number;
+}
+
+const FloattingInner = styled.div<InnerWrapStyle>`
+  position: fixed;
+  width: ${({ width }) => width && `${width}px`};
 
   display: flex;
   justify-content: center;
@@ -38,9 +41,19 @@ const FloattingInner = styled.div`
 `;
 
 export default function FloatingButton({ href }: FloatingButtonType) {
+  // HACK: 웹에서 모바일 처럼 보이기 위한 처리.
+  const ref = useRef<HTMLHeadingElement>(null);
+  const [parent_width, set_parent_width] = useState(0);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    set_parent_width(ref.current.offsetWidth);
+  }, []);
+
   return (
-    <FloattingContainer>
-      <FloattingInner>
+    <FloattingContainer ref={ref}>
+      <FloattingInner width={parent_width}>
         <Link href={href}>
           <a className="fixed hover:bg-orange-500 border-0 aspect-square border-transparent transition-colors cursor-pointer  bottom-24 right-5 shadow-xl bg-orange-400 rounded-full w-14 flex items-center justify-center text-white">
             <AddIcon />
