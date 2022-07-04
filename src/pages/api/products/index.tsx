@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import withHandler, { ResponseType } from "src/libs/server/withHandler";
-import client from "src/libs/client/client";
+import { NextApiRequest, NextApiResponse } from 'next';
+import withHandler, { ResponseType } from 'src/libs/server/withHandler';
+import client from 'src/libs/client/client';
 import { withApiSession } from 'src/libs/server/withSession';
 
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
@@ -12,22 +12,27 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       include: {
         _count: {
           select: {
-            favs: true
+            favs: true,
+          },
+        },
+        chats: {
+          select: {
+            messages: true,
           }
         }
-      }
+      },
     });
     res.json({
       ok: true,
       data: products,
-    })
+    });
   }
 
   // 상품 등록
   if (req.method === 'POST') {
     const {
       body: { name, price, description, photoId },
-      session: { user }
+      session: { user },
     } = req;
 
     const product = await client.product.create({
@@ -39,17 +44,18 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         user: {
           connect: {
             id: user?.id,
-          }
-        }
-      }
-    })
-    res.json({ ok: true, product })
+          },
+        },
+      },
+    });
+    res.json({ ok: true, product });
   }
 }
 
-
-export default withApiSession(withHandler({
-  methods: ['GET', 'POST'],
-  handler,
-  isPrivate: true,
-}));
+export default withApiSession(
+  withHandler({
+    methods: ['GET', 'POST'],
+    handler,
+    isPrivate: true,
+  }),
+);
