@@ -49,8 +49,8 @@ const Home = () => {
           />
         ))}
       </HomeContainer>
-      <Tabbar />
       <FloatingButton href="/products/register" />
+      <Tabbar />
     </>
   );
 };
