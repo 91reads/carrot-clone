@@ -16,8 +16,8 @@ const   ProductCard = ({ title, price, comments, hearts, image, onClick }: Produ
   const ICON_TABLE = [
     {
       id: 1,
-      icon: comments && <ChatIcon style={{ fontSize: '1.6rem', fill: 'black' }} />,
-      content: comments && comments,
+      icon: comments > 0 && <ChatIcon style={{ fontSize: '1.6rem', fill: 'black' }} />,
+      content: comments > 0 && comments,
     },
     {
       id: 2,
