@@ -14,6 +14,7 @@ export interface ProductWithCount extends Product {
   _count: {
     favs: number;
   };
+  chats: Array<any>;
 }
 
 const HomeContainer = styled.div`
@@ -28,8 +29,8 @@ const Home = () => {
   if (!product_data.data) return <div>...loading</div>;
 
   const onMoveRouter = (id: number) => {
-    router.push(`/products/${id}`)
-  }
+    router.push(`/products/${id}`);
+  };
 
   return (
     <>
@@ -42,7 +43,7 @@ const Home = () => {
             title={product.name}
             price={product.price}
             image={product.image}
-            comments={1}
+            comments={product.chats.length}
             hearts={product._count?.favs}
             onClick={() => onMoveRouter(product.id)}
           />
