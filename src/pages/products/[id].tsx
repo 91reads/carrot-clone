@@ -15,6 +15,7 @@ import { updateFavorite } from 'src/api/favorite';
 import { createChat } from 'src/api/chat';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import Appbar from '@components/Layout/Appbar';
+import { getPrevDate } from '@libs/format';
 
 interface ProductWithuser extends Product {
   user: User;
@@ -35,6 +36,14 @@ export const RegisterContent = styled.div`
   padding: 2rem;
   font-size: 1.4rem;
   line-height: 2.8rem;
+  strong {
+    font-size: 1.6rem;
+    font-weight: var(--weight-600);
+  }
+
+  b {
+    color: var(--gray-2);
+  }
 `;
 
 const RegisterProfileContainer = styled.div`
@@ -113,14 +122,18 @@ const TabbarItemBox = styled.div`
 
   height: 4rem;
 
+  font-size: 1.4rem;
+  font-weight: var(--weight-500);
   button {
+    font-size: 1.4rem;
+    font-weight: var(--weight-500);
     border: none;
     background-color: transparent;
-  }
-
-  strong {
-    padding-top: 0.8rem;
-    font-size: 1.2rem;
+    svg {
+      position: relative;
+      top: 0.2rem;
+      font-size: 2rem;
+    }
   }
 `;
 
@@ -175,41 +188,40 @@ const ItemDetail = () => {
   return (
     <>
       <Appbar />
-      <DetailContainer className="px-4  py-4">
-        <div className="mb-8">
-          <RegisterImage>
+      <DetailContainer>
+        <RegisterImage>
+          <Image
+            src={`https://imagedelivery.net/PvvqDlv-2VYHUsYbyy-DlQ/${product_detail.data?.product?.image}/public`}
+            width={280}
+            height={280}
+            alt=""
+            layout="responsive"
+          />
+        </RegisterImage>
+        <RegisterProfileContainer>
+          {product_detail.data.product.user.avatar ? (
             <Image
-              src={`https://imagedelivery.net/PvvqDlv-2VYHUsYbyy-DlQ/${product_detail.data?.product?.image}/public`}
-              width={280}
-              height={280}
+              src={`https://imagedelivery.net/PvvqDlv-2VYHUsYbyy-DlQ/${product_detail.data?.product?.user?.avatar}/avatar`}
+              className="w-12 h-12 rounded-full bg-slate-300"
               alt=""
-              layout="responsive"
+              width={48}
+              height={48}
             />
-          </RegisterImage>
-          <RegisterProfileContainer>
-            {product_detail.data.product.user.avatar ? (
-              <Image
-                src={`https://imagedelivery.net/PvvqDlv-2VYHUsYbyy-DlQ/${product_detail.data?.product?.user?.avatar}/avatar`}
-                className="w-12 h-12 rounded-full bg-slate-300"
-                alt=""
-                width={48}
-                height={48}
-              />
-            ) : (
-              <div style={{ width: '6rem', height: '6rem', backgroundColor: 'red' }}></div>
-            )}
-            <div>
-              <strong>{product_detail.data.product.user.name}</strong>
-              <Link passHref href={`/users/profiles/${product_detail.data.product.user.id}`}>
-                <p>View profile &rarr;</p>
-              </Link>
-            </div>
-          </RegisterProfileContainer>
-          <RegisterContent className="mt-5">
-            <h1 className="text-3xl font-bold text-gray-900">{product_detail.data.product.name}</h1>
-            <p className=" my-6 text-gray-700">{product_detail.data.product.description}</p>
-          </RegisterContent>
-        </div>
+          ) : (
+            <div style={{ width: '6rem', height: '6rem', backgroundColor: 'red' }}></div>
+          )}
+          <div>
+            <strong>{product_detail.data.product.user.name}</strong>
+            <Link passHref href={`/users/profiles/${product_detail.data.product.user.id}`}>
+              <p>View profile &rarr;</p>
+            </Link>
+          </div>
+        </RegisterProfileContainer>
+        <RegisterContent className="mt-5">
+          <strong>{product_detail.data.product.name}</strong>
+          <b>{getPrevDate(product_detail.data.product.createdAt)}</b>
+          <p>{product_detail.data.product.description}</p>
+        </RegisterContent>
         {/* <div>
           <h2 className="text-2xl font-bold text-gray-900">Similar items</h2>
           <div className=" mt-6 grid grid-cols-2 gap-4">
@@ -232,7 +244,7 @@ const ItemDetail = () => {
               <button onClick={onUpdateLike}>
                 <FavoriteBorderIcon style={{ fill: toggle_fav ? 'red' : 'black' }} />
               </button>
-              <span className="text-2xl block mt-3 text-gray-900">{product_detail.data.product.price}만원</span>
+              <p>{product_detail.data.product.price}만원</p>
             </TabbarItemBox>
             <TabbarItemBox>
               <button style={{ width: '140px', height: '40px' }} onClick={onCreateChat}>
