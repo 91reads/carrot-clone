@@ -6,5 +6,6 @@ export interface ProductStructure {
   comments: number;
   hearts: number;
   image: string;
+  updatedAt: Date;
   onClick?: () => void;
 }

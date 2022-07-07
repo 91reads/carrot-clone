@@ -6,7 +6,7 @@ export interface PostStructureType {
   latitude?: number;
   longitude?: number;
   question: string;
-  updatedAt: string;
+  updatedAt: Date;
   user: {
     id: number;
     name: string;
