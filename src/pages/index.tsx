@@ -46,6 +46,7 @@ const Home = () => {
             comments={product.chats.length}
             hearts={product._count?.favs}
             onClick={() => onMoveRouter(product.id)}
+            updatedAt={product.updatedAt}
           />
         ))}
       </HomeContainer>

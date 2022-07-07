@@ -11,6 +11,7 @@ import Appbar from '@components/Layout/Appbar';
 import ChatIcon from '@mui/icons-material/Chat';
 import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
+import { getPrevDate } from '@libs/format';
 // styles
 
 const RegisterContainer = styled.div`
@@ -140,14 +141,14 @@ const CommunityPostDetail = () => {
       <RegisterContainer>
         <RegisterProfileContainer>
           {post_data.data.post.user.avatar ? (
-            <div className="w-10 h-10 rounded-full bg-slate-300" />
+            <div/>
           ) : (
             <AccountCircleRoundedIcon style={{ fontSize: '3.6rem', fill: 'black' }} />
           )}
           <Link key={post_data.data?.post.user.id} passHref href={`/profile/${post_data.data?.post.user.id}`}>
             <div>
-              <strong className="text-sm font-medium text-gray-700">{post_data.data?.post.user.name}</strong>
-              <p className="text-xs font-medium text-gray-500">2시간 전</p>
+              <strong>{post_data.data?.post.user.name}</strong>
+              <p>{getPrevDate(post_data.data.post.createdAt)}</p>
             </div>
           </Link>
         </RegisterProfileContainer>
@@ -166,12 +167,12 @@ const CommunityPostDetail = () => {
         </RegisterInfoContent>
         <RegisterAnswerContainer>
           {post_data.data?.post.answers.map((answer: AnswerStructureType) => (
-            <RegisterAnswerItem key={answer.id} className="flex items-start space-x-3">
+            <RegisterAnswerItem key={answer.id}>
               <div className="w-8 h-8 bg-slate-200 rounded-full" />
               <div>
-                <strong className="text-sm block font-medium text-gray-700">{answer.user.name}</strong>
-                <b className="text-xs text-gray-500 block ">2시간 전</b>
-                <p className="text-gray-700 mt-2">{answer.answer}</p>
+                <strong>{answer.user.name}</strong>
+                <b>{getPrevDate(post_data.data.post.createdAt)}</b>
+                <p>{answer.answer}</p>
               </div>
             </RegisterAnswerItem>
           ))}

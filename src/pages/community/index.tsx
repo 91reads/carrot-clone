@@ -18,6 +18,7 @@ import {
   PostInfo,
   PostInfoContent,
 } from 'assets/pages/community/styles';
+import { getPrevDate } from '@libs/format';
 
 const Community = () => {
   const community_data = useSWR<Array<PostStructureType>>(`/api/posts`, getPostList);
@@ -44,7 +45,7 @@ const Community = () => {
             <PostInfo>
               <div>
                 <span>{post.user.name}</span>
-                <p>18시간 전</p>
+                <p>{getPrevDate(post.updatedAt)}</p>
               </div>
               <PostInfoContent>
                 <ChatIcon style={{ fontSize: '1.6rem', fill: 'black' }} />
