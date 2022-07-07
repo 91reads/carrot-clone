@@ -21,13 +21,17 @@ export const ProductImage = styled.div`
 export const ProductContent = styled.div`
   display: flex;
   flex-direction: column;
-  h3 {
+  font-size: 1.4rem;
+  line-height: 2.8rem;
+  strong {
     font-size: 1.6rem;
-    line-height: 3rem;
-    font-weight: var(--weight-500);
   }
-  span {
+  b {
+    color: var(--gray-2);
     font-size: 1.4rem;
+  }
+  p {
+    font-weight: var(--weight-500);
   }
 `;
 
