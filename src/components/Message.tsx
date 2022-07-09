@@ -1,19 +1,37 @@
-import { cls } from 'src/libs/server/utils';
+import styled from 'styled-components';
 
 interface MessageProps {
   message: string;
-  reversed?: boolean;
+  mymessage: boolean;
   avatarUrl?: string;
 }
 
-export default function Message({ message, avatarUrl, reversed }: MessageProps) {
-  console.log('todo: messages component', avatarUrl)
+interface MessageStyledProps {
+  mymessage: boolean;
+}
+
+const MessageContainer = styled.div<MessageStyledProps>`
+  display: flex;
+  width: 100%;
+  padding: 0.2rem 1rem;
+  justify-content: ${({ mymessage }) => (mymessage ? 'end' : 'start')};
+  p {
+    display: flex;
+    padding: 0.4rem 1rem;
+    align-items: ${({ mymessage }) => (mymessage ? 'end' : 'start')};
+    border-radius: var(--br-6);
+    background-color: ${({ mymessage }) => (mymessage ? 'var(--primary)' : 'var(--gray-1)')};
+    color: ${({ mymessage }) => (mymessage ? 'white' : 'var(--gray-4)')};
+    font-size: 1.4rem;
+    line-height: 2.2rem;
+  }
+`;
+
+export default function Message({ message, mymessage }: MessageProps) {
   return (
-    <div className={cls('flex  items-start', reversed ? 'flex-row-reverse space-x-reverse' : 'space-x-2')}>
-      <div className="w-8 h-8 rounded-full bg-slate-400" />
-      <div className="w-1/2 text-sm text-gray-700 p-2 border border-gray-300 rounded-md">
-        <p>{message}</p>
-      </div>
-    </div>
+    <MessageContainer mymessage={mymessage}>
+      <div />
+      <p>{message}</p>
+    </MessageContainer>
   );
 }
