@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 const AppbarContainer = styled.div`
   position: absolute;
@@ -38,10 +39,14 @@ const AppbarInnerWrap = styled.div<InnerWrapStyle>`
   align-items: center;
   justify-content: space-between;
 
-  
   div:last-child {
     color: var(--primary);
   }
+  `;
+
+const AppbarTitle = styled.div`
+  display: flex;
+  align-items: ceter;
 `;
 
 interface AppbarProps {
@@ -69,15 +74,23 @@ const Appbar = ({ backButtonDisable, title, onClick, onClickTitle }: AppbarProps
   };
 
   const isFilterRouter = () => {
-    if(router.pathname === '/') return false;
+    if (router.pathname === '/') return false;
     else return true;
-  }
+  };
 
   return (
     <AppbarContainer ref={ref}>
       <AppbarInnerWrap width={parent_width}>
-        {!backButtonDisable && isFilterRouter() ? <div onClick={() => router.back()}>뒤로</div> : <div/>}
-        {title && <h3>{title}</h3>}
+        <AppbarTitle>
+          {!backButtonDisable && isFilterRouter() ? (
+            <div onClick={() => router.back()}>
+              <ArrowBackIosIcon style={{ fontSize: '2rem' }} />
+            </div>
+          ) : (
+            <div />
+          )}
+          {title && <h3>{title}</h3>}
+        </AppbarTitle>
         <div onClick={_onClick}>{onClickTitle}</div>
       </AppbarInnerWrap>
     </AppbarContainer>
