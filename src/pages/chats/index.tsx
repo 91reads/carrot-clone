@@ -83,10 +83,10 @@ const Chats = () => {
       <ChatContainer className="divide-y-[1px] ">
         {chat_data.data.map((chat_info, i) => (
           <ChatItemBox onClick={() => moveRouter(chat_info.id, chat_info.productId)} key={i}>
-            <ChatItemImage className="w-12 h-12 rounded-full bg-slate-300" />
+            <ChatItemImage/>
             <ChatItemContent>
-              <strong className="text-gray-700">{chat_info.user.name}</strong>
-              <p className="text-sm  text-gray-500">{chat_info.messages[0]?.message}</p>
+              <strong>{chat_info.user.name}</strong>
+              <p>{chat_info.messages[0]?.message}</p>
             </ChatItemContent>
           </ChatItemBox>
         ))}
