@@ -6,6 +6,7 @@ import reset from 'styled-reset';
 const GlobalStyles = createGlobalStyle`
   :root {
     --br-6: 0.6rem;
+    --br-12: 1.2rem;
 
     --primary: #ff7e35;
 
