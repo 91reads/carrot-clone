@@ -5,22 +5,58 @@ import { useForm } from 'react-hook-form';
 import useSWR from 'swr';
 import Appbar from '@components/Layout/Appbar';
 import styled from 'styled-components';
+import SendIcon from '@mui/icons-material/Send';
+import { MessageStructure } from '@libs/type/message_type';
+import { ChatStructure } from '@libs/type/chat_type';
 
 const ChatDetailContainer = styled.div`
   padding-top: 5rem;
 `;
 
+const ChatButtonBox = styled.div`
+  position: absolute;
+  display: flex;
+  bottom: 0;
+  background-color: var(--gray-1);
+  width: 100%;
+  height: 6.6rem;
+
+  input {
+    margin: 1rem;
+    width: 100%;
+    padding: 2rem 2rem 2rem 1.2rem;
+    border-radius: var(--br-12);
+    background-color: white;
+    border: none;
+  }
+  button {
+    svg {
+      font-size: 2rem;
+      color: var(--gray-2);
+    }
+    svg:hover {
+      color: var(--gray-4);
+      cursor: pointer;
+    }
+    border: none;
+    border-radius: var(--br-12);
+    background-color: transparent;
+    margin: 1rem 1rem 1rem 0;
+  }
+`;
+
 const ChatDetail = () => {
   const router = useRouter();
   const { register, handleSubmit, reset } = useForm();
-  const room_message_data = useSWR(
-    router.query.id && `/api/chats/${router.query.id}/message`,
-    router.query.id ? () => getRoomMessage(router.query.id as string) : null,
+  const room_message_data = useSWR<Array<ChatStructure>>(
+    router.query.product_id && `/api/chats/${router.query.product_id}/message`,
+    router.query.product_id ? () => getRoomMessage(router.query.product_id as string) : null,
   );
 
   if (room_message_data.error) return <div>에러</div>;
   if (!room_message_data.data) return <div>로디중</div>;
 
+  const my_id = room_message_data.data[0].userId;
   const onCreateMessage = (data: any) => {
     if (!router.query.id || !router.query.product_id) return;
 
@@ -37,31 +73,18 @@ const ChatDetail = () => {
 
   return (
     <>
-      <Appbar />
-      <ChatDetailContainer className="py-10 pb-16 px-4 space-y-4">
-        <Message message="Hi how much are you selling them for?" />
-        <Message message="I want ￦20,000" reversed />
-        <Message message="미쳤어" />
-        <form onSubmit={handleSubmit(onCreateMessage)} className="fixed py-2 bg-white  bottom-0 inset-x-0">
-          <div className="flex relative max-w-md items-center  w-full mx-auto">
-            <input
-              type="text"
-              className="shadow-sm rounded-full w-full border-gray-300 focus:ring-orange-500 focus:outline-none pr-12 focus:border-orange-500"
-            />
-            <div className="absolute inset-y-0 flex py-1.5 pr-1.5 right-0">
-              <input
-                {...register('message', { required: true })}
-                type="text"
-                style={{ width: '200px', height: '20px', border: '1px solid gray' }}
-              />
-              <button
-                type="submit"
-                className="flex focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 items-center bg-orange-500 rounded-full px-3 hover:bg-orange-600 text-sm text-white"
-              >
-                메시지전송
-              </button>
-            </div>
-          </div>
+      <Appbar title={''} />
+      <ChatDetailContainer>
+        {room_message_data.data[0].messages.map((v: MessageStructure) => {
+          return <Message key={v.user.id} message={v.message} mymessage={v.user.id === my_id} />;
+        })}
+        <form onSubmit={handleSubmit(onCreateMessage)}>
+          <ChatButtonBox>
+            <input {...register('message', { required: true })} type="text" />
+            <button type="submit">
+              <SendIcon />
+            </button>
+          </ChatButtonBox>
         </form>
       </ChatDetailContainer>
     </>
