@@ -20,6 +20,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
             select: {
               favs: true,
             }
+          },
+          chats: {
+            select: {
+              messages: true,
+            }
           }
         }
       }
