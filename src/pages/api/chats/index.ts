@@ -13,6 +13,20 @@ async function handler(
   } = req;
   if (req.method === "GET") {
     const chat_list = await client.chat.findMany({
+			where: {
+				OR: [
+					{
+						user: {
+							id: user?.id,
+						},
+					},
+					{
+						product: {
+							userId: user?.id,
+						},
+					},
+				],
+			},
       include: {
         user: {
           select: {
@@ -24,7 +38,6 @@ async function handler(
         messages: true,
       },
     });
-
     res.json({
       ok: true,
       data: chat_list,
@@ -32,25 +45,102 @@ async function handler(
   }
 
   if (req.method === "POST") {
-    const chat_room = await client.chat.create({
-      data: {
-        user: {
-          connect: {
-            id: user?.id,
-          },
-        },
-        product: {
-          connect: {
-            id: product_id,
-          },
-        },
-      },
-    });
-    res.json({
-      ok: true,
-      data: chat_room,
-    });
+    const currentChat = await client.chat.findFirst({
+			where: {
+				product: {
+					id: product_id,
+				},
+				user: {
+					id: user?.id,
+				},
+			},
+		});
+		if (currentChat) {
+			return res.json({
+				ok: false,
+				currentChat,
+			});
+		}
+		const product = await client.product.findUnique({
+			where: {
+				id: product_id,
+			},
+			include: {
+				user: {
+					select: {
+						id: true,
+					},
+				},
+			},
+		});
+		if (product?.user.id === user?.id) {
+			return res.json({
+				ok: false,
+				error: "You can't make chat room in your product",
+			});
+		}
+		const chat = await client.chat.create({
+			data: {
+				product: {
+					connect: {
+						id: product_id,
+					},
+				},
+				user: {
+					connect: {
+						id: user?.id,
+					},
+				},
+			},
+		});
+		if (chat) {
+			await client.record.create({
+				data: {
+					product: {
+						connect: {
+							id: product_id,
+						},
+					},
+					user: {
+						connect: {
+							id: user?.id,
+						},
+					},
+					kind: "Purchase",
+				},
+			});
+		}
+		res.json({
+			ok: true,
+			data: chat,
+		});
   }
+  // if (req.method === "POST") {
+  //   if (product_id?.user.id === user?.id) {
+	// 		return res.json({
+	// 			ok: false,
+	// 			error: "You can't make chat room in your product",
+	// 		});
+	// 	}
+  //   const chat_room = await client.chat.create({
+  //     data: {
+  //       user: {
+  //         connect: {
+  //           id: user?.id,
+  //         },
+  //       },
+  //       product: {
+  //         connect: {
+  //           id: product_id,
+  //         },
+  //       },
+  //     },
+  //   });
+  //   res.json({
+  //     ok: true,
+  //     data: chat_room,
+  //   });
+  // }
 }
 
 export default withApiSession(
