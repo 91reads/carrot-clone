@@ -6,11 +6,24 @@ import { withApiSession } from 'src/libs/server/withSession';
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
   if (req.method === 'GET') {
     const {
+      session: { user },
       query: { id },
     } = req;
-    const room_message = await client.chat.findUnique({
+
+    const room_message = await client.chat.findMany({
       where: {
-        id: Number(id),
+        OR: [
+          {
+						user: {
+							id: user?.id,
+						},
+					},
+          {
+            product: {
+              id: +id.toString(),
+            },
+          },
+        ],
       },
       include: {
         user: {
