@@ -5,9 +5,9 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import ChatIcon from '@mui/icons-material/Chat';
 // styles
 import { ProductContainer, ProductBox, ProductImage, ProductContent, ProductInfo, ProductInfoContent } from './styles';
-import { getPrevDate } from '@libs/format';
+import { currencify, getPrevDate } from '@libs/format';
 
-const ProductCard = ({ title, price, comments, hearts, image, onClick, updatedAt }: ProductStructure) => {
+const ProductCard = ({ title, price, comments, hearts, image, onClick, updatedAt }: any) => {
   const _onClick = () => {
     if (!onClick) return;
     onClick();
@@ -31,7 +31,7 @@ const ProductCard = ({ title, price, comments, hearts, image, onClick, updatedAt
       <ProductBox>
         <ProductImage>
           <Image
-            src={`https://imagedelivery.net/PvvqDlv-2VYHUsYbyy-DlQ/${image}/avatar`}
+            src={`${process.env.NEXT_PUBLIC_CF_IMAGE}/${image}/avatar`}
             alt="상품 이미지"
             width={100}
             height={100}
@@ -40,7 +40,7 @@ const ProductCard = ({ title, price, comments, hearts, image, onClick, updatedAt
         <ProductContent>
           <strong>{title}</strong>
           <b>{getPrevDate(updatedAt)}</b>
-          <p>{price}원</p>
+          <p>{currencify(price)}원</p>
         </ProductContent>
       </ProductBox>
       <ProductInfo>
