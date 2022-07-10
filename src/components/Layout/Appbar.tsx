@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import SearchForm from '@components/SearchForm';
 
 const AppbarContainer = styled.div`
   position: absolute;
@@ -42,7 +43,7 @@ const AppbarInnerWrap = styled.div<InnerWrapStyle>`
   div:last-child {
     color: var(--primary);
   }
-  `;
+`;
 
 const AppbarTitle = styled.div`
   display: flex;
@@ -54,16 +55,53 @@ interface AppbarProps {
   onClick?: () => void;
   onClickTitle?: string;
   backButtonDisable?: boolean;
+  set_watch_search?: any;
+  set_search?: any;
+  search?: any;
 }
 
-const Appbar = ({ backButtonDisable, title, onClick, onClickTitle }: AppbarProps) => {
-  // HACK: 웹에서 모바일 처럼 보이기 위한 처리.
+const Appbar = ({
+  backButtonDisable,
+  title,
+  onClick,
+  onClickTitle,
+  set_watch_search,
+  search,
+  set_search,
+}: AppbarProps) => {
+  // XXX: 웹에서 모바일 처럼 보이기 위한 처리.
   const router = useRouter();
   const ref = useRef<HTMLHeadingElement>(null);
   const [parent_width, set_parent_width] = useState(0);
 
+  const throttle = (callback: { (): void; call?: any; }, limit: number | undefined) => {
+    let wait = false;
+    return function () {
+      if (!wait) {
+        callback.call();
+        wait = true;
+        setTimeout(function () {
+          wait = false;
+        }, limit);
+      }
+    };
+  };
+
+  const checkParentOffset = () => {
+    set_parent_width((prev: any) => {
+      if (prev !== ref.current?.offsetWidth) {
+        console.log('new');
+        return ref.current?.offsetWidth;
+      }
+      console.log('not new');
+      return prev;
+    });
+  };
+
   useEffect(() => {
     if (!ref.current) return;
+
+    window.addEventListener('resize', throttle(checkParentOffset, 100));
 
     set_parent_width(ref.current.offsetWidth);
   }, []);
@@ -91,7 +129,11 @@ const Appbar = ({ backButtonDisable, title, onClick, onClickTitle }: AppbarProps
           )}
           {title && <h3>{title}</h3>}
         </AppbarTitle>
-        <div onClick={_onClick}>{onClickTitle}</div>
+        {router.pathname === '/' ? (
+          <SearchForm search={search} set_search={set_search} set_watch_search={set_watch_search} />
+        ) : (
+          <div onClick={_onClick}>{onClickTitle}</div>
+        )}
       </AppbarInnerWrap>
     </AppbarContainer>
   );
