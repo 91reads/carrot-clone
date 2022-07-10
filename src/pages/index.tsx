@@ -10,6 +10,8 @@ import { getProductList } from 'src/api/product';
 import Appbar from 'src/components/Layout/Appbar';
 import Tabbar from 'src/components/Layout/Tabbar';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
+import useCoords from '@libs/client/useCoord';
 export interface ProductWithCount extends Product {
   _count: {
     favs: number;
@@ -24,6 +26,9 @@ const HomeContainer = styled.div`
 const Home = () => {
   const product_data = useSWR<Array<ProductWithCount>>('/api/products', getProductList);
   const router = useRouter();
+  const [search, set_search] = useState(false);
+  const [watch_search, set_watch_search] = useState('');
+  const coord = useCoords();
 
   if (product_data.error) return <div>error</div>;
   if (!product_data.data) return <div>...loading</div>;
@@ -32,11 +37,17 @@ const Home = () => {
     router.push(`/products/${id}`);
   };
 
+  const onSearchFilter = (product: any) => {
+    if (!watch_search) return true;
+    if (product.name.includes(watch_search)) return true;
+    else return false;
+  };
+
   return (
     <>
-      <Appbar title="home" />
+      <Appbar title={coord} set_watch_search={set_watch_search} search={search} set_search={set_search} />
       <HomeContainer>
-        {product_data.data.map((product) => (
+        {product_data.data.filter(onSearchFilter).map((product) => (
           <ProductCard
             id={product.id}
             key={product.id}
@@ -47,6 +58,7 @@ const Home = () => {
             hearts={product._count?.favs}
             onClick={() => onMoveRouter(product.id)}
             updatedAt={product.updatedAt}
+            watch_search={watch_search}
           />
         ))}
       </HomeContainer>
