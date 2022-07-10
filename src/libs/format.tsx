@@ -18,3 +18,7 @@ export const getPrevDate = (date: Date) => {
     return `${betweenTimeDay}일 전`;
   }
 };
+
+export function currencify(number: number) {
+  return Math.floor(number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
