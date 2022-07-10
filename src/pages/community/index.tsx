@@ -56,7 +56,7 @@ const Community = () => {
             </PostInfo>
           </PostContainer>
         ))}
-        <FloatingButton href="/products/register" />
+        <FloatingButton href="/community/write" />
       </CommunityContainer>
       <Tabbar />
     </>
