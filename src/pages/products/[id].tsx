@@ -1,8 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useSWRConfig } from 'swr';
 import useSWRImmutable from 'swr/immutable';
-import Link from 'next/link';
 import Image from 'next/image';
 // components
 import Appbar from '@components/Layout/Appbar';
@@ -33,12 +32,12 @@ const ItemDetail = () => {
     getProductDetail(router.query.id as string),
   );
   const { mutate } = useSWRConfig();
-  const [toggle_fav, set_toggle_fav] = useState(product_detail.data ? product_detail.data.isLiked : false);
+  const [my_id, set_my_id] = useState('');
 
   useEffect(() => {
     if (!product_detail.data) return;
 
-    set_toggle_fav(product_detail.data.isLiked);
+    set_my_id(sessionStorage.getItem('userId') as string);
   }, [product_detail]);
 
   if (product_detail.error) return <div>...error</div>;
@@ -47,8 +46,7 @@ const ItemDetail = () => {
   const onUpdateFav = () => {
     updateFavorite(router.query.id as string)
       .then(() => {
-        set_toggle_fav(!toggle_fav);
-        mutate(`/api/products`);
+        mutate(`/api/products/${router.query.id}`);
       })
       .catch((e) => {
         console.error(e);
@@ -59,7 +57,7 @@ const ItemDetail = () => {
   const isMyProduct = () => {
     if(!product_detail.data) return;
 
-    if(product_detail.data.product.userId === product_detail.data.product.user.id) return true;
+    if(product_detail.data.product.userId === Number(my_id)) return true;
     else return false;
   }
 
@@ -122,7 +120,7 @@ const ItemDetail = () => {
           <TabbarWrap>
             <TabbarItemBox>
               <button onClick={onUpdateFav}>
-                <FavoriteBorderIcon style={{ fill: toggle_fav ? 'red' : 'black' }} />
+                <FavoriteBorderIcon style={{ fill: product_detail.data.isLiked ? 'red' : 'black' }} />
               </button>
               <p>{currencify(product_detail.data.product.price)}원</p>
             </TabbarItemBox>
