@@ -27,9 +27,20 @@ const FormContainer = styled.div`
   padding: 2rem;
 `;
 
+const DetailProfileImage = styled.div`
+  display: flex;
+  align-items: center !important;
+  justify-content: center;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background-color: green;
+  position: relative;
+`;
+
 const EditProfile: NextPage = () => {
   const user_data = useSWR('/api/users/me', getUserDetail);
-  const { register, setValue, handleSubmit, setError, watch } = useForm<EditProfileForm>();
+  const { register, setValue, handleSubmit, watch } = useForm<EditProfileForm>();
   const avatar = watch('avatar');
   const [avatar_preview, set_avatar_preview] = useState('');
   const [error, set_error] = useState(false);
@@ -105,17 +116,20 @@ const EditProfile: NextPage = () => {
       <ProfileEditContainer onSubmit={handleSubmit(onUpdateUser)}>
         <FormContainer>
           <div>
-            {avatar_preview ? (
-              <Image src={avatar_preview} width={280} height={280} layout="responsive" />
+            <DetailProfileImage>
+              {avatar_preview ? (
+                <Image src={avatar_preview} width={280} height={280} layout="responsive" />
               ) : (
-              <Image
-                src={`${process.env.NEXT_PUBLIC_CF_IMAGE}/${user_data.data.avatar}/avatar`}
-                alt=""
-                width={280}
-                height={280}
-                layout="responsive"
-              />
-            )}
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_CF_IMAGE}/${user_data.data.avatar}/avatar`}
+                  alt=""
+                  width={280}
+                  height={280}
+                  layout="responsive"
+                />
+              )}
+            </DetailProfileImage>
+
             <label htmlFor="picture">
               Change
               <input {...register('avatar')} id="picture" type="file" className="hidden" accept="image/*" />
