@@ -10,8 +10,8 @@ import Appbar from '@components/Layout/Appbar';
 // assets
 import ChatIcon from '@mui/icons-material/Chat';
 import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
-import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import { getPrevDate } from '@libs/format';
+import Image from 'next/image';
 // styles
 
 const RegisterContainer = styled.div`
@@ -27,8 +27,11 @@ const RegisterAnswerContainer = styled.div`
 
 const RegisterAnswerItem = styled.div`
   display: flex;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   padding: 1rem 2rem;
+  div {
+    padding-left: 0.6rem;
+  }
   b {
     padding-left: 0.6rem;
     font-size: 1rem;
@@ -79,10 +82,21 @@ export const RegisterInfoContent = styled.div`
 
 const RegisterForm = styled.form`
   padding: 0 2rem;
+
+  button {
+    border: none;
+    width: 100%;
+    margin-top: 0.4rem;
+    padding: 1.4rem;
+    font-size: 1.4rem;
+    background-color: var(--primary);
+    color: white;
+    border-radius: var(--br-12);
+  }
 `;
 
 const RegisterTextArea = styled.textarea`
-  border-radius: var(--br-6);
+  border-radius: var(--br-12);
   border: 1px solid var(--gray-2);
   width: 100%;
   height: 14rem;
@@ -91,6 +105,27 @@ const RegisterTextArea = styled.textarea`
   padding-left: 1rem;
   font-size: 1.4rem;
   line-height: 3rem;
+`;
+
+const DetailProfileImage = styled.div`
+  display: flex;
+  align-items: center !important;
+  justify-content: center;
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background-color: green;
+  position: relative;
+`;
+const AnswerProfileImage = styled.div`
+  display: flex;
+  align-items: center !important;
+  justify-content: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+  background-color: green;
+  position: relative;
 `;
 
 interface AnswerForm {
@@ -140,11 +175,18 @@ const CommunityPostDetail = () => {
       <Appbar title="동네질문" />
       <RegisterContainer>
         <RegisterProfileContainer>
-          {post_data.data.post.user.avatar ? (
-            <div/>
-          ) : (
-            <AccountCircleRoundedIcon style={{ fontSize: '3.6rem', fill: 'black' }} />
-          )}
+          <DetailProfileImage>
+            <Image
+              src={
+                post_data.data.post.user.avatar
+                  ? `${process.env.NEXT_PUBLIC_CF_IMAGE}/${post_data.data.post.user.avatar}/avatar`
+                  : `${process.env.NEXT_PUBLIC_CF_IMAGE}/74514a95-ce9a-471d-b000-b927ff295500/avatar`
+              }
+              alt="사람들이 올린 프로필 이미지 동그란 모양"
+              layout="fill"
+              style={{ borderRadius: '50%' }}
+            />
+          </DetailProfileImage>
           <Link key={post_data.data?.post.user.id} passHref href={`/profile/${post_data.data?.post.user.id}`}>
             <div>
               <strong>{post_data.data?.post.user.name}</strong>
@@ -168,7 +210,18 @@ const CommunityPostDetail = () => {
         <RegisterAnswerContainer>
           {post_data.data?.post.answers.map((answer: AnswerStructureType) => (
             <RegisterAnswerItem key={answer.id}>
-              <div className="w-8 h-8 bg-slate-200 rounded-full" />
+              <AnswerProfileImage>
+                <Image
+                  src={
+                    answer.user.avatar
+                      ? `${process.env.NEXT_PUBLIC_CF_IMAGE}/${answer.user.avatar}/avatar`
+                      : `${process.env.NEXT_PUBLIC_CF_IMAGE}/74514a95-ce9a-471d-b000-b927ff295500/avatar`
+                  }
+                  alt="사람들이 올린 프로필 이미지 동그란 모양"
+                  layout="fill"
+                  style={{ borderRadius: '50%' }}
+                />
+              </AnswerProfileImage>
               <div>
                 <strong>{answer.user.name}</strong>
                 <b>{getPrevDate(post_data.data.post.createdAt)}</b>
