@@ -23,6 +23,20 @@ export const PostContent = styled.div`
   display: flex;
   font-size: 1.4rem;
   line-height: 2.8rem;
+
+  strong {
+    color: var(--primary);
+    padding-right: 0.6rem;
+  }
+  p {
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+    max-height: 9rem;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
 `;
 
 export const PostInfo = styled.div`
