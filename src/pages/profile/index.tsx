@@ -73,6 +73,13 @@ const ProfileHistoryBox = styled.div`
   }
 `;
 
+const ProfileImage = styled.div`
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background-color: red;
+`;
+
 const Profile: NextPage = () => {
   const router = useRouter();
   const user_data = useSWR(`/api/users/me`, getUserDetail);
@@ -106,12 +113,16 @@ const Profile: NextPage = () => {
         <ProfileBox>
           <ProfileBoxContent>
             {user_data.data?.avatar ? (
-              <Image
-                src={`https://imagedelivery.net/PvvqDlv-2VYHUsYbyy-DlQ/${user_data.data?.avatar}/avatar`}
-                className="w-16 h-16 bg-slate-500 rounded-full"
-                alt=""
-                layout="fill"
-              />
+              <ProfileImage>
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_CF_IMAGE}/${user_data.data?.avatar}/avatar`}
+                  width={20}
+                  height={20}
+                  alt=""
+                  layout="responsive"
+                  style={{borderRadius: '50%'}}
+                />
+              </ProfileImage>
             ) : (
               <div style={{ width: '5rem', height: '5rem', backgroundColor: 'red', borderRadius: '50%' }} />
             )}
