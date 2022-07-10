@@ -122,7 +122,7 @@ const Appbar = ({
         <AppbarTitle>
           {!backButtonDisable && isFilterRouter() ? (
             <div onClick={() => router.back()}>
-              <ArrowBackIosIcon style={{ fontSize: '2rem' }} />
+              <ArrowBackIosIcon style={{ fontSize: '2rem', position: 'relative', top:'0.4rem' }} />
             </div>
           ) : (
             <div />
