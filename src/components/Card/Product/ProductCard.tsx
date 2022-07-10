@@ -1,4 +1,3 @@
-import { ProductStructure } from '@libs/type/product_type';
 import Image from 'next/image';
 // assets
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
