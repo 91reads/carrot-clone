@@ -1,11 +1,19 @@
+import { UserStructure } from "./profile_type";
 
 export interface ProductStructure {
-  title: string;
-  id: number;
+  name: string;
   price: number;
-  comments: number;
-  hearts: number;
   image: string;
+  id: number;
+  description: string;
+  userId: number;
+  createdAt: Date;
   updatedAt: Date;
-  onClick?: () => void;
+  user: UserStructure;
+}
+
+export interface ProductDetailStructure {
+  isLiked: boolean;
+  product: ProductStructure;
+  relatedProducts: Array<ProductStructure>;
 }
