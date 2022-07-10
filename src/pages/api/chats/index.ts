@@ -57,26 +57,8 @@ async function handler(
 		});
 		if (currentChat) {
 			return res.json({
-				ok: false,
-				currentChat,
-			});
-		}
-		const product = await client.product.findUnique({
-			where: {
-				id: product_id,
-			},
-			include: {
-				user: {
-					select: {
-						id: true,
-					},
-				},
-			},
-		});
-		if (product?.user.id === user?.id) {
-			return res.json({
-				ok: false,
-				error: "You can't make chat room in your product",
+				ok: true,
+				data: currentChat,
 			});
 		}
 		const chat = await client.chat.create({
@@ -115,32 +97,6 @@ async function handler(
 			data: chat,
 		});
   }
-  // if (req.method === "POST") {
-  //   if (product_id?.user.id === user?.id) {
-	// 		return res.json({
-	// 			ok: false,
-	// 			error: "You can't make chat room in your product",
-	// 		});
-	// 	}
-  //   const chat_room = await client.chat.create({
-  //     data: {
-  //       user: {
-  //         connect: {
-  //           id: user?.id,
-  //         },
-  //       },
-  //       product: {
-  //         connect: {
-  //           id: product_id,
-  //         },
-  //       },
-  //     },
-  //   });
-  //   res.json({
-  //     ok: true,
-  //     data: chat_room,
-  //   });
-  // }
 }
 
 export default withApiSession(
