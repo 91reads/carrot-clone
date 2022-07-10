@@ -31,8 +31,8 @@ export interface AnswerStructureType {
 
 export interface PostRegisterType {
   question: string;
-  latitude: number;
-  longitude: number;
+  latitude?: number;
+  longitude?: number;
 }
 
 export const getPostList = async () => {
