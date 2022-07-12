@@ -45,6 +45,7 @@ const ProfileBoxEdit = styled.div`
 const ProfileHistoryBox = styled.div`
   display: flex;
   justify-content: space-around;
+  padding-top: 2rem;
   div {
     display: flex;
     flex-direction: column;
