@@ -15,8 +15,6 @@ const TabbarContainer = styled.div`
 
   height: 6.6rem;
   width: 100%;
-
-  background-color: white;
 `;
 
 interface InnerWrapStyle {
@@ -33,7 +31,7 @@ const TabbarInnerWrap = styled.div<InnerWrapStyle>`
 `;
 
 const TabbarWrap = styled.div`
-  position: relative;
+  /* position: relative; */
   display: flex;
   justify-content: space-between;
   align-items: center;
