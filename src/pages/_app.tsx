@@ -42,6 +42,7 @@ const AppInnerLayout = styled.div`
   max-height: 91.5rem;
   max-width: 41.2rem;
   overflow: scroll;
+  overflow-x: hidden;
 
   padding-bottom: 6rem;
 
