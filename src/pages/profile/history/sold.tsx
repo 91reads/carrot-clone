@@ -20,7 +20,7 @@ const Sold: NextPage = () => {
 
   return (
     <>
-      <Appbar title="나의 당근" />
+      <Appbar title="판매 내역" />
       <SoldContainer>
         {history_data.data.map((v: any) => {
           return (

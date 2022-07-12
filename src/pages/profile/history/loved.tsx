@@ -18,7 +18,7 @@ const Loved: NextPage = () => {
 
   return (
     <>
-      <Appbar title="나의 당근" />
+      <Appbar title="관심 내역" />
       <LovedContainer>
         {history_data.data.map((v: any) => {
           return (

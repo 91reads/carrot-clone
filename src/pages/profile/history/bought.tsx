@@ -18,7 +18,7 @@ const Bought: NextPage = () => {
 
   return (
     <>
-      <Appbar title="나의 당근" />
+      <Appbar title="구매 내역" />
       <BoughtContainer>
         {history_data.data.map((v: any) => {
           return (
