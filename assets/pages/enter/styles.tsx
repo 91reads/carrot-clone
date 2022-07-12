@@ -8,7 +8,7 @@ export const EnterContainer = styled.div`
 
   height: 100%;
   width: 100%;
-  transform: translateY(-10%);
+  transform: translateY(-2%);
 
   padding: 2rem;
 
@@ -55,4 +55,9 @@ export const CustomInput = styled.input`
   border: 1px solid var(--gray-2);
   font-size: 1.8rem;
   line-height: 3rem;
+`;
+
+export const EnterImage = styled.div`
+  display: flex;
+  justify-content: center;
 `;
