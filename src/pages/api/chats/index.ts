@@ -35,6 +35,20 @@ async function handler(
             avatar: true,
           },
         },
+        product: {
+          select: {
+            name: true,
+            price: true,
+            description: true,
+            user: {
+              select: {
+                id: true,
+                name: true,
+                avatar: true,
+              }
+            }
+          }
+        },
         messages: true,
       },
     });
@@ -51,7 +65,7 @@ async function handler(
 					id: product_id,
 				},
 				user: {
-					id: user?.id,
+					id: user?.id
 				},
 			},
 		});

@@ -26,6 +26,21 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         ],
       },
       include: {
+        product: {
+          select: {
+            name: true,
+            price: true,
+            description: true,
+            image: true,
+            user: {
+              select: {
+                id: true,
+                name: true,
+                avatar: true,
+              }
+            }
+          }
+        },
         user: {
           select: {
             id: true,
