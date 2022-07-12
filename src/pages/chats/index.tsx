@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import Tabbar from '@components/Layout/Tabbar';
 import Appbar from '@components/Layout/Appbar';
 import Loading from '@components/Loading/Loading';
+import Image from 'next/image';
 
 interface MessageStructureType {
   chatId: number;
@@ -21,6 +22,16 @@ interface ChatStructureType {
   messages: Array<MessageStructureType>;
   productId: string;
   updatedAt: string;
+  product: {
+    description: string;
+    name: string;
+    price: number;
+    user: {
+      id: number;
+      name: string;
+      avatar?: string;
+    };
+  };
   user: {
     id: number;
     name: string;
@@ -40,9 +51,9 @@ const ChatItemBox = styled.div`
 `;
 
 const ChatItemImage = styled.div`
+  position: relative;
   width: 3rem;
   height: 3rem;
-  background-color: green;
 `;
 
 const ChatItemContent = styled.div`
@@ -58,6 +69,10 @@ const ChatItemContent = styled.div`
   p {
     font-weight: var(--weight-400);
     line-height: 2.2rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 28rem;
   }
 `;
 
@@ -76,18 +91,29 @@ const Chats = () => {
   };
 
   if (chat_data.error) return <div>...에러</div>;
-  if (!chat_data.data) return  <Loading />
+  if (!chat_data.data) return <Loading />;
+
+  console.log(chat_data.data);
 
   return (
     <>
       <Appbar title="채팅" backButtonDisable={true} />
-      <ChatContainer className="divide-y-[1px] ">
+      <ChatContainer>
         {chat_data.data.map((chat_info, i) => (
           <ChatItemBox onClick={() => moveRouter(chat_info.id, chat_info.productId)} key={i}>
-            <ChatItemImage/>
+            <ChatItemImage>
+              <Image
+                src={`${process.env.NEXT_PUBLIC_CF_IMAGE}/${chat_info.product.user.avatar}/avatar`}
+                alt=""
+                width={280}
+                height={280}
+                layout="fill"
+                style={{ borderRadius: '50%' }}
+              />
+            </ChatItemImage>
             <ChatItemContent>
-              <strong>{chat_info.user.name}</strong>
-              <p>{chat_info.messages[0]?.message}</p>
+              <strong>{chat_info.product.user.name}</strong>
+              <p>{chat_info.messages[chat_info.messages.length - 1]?.message}</p>
             </ChatItemContent>
           </ChatItemBox>
         ))}
