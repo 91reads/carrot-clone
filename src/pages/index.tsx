@@ -12,6 +12,8 @@ import Tabbar from 'src/components/Layout/Tabbar';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import useCoords from '@libs/client/useCoord';
+import Loading from '@components/Loading/Loading';
+
 export interface ProductWithCount extends Product {
   _count: {
     favs: number;
@@ -23,6 +25,7 @@ const HomeContainer = styled.div`
   padding-top: 5rem;
 `;
 
+
 const Home = () => {
   const product_data = useSWR<Array<ProductWithCount>>('/api/products', getProductList);
   const router = useRouter();
@@ -31,7 +34,7 @@ const Home = () => {
   const coord = useCoords();
 
   if (product_data.error) return <div>error</div>;
-  if (!product_data.data) return <div>...loading</div>;
+  if (!product_data.data) return <Loading />
 
   const onMoveRouter = (id: number) => {
     router.push(`/products/${id}`);

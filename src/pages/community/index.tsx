@@ -19,13 +19,14 @@ import {
   PostInfoContent,
 } from 'assets/pages/community/styles';
 import { getPrevDate } from '@libs/format';
+import Loading from '@components/Loading/Loading';
 
 const Community = () => {
   const community_data = useSWR<Array<PostStructureType>>(`/api/posts`, getPostList);
   const router = useRouter();
 
   if (community_data.error) return <div>...error</div>;
-  if (!community_data.data) return <div>...loading</div>;
+  if (!community_data.data) return  <Loading />
 
   const onMoveRouter = (id: number) => {
     router.push(`/community/${id}`);

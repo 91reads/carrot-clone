@@ -4,6 +4,7 @@ import { getChatList } from 'src/api/chat';
 import { useRouter } from 'next/router';
 import Tabbar from '@components/Layout/Tabbar';
 import Appbar from '@components/Layout/Appbar';
+import Loading from '@components/Loading/Loading';
 
 interface MessageStructureType {
   chatId: number;
@@ -75,7 +76,7 @@ const Chats = () => {
   };
 
   if (chat_data.error) return <div>...에러</div>;
-  if (!chat_data.data) return <div>...로딩중</div>;
+  if (!chat_data.data) return  <Loading />
 
   return (
     <>

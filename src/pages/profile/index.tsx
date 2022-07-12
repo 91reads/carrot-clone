@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import ArticleIcon from '@mui/icons-material/Article';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import Loading from '@components/Loading/Loading';
 
 const ProfileContainer = styled.div`
   padding-top: 5rem;
@@ -86,7 +87,7 @@ const Profile: NextPage = () => {
   const user_review = useSWR('/api/reviews', getUserReview);
 
   if (user_data.error || user_review.error) return <div>...에러</div>;
-  if (!user_data.data && !user_review.data) return <div>...로딩중</div>;
+  if (!user_data.data && !user_review.data) return  <Loading />
 
   const HISTORY_TABLE = [
     {

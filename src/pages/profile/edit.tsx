@@ -7,6 +7,7 @@ import useSWR from 'swr';
 import styled from 'styled-components';
 import Appbar from '@components/Layout/Appbar';
 import { getCFToken } from 'src/api/cloudflare';
+import Loading from '@components/Loading/Loading';
 
 interface EditProfileForm {
   name: string;
@@ -61,7 +62,7 @@ const EditProfile: NextPage = () => {
   }, [avatar]);
 
   if (user_data.error) return <div>...에러</div>;
-  if (!user_data.data) return <div>...로딩중</div>;
+  if (!user_data.data) return  <Loading />
   console.log(avatar);
   const onUpdateUser = async ({ email, phone, name, avatar }: EditProfileForm) => {
     console.log('진입');

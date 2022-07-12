@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import SendIcon from '@mui/icons-material/Send';
 import { MessageStructure } from '@libs/type/message_type';
 import { ChatStructure } from '@libs/type/chat_type';
+import Loading from '@components/Loading/Loading';
 
 const ChatDetailContainer = styled.div`
   padding-top: 5rem;
@@ -54,7 +55,7 @@ const ChatDetail = () => {
   );
 
   if (room_message_data.error) return <div>에러</div>;
-  if (!room_message_data.data) return <div>로디중</div>;
+  if (!room_message_data.data) return  <Loading />
 
   const my_id = room_message_data.data[0].userId;
   const onCreateMessage = (data: any) => {

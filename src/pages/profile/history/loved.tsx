@@ -4,6 +4,7 @@ import useSWR from 'swr';
 import ProductCard from '@components/Card/Product/ProductCard';
 import Appbar from '@components/Layout/Appbar';
 import styled from 'styled-components';
+import Loading from '@components/Loading/Loading';
 
 const LovedContainer = styled.div`
   margin-top: 5rem;
@@ -13,7 +14,7 @@ const Loved: NextPage = () => {
   const history_data = useSWR(`/api/users/me/favs`, () => getUserHistory('favs'));
 
   if (history_data.error) return <div>...에러</div>;
-  if (!history_data.data) return <div>...로딩중</div>;
+  if (!history_data.data) return  <Loading />
 
   return (
     <>

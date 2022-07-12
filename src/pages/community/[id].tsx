@@ -12,6 +12,7 @@ import ChatIcon from '@mui/icons-material/Chat';
 import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
 import { getPrevDate } from '@libs/format';
 import Image from 'next/image';
+import Loading from '@components/Loading/Loading';
 // styles
 
 const RegisterContainer = styled.div`
@@ -141,7 +142,7 @@ const CommunityPostDetail = () => {
   );
 
   if (post_data.error) return <div>...error</div>;
-  if (!post_data.data) return <div>...loading</div>;
+  if (!post_data.data) return  <Loading />
 
   const onUpdateWonder = (id: string) => {
     if (!id) return;

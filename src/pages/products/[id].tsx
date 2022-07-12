@@ -25,6 +25,7 @@ import {
   TabbarItemBox,
 } from 'assets/pages/products/detail/styles';
 import { ProductDetailStructure } from '@libs/type/product_type';
+import Loading from '@components/Loading/Loading';
 
 const ItemDetail = () => {
   const router = useRouter();
@@ -41,7 +42,7 @@ const ItemDetail = () => {
   }, [product_detail]);
 
   if (product_detail.error) return <div>...error</div>;
-  if (!product_detail.data) return <div>...loading</div>;
+  if (!product_detail.data) return <Loading />
 
   const onUpdateFav = () => {
     updateFavorite(router.query.id as string)

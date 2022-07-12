@@ -4,6 +4,7 @@ import useSWR from 'swr';
 import Appbar from '@components/Layout/Appbar';
 import styled from 'styled-components';
 import ProductCard from '@components/Card/Product/ProductCard';
+import Loading from '@components/Loading/Loading';
 
 const BoughtContainer = styled.div``;
 
@@ -11,7 +12,7 @@ const Bought: NextPage = () => {
   const history_data = useSWR(`/api/users/me/purchase`, () => getUserHistory('purchase'));
 
   if (history_data.error) return <div>...에러</div>;
-  if (!history_data.data) return <div>...로딩중</div>;
+  if (!history_data.data) return  <Loading />
 
   console.log(history_data.data);
 
