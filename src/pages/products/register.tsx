@@ -106,7 +106,7 @@ const Register = () => {
 
   return (
     <>
-      <Appbar title="상품 등록" onClick={triggerSubmit} onClickTitle={"클릭"}/>
+      <Appbar title="상품 등록" onClick={triggerSubmit} onClickTitle={"등록"}/>
       <RegisterContainer>
         <RegisterForm onSubmit={handleSubmit(onCreateProduct)}>
           <RegisterImage>
