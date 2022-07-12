@@ -9,6 +9,7 @@ import Appbar from '@components/Layout/Appbar';
 import { getCFToken } from 'src/api/cloudflare';
 import Loading from '@components/Loading/Loading';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import { useRouter } from 'next/router';
 
 interface EditProfileForm {
   name: string;
@@ -76,6 +77,7 @@ const DetailProfileImageIcon = styled.div`
 `;
 
 const EditProfile: NextPage = () => {
+  const router = useRouter();
   const user_data = useSWR('/api/users/me', getUserDetail);
   const { register, setValue, handleSubmit, watch } = useForm<EditProfileForm>();
   const avatar = watch('avatar');
@@ -137,6 +139,7 @@ const EditProfile: NextPage = () => {
         .then(() => {
           set_loading(false);
           alert('Profile Update Success');
+          router.back();
         })
         .catch(() => {
           alert('Profile Update Failure, Retry Update Please');
