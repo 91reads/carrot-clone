@@ -1,4 +1,4 @@
-import { MessageStructure } from "./message_type";
+import { MessageStructure } from './message_type';
 
 export interface ChatStructure {
   createdAt: string;
@@ -6,10 +6,21 @@ export interface ChatStructure {
   messages: Array<MessageStructure>;
   productId: number;
   updatedAt: string;
+  product: {
+    name: string;
+    price: number;
+    image: string;
+    description: string;
+    user: {
+      id: number;
+      name: string;
+      avatar?: string;
+    };
+  };
   user: {
     id: number;
     name: string;
     avatar?: string;
-  }
+  };
   userId: number;
 }
