@@ -155,7 +155,7 @@ const EditProfile: NextPage = () => {
 
   return (
     <>
-      <Appbar title="프로필 수정" onClick={loading ? () => {} : triggerSubmit} onClickTitle={loading ? '저장중' : '완료'} />
+      <Appbar title="프로필 수정" onClick={loading ? () => {undefined} : triggerSubmit} onClickTitle={loading ? '저장중' : '완료'} />
       {loading ? (
         <Loading />
       ) : (
