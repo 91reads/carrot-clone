@@ -9,9 +9,36 @@ import SendIcon from '@mui/icons-material/Send';
 import { MessageStructure } from '@libs/type/message_type';
 import { ChatStructure } from '@libs/type/chat_type';
 import Loading from '@components/Loading/Loading';
+import Image from 'next/image';
+import { currencify } from '@libs/format';
 
 const ChatDetailContainer = styled.div`
   padding-top: 5rem;
+`;
+
+const ChatProductInfo = styled.div`
+  width: 100%;
+  border-bottom: 1px solid var(--gray-2);
+  display: flex;
+  align-items: center;
+  padding: 2rem;
+  margin-bottom: 1rem;
+  div {
+    font-size: 1.4rem;
+    padding-left: 1rem;
+    line-height: 1.8rem;
+    strong {
+    }
+    p {
+      font-weight: var(--weight-600);
+    }
+  }
+`;
+
+const ChatProductImage = styled.div`
+  position: relative;
+  width: 3rem;
+  height: 3rem;
 `;
 
 const ChatButtonBox = styled.div`
@@ -55,7 +82,7 @@ const ChatDetail = () => {
   );
 
   if (room_message_data.error) return <div>에러</div>;
-  if (!room_message_data.data) return  <Loading />
+  if (!room_message_data.data) return <Loading />;
 
   const my_id = room_message_data.data[0].userId;
   const onCreateMessage = (data: any) => {
@@ -74,8 +101,24 @@ const ChatDetail = () => {
 
   return (
     <>
-      <Appbar title={''} />
+      <Appbar title={room_message_data.data[0].product.user.name} />
       <ChatDetailContainer>
+        <ChatProductInfo>
+          <ChatProductImage>
+            <Image
+              src={`${process.env.NEXT_PUBLIC_CF_IMAGE}/${room_message_data.data[0].product.image}/avatar`}
+              alt=""
+              width={280}
+              height={280}
+              layout="fill"
+              style={{ borderRadius: '50%' }}
+            />
+          </ChatProductImage>
+          <div>
+            <strong>{room_message_data.data[0].product.name}</strong>
+            <p>{currencify(room_message_data.data[0].product.price)}원</p>
+          </div>
+        </ChatProductInfo>
         {room_message_data.data[0].messages.map((v: MessageStructure) => {
           return <Message key={v.user.id} message={v.message} mymessage={v.user.id === my_id} />;
         })}
