@@ -11,6 +11,7 @@ export interface ChatStructure {
     price: number;
     image: string;
     description: string;
+    status: string;
     user: {
       id: number;
       name: string;
