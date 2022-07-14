@@ -6,7 +6,7 @@ import ChatIcon from '@mui/icons-material/Chat';
 import { ProductContainer, ProductBox, ProductImage, ProductContent, ProductInfo, ProductInfoContent } from './styles';
 import { currencify, getPrevDate } from '@libs/format';
 
-const ProductCard = ({ title, price, comments, hearts, image, onClick, updatedAt }: any) => {
+const ProductCard = ({ title, price, comments, hearts, image, onClick, updatedAt, status }: any) => {
   const _onClick = () => {
     if (!onClick) return;
     onClick();
@@ -39,7 +39,10 @@ const ProductCard = ({ title, price, comments, hearts, image, onClick, updatedAt
         <ProductContent>
           <strong>{title}</strong>
           <b>{getPrevDate(updatedAt)}</b>
-          <p>{currencify(price)}원</p>
+          <p>
+            {status === 'close' && <span>판매완료</span>}
+            {currencify(price)}원
+          </p>
         </ProductContent>
       </ProductBox>
       <ProductInfo>
