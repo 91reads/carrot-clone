@@ -26,6 +26,7 @@ interface ChatStructureType {
     description: string;
     name: string;
     price: number;
+    status: string;
     user: {
       id: number;
       name: string;
@@ -80,12 +81,13 @@ const Chats = () => {
   const router = useRouter();
   const chat_data = useSWR<Array<ChatStructureType>>(`/api/chats`, getChatList);
 
-  const moveRouter = (chat_id: string, product_id: string) => {
+  const moveRouter = (chat_id: string, product_id: string, status: string) => {
     router.push({
       pathname: `/chats/${chat_id}`,
       query: {
         chat_id,
         product_id,
+        status,
       },
     });
   };
@@ -100,7 +102,7 @@ const Chats = () => {
       <Appbar title="채팅" backButtonDisable={true} />
       <ChatContainer>
         {chat_data.data.map((chat_info, i) => (
-          <ChatItemBox onClick={() => moveRouter(chat_info.id, chat_info.productId)} key={i}>
+          <ChatItemBox onClick={() => moveRouter(chat_info.id, chat_info.productId, chat_info.product.status)} key={i}>
             <ChatItemImage>
               <Image
                 src={`${process.env.NEXT_PUBLIC_CF_IMAGE}/${chat_info.product.user.avatar}/avatar`}
