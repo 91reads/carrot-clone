@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react';
 import Message from 'src/components/Message';
 import { createMessage, getRoomMessage } from 'src/api/message';
+import { updateProduct } from 'src/api/product';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import useSWR from 'swr';
@@ -80,6 +82,31 @@ const ChatDetail = () => {
     router.query.product_id && `/api/chats/${router.query.product_id}/message`,
     router.query.product_id ? () => getRoomMessage(router.query.product_id as string) : null,
   );
+  const [product_status, set_product_status] = useState(router.query.status ? router.query.status : '');
+
+  console.log(room_message_data.data);
+
+  const onChangeProductStatus = (e: any) => {
+    set_product_status(e.target.value);
+
+    const change_word = (word: string) => {
+      if (word === 'live') return '판매중';
+      else return '판매 완료';
+    };
+
+    if (!confirm(`상품을 ${change_word(e.target.value)} 처리 하시겠습니까?`)) return;
+
+    updateProduct({
+      product_id: router.query.product_id,
+      status: e.target.value,
+    })
+      .then(() => {
+        alert('update success');
+      })
+      .catch((e) => {
+        console.log('statusUpdate:', e);
+      });
+  };
 
   if (room_message_data.error) return <div>에러</div>;
   if (!room_message_data.data) return <Loading />;
@@ -118,6 +145,10 @@ const ChatDetail = () => {
             <strong>{room_message_data.data[0].product.name}</strong>
             <p>{currencify(room_message_data.data[0].product.price)}원</p>
           </div>
+          <select onChange={onChangeProductStatus} value={product_status}>
+            <option value="live">판매중</option>
+            <option value="close">판매완료</option>
+          </select>
         </ChatProductInfo>
         {room_message_data.data[0].messages.map((v: MessageStructure) => {
           return <Message key={v.user.id} message={v.message} mymessage={v.user.id === my_id} />;
