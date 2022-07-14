@@ -31,7 +31,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
   // 상품 등록
   if (req.method === 'POST') {
     const {
-      body: { name, price, description, photoId },
+      body: { name, price, description, photoId, status },
       session: { user },
     } = req;
 
@@ -41,6 +41,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         price: +price,
         description,
         image: photoId,
+        status: status,
         user: {
           connect: {
             id: user?.id,
