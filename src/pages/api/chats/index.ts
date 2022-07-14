@@ -40,6 +40,7 @@ async function handler(
             name: true,
             price: true,
             description: true,
+            status: true,
             user: {
               select: {
                 id: true,

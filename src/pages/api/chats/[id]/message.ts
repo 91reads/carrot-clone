@@ -32,6 +32,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
             price: true,
             description: true,
             image: true,
+            status: true,
             user: {
               select: {
                 id: true,
