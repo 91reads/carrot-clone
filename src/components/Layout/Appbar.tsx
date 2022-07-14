@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import SearchForm from '@components/SearchForm';
+// import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const AppbarContainer = styled.div`
   position: absolute;
@@ -58,6 +59,7 @@ interface AppbarProps {
   set_watch_search?: any;
   set_search?: any;
   search?: any;
+  setting?: any;
 }
 
 const Appbar = ({
@@ -68,13 +70,14 @@ const Appbar = ({
   set_watch_search,
   search,
   set_search,
+  setting,
 }: AppbarProps) => {
   // XXX: 웹에서 모바일 처럼 보이기 위한 처리.
   const router = useRouter();
   const ref = useRef<HTMLHeadingElement>(null);
   const [parent_width, set_parent_width] = useState(0);
 
-  const throttle = (callback: { (): void; call?: any; }, limit: number | undefined) => {
+  const throttle = (callback: { (): void; call?: any }, limit: number | undefined) => {
     let wait = false;
     return function () {
       if (!wait) {
@@ -90,10 +93,8 @@ const Appbar = ({
   const checkParentOffset = () => {
     set_parent_width((prev: any) => {
       if (prev !== ref.current?.offsetWidth) {
-        console.log('new');
         return ref.current?.offsetWidth;
       }
-      console.log('not new');
       return prev;
     });
   };
@@ -122,7 +123,7 @@ const Appbar = ({
         <AppbarTitle>
           {!backButtonDisable && isFilterRouter() ? (
             <div onClick={() => router.back()}>
-              <ArrowBackIosIcon style={{ fontSize: '2rem', position: 'relative', top:'0.4rem' }} />
+              <ArrowBackIosIcon style={{ fontSize: '2rem', position: 'relative', top: '0.4rem' }} />
             </div>
           ) : (
             <div />
