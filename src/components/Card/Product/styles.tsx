@@ -31,6 +31,18 @@ export const ProductContent = styled.div`
     font-size: 1.4rem;
   }
   p {
+    display: flex;
+    span {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0rem 0.6rem;
+      margin-right: 0.6rem;
+      border-radius: var(--br-6);
+      font-size: 1.2rem;
+      color: white;
+      background-color: black;
+    }
     font-weight: var(--weight-500);
   }
 `;
