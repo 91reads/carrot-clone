@@ -63,7 +63,7 @@ model Product {
   image       String
   name        String
   price       Int
-  status      String?
+  status      String
   description String     @db.MediumText
   user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   favs        favs[]
