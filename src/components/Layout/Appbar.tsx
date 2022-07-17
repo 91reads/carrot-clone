@@ -70,7 +70,6 @@ const Appbar = ({
   set_watch_search,
   search,
   set_search,
-  setting,
 }: AppbarProps) => {
   // XXX: 웹에서 모바일 처럼 보이기 위한 처리.
   const router = useRouter();

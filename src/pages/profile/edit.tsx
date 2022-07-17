@@ -166,7 +166,7 @@ const EditProfile: NextPage = () => {
           <FormContainer>
             <DetailProfileImage htmlFor="picture">
               {avatar_preview.length > 1 ? (
-                <Image src={avatar_preview} width={280} height={280} layout="fill" style={{ borderRadius: '50%' }} />
+                <Image src={avatar_preview} width={280} height={280} layout="fill" style={{ borderRadius: '50%' }} alt=""/>
               ) : (
                 <Image
                   src={`${process.env.NEXT_PUBLIC_CF_IMAGE}/${user_data.data.avatar}/avatar`}

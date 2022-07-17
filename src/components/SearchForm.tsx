@@ -37,7 +37,7 @@ const SearchForm = ({ search, set_search, set_watch_search }: any) => {
     if (set_watch_search) {
       set_watch_search(watchSearch);
     }
-  }, [watchSearch]);
+  }, [watchSearch, set_watch_search]);
 
   const onSearch = () => {
     set_search(!search);

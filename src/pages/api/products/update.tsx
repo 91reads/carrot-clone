@@ -9,7 +9,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
   if (req.method === 'POST') {
     const {
       body: { product_id, status },
-      session: { user },
     } = req;
 
     await client.product.update({

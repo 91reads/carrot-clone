@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Message from 'src/components/Message';
 import { createMessage, getRoomMessage } from 'src/api/message';
 import { updateProduct } from 'src/api/product';

@@ -1,5 +1,4 @@
 import type { NextPage } from 'next';
-import { getUserHistory } from 'src/api/user';
 import useSWR from 'swr';
 import ProductCard from '@components/Card/Product/ProductCard';
 import Appbar from '@components/Layout/Appbar';
