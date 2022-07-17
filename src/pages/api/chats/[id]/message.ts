@@ -8,7 +8,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     const {
       session: { user },
       query: { id },
-    } = req;
+    } = req; 
 
     const room_message = await client.chat.findMany({
       where: {
