@@ -8,7 +8,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
   // 상품 등록
   if (req.method === 'POST') {
     const {
-      body: { product_id, status },
+      body: { product_id, buyer_id, status },
     } = req;
 
     await client.product.update({
@@ -17,6 +17,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       },
       data: {
         status: status,
+        buyer: Number(buyer_id),
       },
     });
     res.json({ ok: true });
