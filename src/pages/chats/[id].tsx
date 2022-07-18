@@ -13,6 +13,7 @@ import { ChatStructure } from '@libs/type/chat_type';
 import Loading from '@components/Loading/Loading';
 import Image from 'next/image';
 import { currencify } from '@libs/format';
+import useUser from '@libs/client/useUser';
 
 const ChatDetailContainer = styled.div`
   padding-top: 5rem;
@@ -83,8 +84,10 @@ const ChatDetail = () => {
     router.query.product_id ? () => getRoomMessage(router.query.product_id as string) : null,
   );
   const [product_status, set_product_status] = useState(router.query.status ? router.query.status : '');
+  const user_id = useUser();
 
-  console.log(room_message_data.data);
+  if (room_message_data.error) return <div>에러</div>;
+  if (!room_message_data.data) return <Loading />;
 
   const onChangeProductStatus = (e: any) => {
     set_product_status(e.target.value);
@@ -98,6 +101,7 @@ const ChatDetail = () => {
 
     updateProduct({
       product_id: router.query.product_id,
+      buyer_id: router.query.user_id,
       status: e.target.value,
     })
       .then(() => {
@@ -108,10 +112,6 @@ const ChatDetail = () => {
       });
   };
 
-  if (room_message_data.error) return <div>에러</div>;
-  if (!room_message_data.data) return <Loading />;
-
-  const my_id = room_message_data.data[0].userId;
   const onCreateMessage = (data: any) => {
     if (!router.query.id || !router.query.product_id) return;
 
@@ -128,12 +128,12 @@ const ChatDetail = () => {
 
   return (
     <>
-      <Appbar title={room_message_data.data[0].product.user.name} />
+      <Appbar title={room_message_data.data.filter((v) => Number(v.userId) === Number(router.query.user_id))[0].product.user.name} />
       <ChatDetailContainer>
         <ChatProductInfo>
           <ChatProductImage>
             <Image
-              src={`${process.env.NEXT_PUBLIC_CF_IMAGE}/${room_message_data.data[0].product.image}/avatar`}
+              src={`${process.env.NEXT_PUBLIC_CF_IMAGE}/${room_message_data.data.filter((v) => Number(v.userId) === Number(router.query.user_id))[0].product.image}/avatar`}
               alt=""
               width={280}
               height={280}
@@ -142,16 +142,16 @@ const ChatDetail = () => {
             />
           </ChatProductImage>
           <div>
-            <strong>{room_message_data.data[0].product.name}</strong>
-            <p>{currencify(room_message_data.data[0].product.price)}원</p>
+            <strong>{room_message_data.data.filter((v) => Number(v.userId) === Number(router.query.user_id))[0].product.name}</strong>
+            <p>{currencify(room_message_data.data.filter((v) => Number(v.userId) === Number(router.query.user_id))[0].product.price)}원</p>
           </div>
           <select onChange={onChangeProductStatus} value={product_status}>
             <option value="live">판매중</option>
             <option value="close">판매완료</option>
           </select>
         </ChatProductInfo>
-        {room_message_data.data[0].messages.map((v: MessageStructure) => {
-          return <Message key={v.user.id} message={v.message} mymessage={v.user.id === my_id} />;
+        {room_message_data.data.filter((v) => Number(v.userId) === Number(router.query.user_id))[0].messages.map((v: MessageStructure) => {
+          return <Message key={v.user.id} message={v.message} mymessage={v.user.id === user_id} />;
         })}
         <form onSubmit={handleSubmit(onCreateMessage)}>
           <ChatButtonBox>
