@@ -6,6 +6,7 @@ import Tabbar from '@components/Layout/Tabbar';
 import Appbar from '@components/Layout/Appbar';
 import Loading from '@components/Loading/Loading';
 import Image from 'next/image';
+import useUser from '@libs/client/useUser';
 
 interface MessageStructureType {
   chatId: number;
@@ -22,11 +23,13 @@ interface ChatStructureType {
   messages: Array<MessageStructureType>;
   productId: string;
   updatedAt: string;
+  sellerId: number;
   product: {
     description: string;
     name: string;
     price: number;
     status: string;
+    image: string;
     user: {
       id: number;
       name: string;
@@ -80,14 +83,16 @@ const ChatItemContent = styled.div`
 const Chats = () => {
   const router = useRouter();
   const chat_data = useSWR<Array<ChatStructureType>>(`/api/chats`, getChatList);
+  const my_id = useUser();
 
-  const moveRouter = (chat_id: string, product_id: string, status: string) => {
+  const moveRouter = (chat_id: string, product_id: string, status: string, user_id: number) => {
     router.push({
       pathname: `/chats/${chat_id}`,
       query: {
         chat_id,
         product_id,
         status,
+        user_id,
       },
     });
   };
@@ -95,28 +100,47 @@ const Chats = () => {
   if (chat_data.error) return <div>...에러</div>;
   if (!chat_data.data) return <Loading />;
 
-  console.log(chat_data.data);
-
   return (
     <>
       <Appbar title="채팅" backButtonDisable={true} />
       <ChatContainer>
         {chat_data.data.map((chat_info, i) => (
-          <ChatItemBox onClick={() => moveRouter(chat_info.id, chat_info.productId, chat_info.product.status)} key={i}>
+          <ChatItemBox
+            onClick={() => moveRouter(chat_info.id, chat_info.productId, chat_info.product.status, chat_info.user.id)}
+            key={i}
+          >
             <ChatItemImage>
               <Image
-                src={`${process.env.NEXT_PUBLIC_CF_IMAGE}/${chat_info.product.user.avatar}/avatar`}
+                src={
+                  chat_info.sellerId === my_id
+                    ? `${process.env.NEXT_PUBLIC_CF_IMAGE}/${
+                        chat_info.user.avatar || '74514a95-ce9a-471d-b000-b927ff295500'
+                      }/avatar`
+                    : `${process.env.NEXT_PUBLIC_CF_IMAGE}/${
+                        chat_info.product.user.avatar || '74514a95-ce9a-471d-b000-b927ff295500'
+                      }/avatar`
+                }
                 alt=""
-                width={280}
-                height={280}
                 layout="fill"
                 style={{ borderRadius: '50%' }}
               />
             </ChatItemImage>
             <ChatItemContent>
-              <strong>{chat_info.product.user.name}</strong>
+              <strong>{chat_info.sellerId === my_id ? chat_info.user.name : chat_info.product.user.name}</strong>
               <p>{chat_info.messages[chat_info.messages.length - 1]?.message}</p>
             </ChatItemContent>
+            <ChatItemImage>
+              <Image
+                src={
+                  chat_info.product.image
+                    ? `${process.env.NEXT_PUBLIC_CF_IMAGE}/${chat_info.product.image}/avatar`
+                    : `${process.env.NEXT_PUBLIC_CF_IMAGE}/74514a95-ce9a-471d-b000-b927ff295500/avatar`
+                }
+                alt=""
+                layout="fill"
+                style={{ borderRadius: '50%' }}
+              />
+            </ChatItemImage>
           </ChatItemBox>
         ))}
       </ChatContainer>
