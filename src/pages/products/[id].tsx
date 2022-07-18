@@ -26,6 +26,7 @@ import {
 } from 'assets/pages/products/detail/styles';
 import { ProductDetailStructure } from '@libs/type/product_type';
 import Loading from '@components/Loading/Loading';
+import useUser from '@libs/client/useUser';
 
 const ItemDetail = () => {
   const router = useRouter();
@@ -33,12 +34,13 @@ const ItemDetail = () => {
     getProductDetail(router.query.id as string),
   );
   const { mutate } = useSWRConfig();
-  const [my_id, set_my_id] = useState('');
+  const my_id = useUser();
+  const [seller_id, set_seller_id] = useState<number>();
 
   useEffect(() => {
     if (!product_detail.data) return;
 
-    set_my_id(sessionStorage.getItem('userId') as string);
+    set_seller_id(product_detail.data.product.userId)
   }, [product_detail]);
 
   if (product_detail.error) return <div>...error</div>;
@@ -57,6 +59,7 @@ const ItemDetail = () => {
 
   const isMyProduct = () => {
     if(!product_detail.data) return;
+    if(!seller_id) return;
 
     if(product_detail.data.product.userId === Number(my_id)) return true;
     else return false;
@@ -67,7 +70,7 @@ const ItemDetail = () => {
       router.push('/');
       return;
     }
-    createChat(product_detail.data?.product.id as number)
+    createChat(seller_id as number, product_detail.data?.product.id as number)
       .then((v) => {
         alert('Success Create ChatRoom');
         router.push(`/chats/${v.id}?chat_id${v.id}&product_id=${v.productId}`);
