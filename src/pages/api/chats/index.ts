@@ -9,7 +9,7 @@ async function handler(
 ) {
   const {
     session: { user },
-    body: { product_id }
+    body: { product_id, seller_id }
   } = req;
   if (req.method === "GET") {
     const chat_list = await client.chat.findMany({
@@ -41,6 +41,7 @@ async function handler(
             price: true,
             description: true,
             status: true,
+            image: true,
             user: {
               select: {
                 id: true,
@@ -88,6 +89,7 @@ async function handler(
 						id: user?.id,
 					},
 				},
+        sellerId: Number(seller_id),
 			},
 		});
 		if (chat) {
