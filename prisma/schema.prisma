@@ -64,6 +64,7 @@ model Product {
   name        String
   price       Int
   status      String
+  buyer       Int?
   description String     @db.MediumText
   user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   favs        favs[]
@@ -202,6 +203,7 @@ model Chat {
   updatedAt DateTime  @updatedAt
   userId    Int
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sellerId  Int?
   productId Int?
   product   Product?  @relation(fields: [productId], references: [id], onDelete: Cascade)
   messages  Message[]
@@ -215,6 +217,7 @@ model Message {
   userId    Int
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   chatId    Int?
+  sellerId  Int?
   chat      Chat?    @relation(fields: [chatId], references: [id], onDelete: Cascade)
   productId Int?
   product   Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
