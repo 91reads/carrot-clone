@@ -19,23 +19,21 @@ const Bought: NextPage = () => {
   if (product_data.error) return <div>...에러</div>;
   if (!product_data.data) return  <Loading />
 
-  const isMyProduct = (product: any) => {
-    if(product.userId === user_id) return true
-    else false;
-  }
-
   const isCloseProduct = (product: any) => {
     if(product.status === 'close') return true
-    else false;
+    else return false;
   }
 
-  console.log(product_data.data);
+  const isPurchase = (product: any) => {
+    if(Number(product.buyer) === user_id) return true;
+    else return false;
+  }
 
   return (
     <>
       <Appbar title="구매 내역" />
       <BoughtContainer>
-      {product_data.data.filter(isMyProduct).filter(isCloseProduct).map((v: any) => {
+      {product_data.data.filter(isCloseProduct).filter(isPurchase).map((v: any) => {
           return (
             <ProductCard
               key={v.id}
