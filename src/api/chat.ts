@@ -12,13 +12,14 @@ export const getChatList = async () => {
   return result;
 }
 
-export const createChat = async (product_id: number) => {
+export const createChat = async (my_id: number, product_id: number) => {
   const uri = `/api/chats`;
 
   const result = await callAPI({
     uri,
     method: 'POST',
     body: {
+      seller_id: my_id,
       product_id,
     }
   });
