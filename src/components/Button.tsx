@@ -23,6 +23,8 @@ const ButtonContainer = styled.button<ButtonStyleProps>`
 
   background-color: ${({ backgroundColor }) => backgroundColor && `${backgroundColor}`};
   color: ${( props ) => props.active ? `${props.activeColor}` : `${props.normalColor}`};
+
+  cursor: pointer;
 `;
 
 interface ButtonProps {

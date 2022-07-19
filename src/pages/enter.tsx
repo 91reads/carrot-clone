@@ -4,13 +4,13 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 // components
 import Button from 'src/components/Button';
+import Loading from '@components/Loading/Loading';
 // api
 import { requestOTP, verifyOTP } from 'src/api/auth';
 // assets
 import Logo from 'public/logo.png';
 // styles
 import { EnterContainer, EnterTitle, CustomInput, EnterImage } from 'assets/pages/enter/styles';
-import Loading from '@components/Loading/Loading';
 
 interface EnterForm {
   email: string;
@@ -38,7 +38,7 @@ const Enter = () => {
     else set_active_color(false);
   }, [watch_email]);
 
-  // 로그인 이메일 작성
+  // 로그인 / 회원가입 이메일 작성
   const onValid = (data: EnterForm) => {
     if (token_valid || !active_color) return;
     set_loading(true);
@@ -56,7 +56,9 @@ const Enter = () => {
   };
 
   // 토큰 검증
-  const onTokenValid = (data: TokenForm) => {
+  const onValidToken = (data: TokenForm) => {
+    set_loading(true);
+
     verifyOTP(data)
       .then(() => {
         alert('Login Success');
@@ -82,7 +84,7 @@ const Enter = () => {
         {/* 이메일 입력 폼 */}
         <form onSubmit={handleSubmit(onValid)}>
           <CustomInput {...register('email', { required: true })} type="email" />
-          {loading ? (
+          {!token_valid && loading ? (
             <Loading />
           ) : (
             <Button
@@ -98,16 +100,20 @@ const Enter = () => {
 
         {/* 토큰 검증 폼 */}
         {token_valid && (
-          <form onSubmit={tokenHandleSubmit(onTokenValid)}>
+          <form onSubmit={tokenHandleSubmit(onValidToken)}>
             <CustomInput {...tokenRegister('token', { required: true })} type="text" />
             <p>어떤 경우에도 타인에게 공유하지 마세요!</p>
-            <Button
-              content={'인증번호 확인'}
-              marginTop={1}
-              normalColor={'white'}
-              backgroundColor={'var(--primary)'}
-              borderDisabled={true}
-            />
+            {loading ? (
+              <Loading />
+            ) : (
+              <Button
+                content={'인증번호 확인'}
+                marginTop={1}
+                normalColor={'white'}
+                backgroundColor={'var(--primary)'}
+                borderDisabled={true}
+              />
+            )}
           </form>
         )}
       </div>

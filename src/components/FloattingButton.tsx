@@ -13,9 +13,9 @@ const FloattingContainer = styled.div`
   left: 84%;
   /* right: -8rem; */
   height: 5rem;
-
+  
   width: 100%;
-`;
+  `;
 interface InnerWrapStyle {
   width: number;
 }
@@ -23,7 +23,7 @@ interface InnerWrapStyle {
 const FloattingInner = styled.div<InnerWrapStyle>`
   position: fixed;
   width: ${({ width }) => width && `${width}px`};
-
+  cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -55,7 +55,7 @@ export default function FloatingButton({ href }: FloatingButtonType) {
     <FloattingContainer ref={ref}>
       <FloattingInner width={parent_width}>
         <Link href={href}>
-          <a className="fixed hover:bg-orange-500 border-0 aspect-square border-transparent transition-colors cursor-pointer  bottom-24 right-5 shadow-xl bg-orange-400 rounded-full w-14 flex items-center justify-center text-white">
+          <a>
             <AddIcon />
           </a>
         </Link>

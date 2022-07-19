@@ -43,12 +43,17 @@ const AppbarInnerWrap = styled.div<InnerWrapStyle>`
 
   div:last-child {
     color: var(--primary);
+    cursor: pointer;
   }
 `;
 
 const AppbarTitle = styled.div`
   display: flex;
   align-items: ceter;
+
+  div {
+    cursor: pointer;
+  }
 `;
 
 interface AppbarProps {
