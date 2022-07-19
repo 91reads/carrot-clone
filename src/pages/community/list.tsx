@@ -3,8 +3,11 @@ import useSWR from 'swr';
 // components
 import Appbar from '@components/Layout/Appbar';
 import Tabbar from '@components/Layout/Tabbar';
+import Loading from '@components/Loading/Loading';
 // api
 import { getPostList, PostStructureType } from 'src/api/community';
+// lib
+import { getPrevDate } from '@libs/format';
 // assets
 import ChatIcon from '@mui/icons-material/Chat';
 import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
@@ -12,14 +15,12 @@ import { useRouter } from 'next/router';
 // styles
 import {
   CommunityContainer,
-  PostContainer,
-  PostTitle,
-  PostContent,
-  PostInfo,
-  PostInfoContent,
-} from 'assets/pages/community/styles';
-import { getPrevDate } from '@libs/format';
-import Loading from '@components/Loading/Loading';
+  CommunityInnerWrap,
+  CommunityTitle,
+  CommunityContent,
+  CommunityInfo,
+  CommunityInfoContent,
+} from 'assets/pages/community/list_styles';
 
 const Community = () => {
   const community_data = useSWR<Array<PostStructureType>>(`/api/posts`, getPostList);
@@ -37,27 +38,27 @@ const Community = () => {
       <Appbar title="동네생활" backButtonDisable={true} />
       <CommunityContainer>
         {community_data?.data?.map((post) => (
-          <PostContainer key={post.id} onClick={() => onMoveRouter(post.id)}>
-            <PostTitle>동네질문</PostTitle>
-            <PostContent>
+          <CommunityInnerWrap key={post.id} onClick={() => onMoveRouter(post.id)}>
+            <CommunityTitle>동네질문</CommunityTitle>
+            <CommunityContent>
               <strong>Q. </strong>
               <p>{post.question}</p>
-            </PostContent>
-            <PostInfo>
+            </CommunityContent>
+            <CommunityInfo>
               <div>
                 <span>{post.user.name}</span>
                 <p>{getPrevDate(post.updatedAt)}</p>
               </div>
-              <PostInfoContent>
+              <CommunityInfoContent>
                 <ChatIcon style={{ fontSize: '1.6rem', fill: 'black' }} />
                 <p>궁금해요 {post._count.wondering}</p>
                 <CheckCircleOutlineRoundedIcon style={{ fontSize: '1.6rem', fill: 'black' }} />
                 <p>답변 {post._count.answers}</p>
-              </PostInfoContent>
-            </PostInfo>
-          </PostContainer>
+              </CommunityInfoContent>
+            </CommunityInfo>
+          </CommunityInnerWrap>
         ))}
-        <FloatingButton href="/community/write" />
+        <FloatingButton href="/community/register" />
       </CommunityContainer>
       <Tabbar />
     </>

@@ -1,84 +1,22 @@
-import styled from 'styled-components';
 import useSWR from 'swr';
-import { getChatList } from 'src/api/chat';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
+// components
 import Tabbar from '@components/Layout/Tabbar';
 import Appbar from '@components/Layout/Appbar';
 import Loading from '@components/Loading/Loading';
-import Image from 'next/image';
+// api
+import { getChatList } from 'src/api/chat';
+// lib
 import useUser from '@libs/client/useUser';
-
-interface MessageStructureType {
-  chatId: number;
-  createdAt: string;
-  id: number;
-  message: string;
-  productId: number;
-  updatedAt: string;
-  userId: number;
-}
-interface ChatStructureType {
-  createdAt: string;
-  id: string;
-  messages: Array<MessageStructureType>;
-  productId: string;
-  updatedAt: string;
-  sellerId: number;
-  product: {
-    description: string;
-    name: string;
-    price: number;
-    status: string;
-    image: string;
-    user: {
-      id: number;
-      name: string;
-      avatar?: string;
-    };
-  };
-  user: {
-    id: number;
-    name: string;
-    avatar?: string;
-  };
-  userId: number;
-}
-
-const ChatContainer = styled.div`
-  padding-top: 5rem;
-`;
-
-const ChatItemBox = styled.div`
-  display: flex;
-  padding: 2rem;
-  border-bottom: 1px solid var(--gray-1);
-`;
-
-const ChatItemImage = styled.div`
-  position: relative;
-  width: 3rem;
-  height: 3rem;
-`;
-
-const ChatItemContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-left: 1rem;
-
-  font-size: 1.4rem;
-  strong {
-    font-weight: var(--weight-500);
-  }
-  p {
-    font-weight: var(--weight-400);
-    line-height: 2.2rem;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    width: 28rem;
-  }
-`;
+import { ChatStructureType } from '@libs/type/chat_type';
+// styles
+import {
+  ChatContainer,
+  ChatItemBox,
+  ChatItemContent,
+  ChatItemImage,
+} from 'assets/pages/chat/list_styles';
 
 const Chats = () => {
   const router = useRouter();

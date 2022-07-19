@@ -1,28 +1,15 @@
+import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import { createPost, PostRegisterType } from 'src/api/community';
+// components
 import Appbar from '@components/Layout/Appbar';
-import styled from 'styled-components';
-import { useRef } from 'react';
-
-const PostContainer = styled.form`
-  margin-top: 5rem;
-  height: 80%;
-`;
-const RegisterTextArea = styled.textarea`
-  border-radius: var(--br-6);
-  /* border: 1px solid var(--gray-2); */
-  border: none;
-  width: 100%;
-  /* height: 14rem; */
-  padding: 1rem;
-  margin-top: 1.6rem;
-  resize: none;
-  font-size: 1.8rem;
-  line-height: 3rem;
-  height: 100%;
-  outline-style: none;
-`;
+// api
+import { createPost, PostRegisterType } from 'src/api/community';
+// styles
+import {
+  RegisterContainer,
+  RegisterTextArea
+} from 'assets/pages/community/register_styles';
 
 const Write = () => {
   const router = useRouter();
@@ -33,7 +20,7 @@ const Write = () => {
     refSubmitButton?.current?.click();
   };
 
-  const onCreatePost = (data: PostRegisterType) => {
+  const onRegisterPost = (data: PostRegisterType) => {
     createPost({ ...data })
       .then(() => {
         alert('Create Post Success');
@@ -47,10 +34,10 @@ const Write = () => {
   return (
     <>
       <Appbar title="동네생활 등록" onClick={triggerSubmit} onClickTitle={'저장'} />
-      <PostContainer onSubmit={handleSubmit(onCreatePost)} className="p-4 space-y-4">
+      <RegisterContainer onSubmit={handleSubmit(onRegisterPost)}>
         <RegisterTextArea {...register('question', { required: true })} required placeholder="Ask a question!" />
         <button ref={refSubmitButton} type="submit" hidden={true} />
-      </PostContainer>
+      </RegisterContainer>
     </>
   );
 };
