@@ -1,17 +1,18 @@
-import { MessageStructure } from './message_type';
+import { MessageStructureType } from "./message_type";
 
-export interface ChatStructure {
+export interface ChatStructureType {
   createdAt: string;
-  id: number;
-  messages: Array<MessageStructure>;
-  productId: number;
+  id: string;
+  messages: Array<MessageStructureType>;
+  productId: string;
   updatedAt: string;
+  sellerId: number;
   product: {
+    description: string;
     name: string;
     price: number;
-    image: string;
-    description: string;
     status: string;
+    image: string;
     user: {
       id: number;
       name: string;
