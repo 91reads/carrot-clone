@@ -102,13 +102,13 @@ const Tabbar = () => {
       id: 2,
       icon: <MapsHomeWorkIcon style={{ fontSize: '2.4rem', fill: 'black' }} />,
       text: '동네생활',
-      link: '/community',
+      link: '/community/list',
     },
     {
       id: 3,
       icon: <ChatIcon style={{ fontSize: '2.2rem', fill: 'black' }} />,
       text: '채팅',
-      link: '/chats',
+      link: '/chats/list',
     },
     {
       id: 4,
