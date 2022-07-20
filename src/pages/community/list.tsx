@@ -27,7 +27,7 @@ const Community = () => {
   const router = useRouter();
 
   if (community_data.error) return <div>...error</div>;
-  if (!community_data.data) return  <Loading />
+  if (!community_data.data) return <Loading />;
 
   const onMoveRouter = (id: number) => {
     router.push(`/community/${id}`);
@@ -37,27 +37,29 @@ const Community = () => {
     <>
       <Appbar title="동네생활" backButtonDisable={true} />
       <CommunityContainer>
-        {community_data?.data?.map((post) => (
-          <CommunityInnerWrap key={post.id} onClick={() => onMoveRouter(post.id)}>
-            <CommunityTitle>동네질문</CommunityTitle>
-            <CommunityContent>
-              <strong>Q. </strong>
-              <p>{post.question}</p>
-            </CommunityContent>
-            <CommunityInfo>
-              <div>
-                <span>{post.user.name}</span>
-                <p>{getPrevDate(post.updatedAt)}</p>
-              </div>
-              <CommunityInfoContent>
-                <ChatIcon style={{ fontSize: '1.6rem', fill: 'black' }} />
-                <p>궁금해요 {post._count.wondering}</p>
-                <CheckCircleOutlineRoundedIcon style={{ fontSize: '1.6rem', fill: 'black' }} />
-                <p>답변 {post._count.answers}</p>
-              </CommunityInfoContent>
-            </CommunityInfo>
-          </CommunityInnerWrap>
-        ))}
+        {community_data?.data
+          ?.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+          .map((post) => (
+            <CommunityInnerWrap key={post.id} onClick={() => onMoveRouter(post.id)}>
+              <CommunityTitle>동네질문</CommunityTitle>
+              <CommunityContent>
+                <strong>Q. </strong>
+                <p>{post.question}</p>
+              </CommunityContent>
+              <CommunityInfo>
+                <div>
+                  <span>{post.user.name}</span>
+                  <p>{getPrevDate(post.updatedAt)}</p>
+                </div>
+                <CommunityInfoContent>
+                  <ChatIcon style={{ fontSize: '1.6rem', fill: 'black' }} />
+                  <p>궁금해요 {post._count.wondering}</p>
+                  <CheckCircleOutlineRoundedIcon style={{ fontSize: '1.6rem', fill: 'black' }} />
+                  <p>답변 {post._count.answers}</p>
+                </CommunityInfoContent>
+              </CommunityInfo>
+            </CommunityInnerWrap>
+          ))}
         <FloatingButton href="/community/register" />
       </CommunityContainer>
       <Tabbar />

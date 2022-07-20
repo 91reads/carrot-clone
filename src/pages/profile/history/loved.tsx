@@ -5,13 +5,14 @@ import ProductCard from '@components/Card/Product/ProductCard';
 import Appbar from '@components/Layout/Appbar';
 import styled from 'styled-components';
 import Loading from '@components/Loading/Loading';
+import { ProductWithCount } from 'src/pages';
 
 const LovedContainer = styled.div`
   margin-top: 5rem;
 `;
 
 const Loved: NextPage = () => {
-  const history_data = useSWR(`/api/users/me/favs`, () => getUserHistory('favs'));
+  const history_data = useSWR<Array<ProductWithCount>>(`/api/users/me/favs`, () => getUserHistory('favs'));
 
   if (history_data.error) return <div>...에러</div>;
   if (!history_data.data) return  <Loading />
@@ -25,12 +26,13 @@ const Loved: NextPage = () => {
             <ProductCard
               key={v.product.id}
               title={v.product.name}
-              id={v.product.id}
+              // id={v.product.id}
               price={v.product.price}
               comments={v.product.chats.length}
               hearts={v.product._count.favs}
               image={v.product.image}
               updatedAt={v.product.updatedAt}
+              status={v.status}
             />
           );
         })}

@@ -44,7 +44,13 @@ export const createProduct = async (product_info: ProductRegisterType) => {
   return result;
 }
 
-export const updateProduct = async ({product_id, buyer_id, status}: any) => {
+interface UpdateProductType {
+  product_id: string;
+  buyer_id: string;
+  status: 'live' | 'close';
+}
+
+export const updateProduct = async ({product_id, buyer_id, status}: UpdateProductType) => {
   const uri = `/api/products/update`;
 
   const result = await callAPI({

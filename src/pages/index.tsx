@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Product } from '@prisma/client';
 import styled from 'styled-components';
 import useSWR from 'swr';
 // components
@@ -16,7 +15,7 @@ import useCoords from '@libs/client/useCoord';
 import { ChatStructureType } from '@libs/type/chat_type';
 import { ProductStructure } from '@libs/type/product_type';
 
-export interface ProductWithCount extends Product {
+export interface ProductWithCount extends ProductStructure {
   _count: {
     favs: number;
   };
@@ -62,7 +61,6 @@ const Home = () => {
           .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
           .map((product) => (
             <ProductCard
-              id={product.id}
               key={product.id}
               title={product.name}
               price={product.price}
@@ -71,7 +69,7 @@ const Home = () => {
               hearts={product._count?.favs}
               onClick={() => onMoveRouter(product.id)}
               updatedAt={product.createdAt}
-              watch_search={watch_search}
+              status={product.status}
             />
           ))}
       </HomeContainer>

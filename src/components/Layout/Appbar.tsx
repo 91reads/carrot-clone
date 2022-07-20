@@ -3,7 +3,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import SearchForm from '@components/SearchForm';
-// import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const AppbarContainer = styled.div`
   position: absolute;
@@ -61,10 +60,9 @@ interface AppbarProps {
   onClick?: () => void;
   onClickTitle?: string;
   backButtonDisable?: boolean;
-  set_watch_search?: any;
-  set_search?: any;
-  search?: any;
-  setting?: any;
+  set_watch_search?: React.Dispatch<React.SetStateAction<string>>;
+  set_search?: React.Dispatch<React.SetStateAction<boolean>>;
+  search?: boolean;
 }
 
 const Appbar = ({

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import Image from 'next/image';
-import useSWR from 'swr';
+import useSWR, { useSWRConfig } from 'swr';
 // components
 import Message from 'src/components/Message';
 import Appbar from '@components/Layout/Appbar';
@@ -26,10 +26,12 @@ const ChatDetail = () => {
   const room_message_data = useSWR<Array<ChatStructureType>>(
     router.query.product_id && `/api/chats/${router.query.chat_id}/${router.query.product_id}/message`,
     router.query.product_id ? () => getRoomMessage(router.query.product_id as string) : null,
+    { refreshInterval: 1000 },
   );
   const [product_status, set_product_status] = useState(router.query.status ? router.query.status : '');
   const [valid_button, set_valid_button] = useState(false);
   const user_id = useUser();
+  const { mutate } = useSWRConfig();
 
   const watch_message = watch('message');
 
@@ -58,11 +60,13 @@ const ChatDetail = () => {
     if (!confirm(`상품을 ${change_word(e.target.value)} 처리 하시겠습니까?`)) return;
 
     updateProduct({
-      product_id: router.query.product_id,
-      buyer_id: router.query.user_id,
+      product_id: router.query.product_id as string,
+      buyer_id: router.query.user_id as string,
       status: e.target.value,
     })
-      .then(() => {})
+      .then(() => {
+        mutate(`/api/chats/${router.query.chat_id}/${router.query.product_id}/message`);
+      })
       .catch((e) => {
         console.error('statusUpdate:', e);
       });

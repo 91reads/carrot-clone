@@ -57,7 +57,7 @@ const Tabbar = () => {
   const router = useRouter();
   // XXX: 웹에서 모바일 처럼 보이기 위한 처리.
   const ref = useRef<HTMLHeadingElement>(null);
-  const [parent_width, set_parent_width] = useState<any>(0);
+  const [parent_width, set_parent_width] = useState<number>(0);
 
   const throttle = (callback: { (): void; call?: any; }, limit: number | undefined) => {
     let wait = false;

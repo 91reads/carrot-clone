@@ -5,8 +5,9 @@ import ChatIcon from '@mui/icons-material/Chat';
 // styles
 import { ProductContainer, ProductBox, ProductImage, ProductContent, ProductInfo, ProductInfoContent } from './styles';
 import { currencify, getPrevDate } from '@libs/format';
+import { ProductCardProps } from '@libs/type/product_type';
 
-const ProductCard = ({ title, price, comments, hearts, image, onClick, updatedAt, status }: any) => {
+const ProductCard = ({ title, price, comments, hearts, image, onClick, updatedAt, status }: ProductCardProps) => {
   const _onClick = () => {
     if (!onClick) return;
     onClick();

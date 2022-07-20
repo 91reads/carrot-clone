@@ -7,6 +7,7 @@ import Loading from '@components/Loading/Loading';
 import { ProductWithCount } from 'src/pages';
 import { getProductList } from 'src/api/product';
 import useUser from '@libs/client/useUser';
+import { ProductStructure } from '@libs/type/product_type';
 
 const SoldContainer = styled.div`
   margin-top: 5rem;
@@ -20,7 +21,7 @@ const Sold: NextPage = () => {
   if (product_data.error) return <div>...에러</div>;
   if (!product_data.data) return  <Loading />
 
-  const isMyProduct = (product: any) => {
+  const isMyProduct = (product: ProductStructure) => {
     if(product.userId === user_id) return true
     else false;
   }
@@ -29,12 +30,11 @@ const Sold: NextPage = () => {
     <>
       <Appbar title="판매 내역" />
       <SoldContainer>
-        {product_data.data.filter(isMyProduct).map((v: any) => {
+        {product_data.data.filter(isMyProduct).map((v: ProductWithCount) => {
           return (
             <ProductCard
               key={v.id}
               title={v.name}
-              id={v.id}
               price={v.price}
               comments={v.chats.length}
               hearts={v._count.favs}

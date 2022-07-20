@@ -8,7 +8,7 @@ export interface ProductStructure {
   image: string;
   name: string;
   price: number;
-  status: string;
+  status: 'live' | 'close';
   buyer: number | null;
   description: string;
 }
@@ -21,4 +21,15 @@ export interface ProductDetailStructure {
   product: ProductWithUser;
   isLiked: boolean;
   relatedProducts: Array<ProductStructure>;
+}
+
+export interface ProductCardProps {
+  title: string;
+  price: number;
+  comments: any;
+  image: string;
+  hearts: number;
+  updatedAt: Date;
+  onClick?: () => void;
+  status: 'live' | 'close';
 }

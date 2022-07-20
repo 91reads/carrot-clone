@@ -81,6 +81,7 @@ export const CommunityForm = styled.form`
     background-color: var(--primary);
     color: white;
     border-radius: var(--br-12);
+    cursor: pointer;
   }
 `;
 
@@ -103,7 +104,6 @@ export const DetailProfileImage = styled.div`
   width: 5rem;
   height: 5rem;
   border-radius: 50%;
-  background-color: green;
   position: relative;
 `;
 
@@ -114,6 +114,5 @@ export const AnswerProfileImage = styled.div`
   width: 2.6rem;
   height: 2.6rem;
   border-radius: 50%;
-  background-color: green;
   position: relative;
 `;

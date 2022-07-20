@@ -43,7 +43,7 @@ export const getUserReview = async () => {
   return result;
 }
 
-export const getUserHistory = async (name: any) => {
+export const getUserHistory = async (name: string) => {
   const uri = `/api/users/me/${name}`;
 
   const result = await callAPI({

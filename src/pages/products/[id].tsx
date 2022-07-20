@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { useSWRConfig } from 'swr';
-import useSWRImmutable from 'swr/immutable';
+import useSWR, { useSWRConfig } from 'swr';
 import Image from 'next/image';
 // components
 import Appbar from '@components/Layout/Appbar';
@@ -31,10 +30,10 @@ import {
 
 const ItemDetail = () => {
   const router = useRouter();
-  const product_detail = useSWRImmutable<ProductDetailStructure>(`/api/products/${router.query.id}`, () =>
+  const product_detail = useSWR<ProductDetailStructure>(`/api/products/${router.query.id}`, () =>
     getProductDetail(router.query.id as string),
   );
-  const chat_data = useSWRImmutable<Array<ChatStructureType>>(`/api/chats`, getChatList);
+  const chat_data = useSWR<Array<ChatStructureType>>(`/api/chats`, getChatList);
   const { mutate } = useSWRConfig();
   const my_id = useUser();
   const [seller_id, set_seller_id] = useState<number>();
