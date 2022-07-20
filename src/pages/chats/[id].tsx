@@ -24,7 +24,7 @@ const ChatDetail = () => {
   const router = useRouter();
   const { register, handleSubmit, reset, watch } = useForm();
   const room_message_data = useSWR<Array<ChatStructureType>>(
-    router.query.product_id && `/api/chats/${router.query.product_id}/message`,
+    router.query.product_id && `/api/chats/${router.query.chat_id}/${router.query.product_id}/message`,
     router.query.product_id ? () => getRoomMessage(router.query.product_id as string) : null,
   );
   const [product_status, set_product_status] = useState(router.query.status ? router.query.status : '');
@@ -39,12 +39,6 @@ const ChatDetail = () => {
 
     set_valid_button(true);
   }, [watch_message]);
-
-  // useEffect(() => {
-  //   if(!room_message_data.data) return;
-
-  //   console.log('asdf:', room_message_data.data.filter((v) => Number(v.userId) === Number(user_id))[0]);
-  // }, [room_message_data])
 
   if (room_message_data.error) return <div>에러</div>;
   if (!room_message_data.data) return <Loading />;
@@ -108,7 +102,11 @@ const ChatDetail = () => {
             <strong>{filtered_data?.product.name}</strong>
             <p>{currencify(filtered_data?.product.price)}원</p>
           </div>
-          <select onChange={onChangeProductStatus} value={product_status}>
+          <select
+            onChange={onChangeProductStatus}
+            value={product_status}
+            disabled={filtered_data.sellerId === user_id ? true : false}
+          >
             <option value="live">판매중</option>
             <option value="close">판매완료</option>
           </select>
