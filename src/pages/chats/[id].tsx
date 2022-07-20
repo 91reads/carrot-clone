@@ -35,13 +35,17 @@ const ChatDetail = () => {
 
   useEffect(() => {
     set_valid_button(false);
-    if(!watch_message) return;
+    if (!watch_message) return;
 
     set_valid_button(true);
   }, [watch_message]);
 
   if (room_message_data.error) return <div>에러</div>;
   if (!room_message_data.data) return <Loading />;
+
+  const filtered_data = room_message_data.data
+    .filter((v) => Number(v.productId) === Number(router.query.product_id))
+    .filter((v) => Number(v.userId) === Number(user_id))[0];
 
   const onChangeProductStatus = (e: any) => {
     set_product_status(e.target.value);
@@ -69,6 +73,8 @@ const ChatDetail = () => {
   const onCreateMessage = (data: any) => {
     if (!router.query.id || !router.query.product_id) return;
 
+    console.log(router.query.chat_id);
+
     createMessage(router.query.chat_id as string, router.query.product_id as string, data.message)
       .then(() => {
         reset();
@@ -81,18 +87,12 @@ const ChatDetail = () => {
 
   return (
     <>
-      <Appbar
-        title={
-          room_message_data.data.filter((v) => Number(v.productId) === Number(router.query.product_id))[0].product.user.name
-        }
-      />
+      <Appbar title={filtered_data?.product.user.name} />
       <RoomContainer>
         <RoomProductInfo>
           <RoomProductImage>
             <Image
-              src={`${process.env.NEXT_PUBLIC_CF_IMAGE}/${
-                room_message_data.data.filter((v) => Number(v.productId) === Number(router.query.product_id))[0].product.image
-              }/avatar`}
+              src={`${process.env.NEXT_PUBLIC_CF_IMAGE}/${filtered_data?.product.image}/avatar`}
               alt=""
               width={280}
               height={280}
@@ -101,27 +101,17 @@ const ChatDetail = () => {
             />
           </RoomProductImage>
           <div>
-            <strong>
-              {room_message_data.data.filter((v) => Number(v.productId) === Number(router.query.product_id))[0].product.name}
-            </strong>
-            <p>
-              {currencify(
-                room_message_data.data.filter((v) => Number(v.productId) === Number(router.query.product_id))[0].product
-                  .price,
-              )}
-              원
-            </p>
+            <strong>{filtered_data?.product.name}</strong>
+            <p>{currencify(filtered_data?.product.price)}원</p>
           </div>
-          <select onChange={onChangeProductStatus} value={product_status}>
+          <select onChange={onChangeProductStatus} value={product_status} disabled={true}>
             <option value="live">판매중</option>
             <option value="close">판매완료</option>
           </select>
         </RoomProductInfo>
-        {room_message_data.data
-          .filter((v) => Number(v.userId) === Number(router.query.user_id))[0]
-          .messages.map((v: MessageStructureType, i: number) => {
-            return <Message key={i} message={v.message} mymessage={v.user.id === user_id} />;
-          })}
+        {filtered_data?.messages?.map((v: MessageStructureType, i: number) => {
+          return <Message key={i} message={v.message} mymessage={v.user.id === user_id} />;
+        })}
         <form onSubmit={handleSubmit(onCreateMessage)}>
           <RoomButtonBox valid_button={valid_button}>
             <input {...register('message', { required: true })} type="text" />
