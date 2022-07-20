@@ -35,8 +35,6 @@ interface ProductRegisterType {
 export const createProduct = async (product_info: ProductRegisterType) => {
   const uri = `/api/products`;
 
-  console.log(product_info);
-
   const result = await callAPI({
     uri,
     method: 'POST',

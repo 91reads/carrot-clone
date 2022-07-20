@@ -61,7 +61,6 @@ const Enter = () => {
 
     verifyOTP(data)
       .then(() => {
-        alert('Login Success');
         router.push('/');
       })
       .catch((e) => {

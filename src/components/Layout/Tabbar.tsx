@@ -117,7 +117,6 @@ const Tabbar = () => {
   ];
 
   const moveRouter = (link: string) => {
-    console.log('click');
     router.push(link);
   };
 

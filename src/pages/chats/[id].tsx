@@ -63,7 +63,6 @@ const ChatDetail = () => {
       status: e.target.value,
     })
       .then(() => {
-        alert('update success');
       })
       .catch((e) => {
         console.error('statusUpdate:', e);

@@ -4,8 +4,6 @@ import client from 'src/libs/client/client';
 import { withApiSession } from 'src/libs/server/withSession';
 
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
-  console.log('REQ', req.method);
-
   // 상품 목록 가져오기
   if (req.method === 'GET') {
     const products = await client.product.findMany({

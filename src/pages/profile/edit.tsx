@@ -137,7 +137,6 @@ const EditProfile: NextPage = () => {
       })
         .then(() => {
           set_loading(false);
-          alert('Profile Update Success');
           router.back();
         })
         .catch(() => {
@@ -147,7 +146,6 @@ const EditProfile: NextPage = () => {
         updateUser({ email, phone, name })
         .then(() => {
           set_loading(false);
-          alert('Profile Update Success');
         })
         .catch(() => {
           alert('Profile Update Failure, Retry Update Please');

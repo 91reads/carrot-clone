@@ -13,7 +13,6 @@ export const createMessage = async (chat_id: string, product_id: string, message
     },
   });
 
-  console.log('createMessageResult:', result);
   return result;
 }
 

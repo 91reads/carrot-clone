@@ -23,7 +23,6 @@ const Write = () => {
   const onRegisterPost = (data: PostRegisterType) => {
     createPost({ ...data })
       .then(() => {
-        alert('Create Post Success');
         router.push(`/community/list`);
       })
       .catch(() => {
