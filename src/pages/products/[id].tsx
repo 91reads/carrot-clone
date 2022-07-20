@@ -76,7 +76,7 @@ const ItemDetail = () => {
     createChat(seller_id as number, product_detail.data?.product.id as number)
       .then((v) => {
         alert('Success Create ChatRoom');
-        router.push(`/chats/${v.id}?chat_id${v.id}&product_id=${v.productId}`);
+        router.push(`/chats/${v.id}?chat_id=${v.id}&product_id=${v.productId}`);
       })
       .catch((v) => {
         console.log(v);
