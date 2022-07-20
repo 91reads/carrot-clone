@@ -11,12 +11,7 @@ import { getChatList } from 'src/api/chat';
 import useUser from '@libs/client/useUser';
 import { ChatStructureType } from '@libs/type/chat_type';
 // styles
-import {
-  ChatContainer,
-  ChatItemBox,
-  ChatItemContent,
-  ChatItemImage,
-} from 'assets/pages/chat/list_styles';
+import { ChatContainer, ChatItemBox, ChatItemContent, ChatItemImage } from 'assets/pages/chat/list_styles';
 
 const Chats = () => {
   const router = useRouter();
@@ -42,45 +37,47 @@ const Chats = () => {
     <>
       <Appbar title="채팅" backButtonDisable={true} />
       <ChatContainer>
-        {chat_data.data.map((chat_info, i) => (
-          <ChatItemBox
-            onClick={() => moveRouter(chat_info.id, chat_info.productId, chat_info.product.status, chat_info.user.id)}
-            key={i}
-          >
-            <ChatItemImage>
-              <Image
-                src={
-                  chat_info.sellerId === my_id
-                    ? `${process.env.NEXT_PUBLIC_CF_IMAGE}/${
-                        chat_info.user.avatar || '74514a95-ce9a-471d-b000-b927ff295500'
-                      }/avatar`
-                    : `${process.env.NEXT_PUBLIC_CF_IMAGE}/${
-                        chat_info.product.user.avatar || '74514a95-ce9a-471d-b000-b927ff295500'
-                      }/avatar`
-                }
-                alt=""
-                layout="fill"
-                style={{ borderRadius: '50%' }}
-              />
-            </ChatItemImage>
-            <ChatItemContent>
-              <strong>{chat_info.sellerId === my_id ? chat_info.user.name : chat_info.product.user.name}</strong>
-              <p>{chat_info.messages[chat_info.messages.length - 1]?.message}</p>
-            </ChatItemContent>
-            <ChatItemImage>
-              <Image
-                src={
-                  chat_info.product.image
-                    ? `${process.env.NEXT_PUBLIC_CF_IMAGE}/${chat_info.product.image}/avatar`
-                    : `${process.env.NEXT_PUBLIC_CF_IMAGE}/74514a95-ce9a-471d-b000-b927ff295500/avatar`
-                }
-                alt=""
-                layout="fill"
-                style={{ borderRadius: '50%' }}
-              />
-            </ChatItemImage>
-          </ChatItemBox>
-        ))}
+        {chat_data.data
+          .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+          .map((chat_info, i) => (
+            <ChatItemBox
+              onClick={() => moveRouter(chat_info.id, chat_info.productId, chat_info.product.status, chat_info.user.id)}
+              key={i}
+            >
+              <ChatItemImage>
+                <Image
+                  src={
+                    chat_info.sellerId === my_id
+                      ? `${process.env.NEXT_PUBLIC_CF_IMAGE}/${
+                          chat_info.user.avatar || '74514a95-ce9a-471d-b000-b927ff295500'
+                        }/avatar`
+                      : `${process.env.NEXT_PUBLIC_CF_IMAGE}/${
+                          chat_info.product.user.avatar || '74514a95-ce9a-471d-b000-b927ff295500'
+                        }/avatar`
+                  }
+                  alt=""
+                  layout="fill"
+                  style={{ borderRadius: '50%' }}
+                />
+              </ChatItemImage>
+              <ChatItemContent>
+                <strong>{chat_info.sellerId === my_id ? chat_info.user.name : chat_info.product.user.name}</strong>
+                <p>{chat_info.messages[chat_info.messages.length - 1]?.message}</p>
+              </ChatItemContent>
+              <ChatItemImage>
+                <Image
+                  src={
+                    chat_info.product.image
+                      ? `${process.env.NEXT_PUBLIC_CF_IMAGE}/${chat_info.product.image}/avatar`
+                      : `${process.env.NEXT_PUBLIC_CF_IMAGE}/74514a95-ce9a-471d-b000-b927ff295500/avatar`
+                  }
+                  alt=""
+                  layout="fill"
+                  style={{ borderRadius: '50%' }}
+                />
+              </ChatItemImage>
+            </ChatItemBox>
+          ))}
       </ChatContainer>
       <Tabbar />
     </>
