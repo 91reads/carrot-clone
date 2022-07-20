@@ -37,8 +37,8 @@ const Community = () => {
     <>
       <Appbar title="동네생활" backButtonDisable={true} />
       <CommunityContainer>
-        {community_data?.data
-          ?.sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
+        {community_data.data
+          .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())
           .map((post) => (
             <CommunityInnerWrap key={post.id} onClick={() => onMoveRouter(post.id)}>
               <CommunityTitle>동네질문</CommunityTitle>
