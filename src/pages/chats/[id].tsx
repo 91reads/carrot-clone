@@ -83,7 +83,7 @@ const ChatDetail = () => {
     <>
       <Appbar
         title={
-          room_message_data.data.filter((v) => Number(v.userId) === Number(router.query.user_id))[0].product.user.name
+          room_message_data.data.filter((v) => Number(v.productId) === Number(router.query.product_id))[0].product.user.name
         }
       />
       <RoomContainer>
@@ -91,7 +91,7 @@ const ChatDetail = () => {
           <RoomProductImage>
             <Image
               src={`${process.env.NEXT_PUBLIC_CF_IMAGE}/${
-                room_message_data.data.filter((v) => Number(v.userId) === Number(router.query.user_id))[0].product.image
+                room_message_data.data.filter((v) => Number(v.productId) === Number(router.query.product_id))[0].product.image
               }/avatar`}
               alt=""
               width={280}
@@ -102,11 +102,11 @@ const ChatDetail = () => {
           </RoomProductImage>
           <div>
             <strong>
-              {room_message_data.data.filter((v) => Number(v.userId) === Number(router.query.user_id))[0].product.name}
+              {room_message_data.data.filter((v) => Number(v.productId) === Number(router.query.product_id))[0].product.name}
             </strong>
             <p>
               {currencify(
-                room_message_data.data.filter((v) => Number(v.userId) === Number(router.query.user_id))[0].product
+                room_message_data.data.filter((v) => Number(v.productId) === Number(router.query.product_id))[0].product
                   .price,
               )}
               원
