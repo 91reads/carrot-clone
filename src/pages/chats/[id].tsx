@@ -49,7 +49,9 @@ const ChatDetail = () => {
   if (room_message_data.error) return <div>에러</div>;
   if (!room_message_data.data) return <Loading />;
 
-  const filtered_data = room_message_data.data.filter((v) => Number(v.userId) === Number(user_id))[0];
+  const filtered_data = room_message_data.data
+    .filter((v) => Number(v.productId) === Number(router.query.product_id))
+    .filter((v) => Number(v.userId) === Number(router.query.user_id))[0];
 
   const onChangeProductStatus = (e: any) => {
     set_product_status(e.target.value);
