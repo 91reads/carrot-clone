@@ -13,12 +13,14 @@ import FloatingButton from 'src/components/FloattingButton';
 import { getProductList } from 'src/api/product';
 // lib
 import useCoords from '@libs/client/useCoord';
+import { ChatStructureType } from '@libs/type/chat_type';
+import { ProductStructure } from '@libs/type/product_type';
 
 export interface ProductWithCount extends Product {
   _count: {
     favs: number;
   };
-  chats: Array<any>;
+  chats: Array<ChatStructureType>;
 }
 
 const HomeContainer = styled.div`
@@ -39,13 +41,13 @@ const Home = () => {
     router.push(`/products/${id}`);
   };
 
-  const isSearch = (product: any) => {
+  const isSearch = (product: ProductStructure) => {
     if (!watch_search) return true;
     if (product.name.includes(watch_search)) return true;
     else return false;
   };
 
-  const isLive = (product: any) => {
+  const isLive = (product: ProductStructure) => {
     if (product.status === 'live') return true;
     else false;
   };
@@ -57,6 +59,7 @@ const Home = () => {
         {product_data.data
           .filter(isSearch)
           .filter(isLive)
+          .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
           .map((product) => (
             <ProductCard
               id={product.id}
