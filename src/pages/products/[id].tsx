@@ -5,12 +5,16 @@ import useSWRImmutable from 'swr/immutable';
 import Image from 'next/image';
 // components
 import Appbar from '@components/Layout/Appbar';
+import Loading from '@components/Loading/Loading';
 // api
 import { getProductDetail } from 'src/api/product';
 import { updateFavorite } from 'src/api/favorite';
-import { createChat } from 'src/api/chat';
+import { createChat, getChatList } from 'src/api/chat';
 // lib
 import { currencify, getPrevDate } from '@libs/format';
+import { ChatStructureType } from '@libs/type/chat_type';
+import { ProductDetailStructure } from '@libs/type/product_type';
+import useUser from '@libs/client/useUser';
 // style
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import {
@@ -24,15 +28,13 @@ import {
   TabbarWrap,
   TabbarItemBox,
 } from 'assets/pages/products/detail/styles';
-import { ProductDetailStructure } from '@libs/type/product_type';
-import Loading from '@components/Loading/Loading';
-import useUser from '@libs/client/useUser';
 
 const ItemDetail = () => {
   const router = useRouter();
   const product_detail = useSWRImmutable<ProductDetailStructure>(`/api/products/${router.query.id}`, () =>
     getProductDetail(router.query.id as string),
   );
+  const chat_data = useSWRImmutable<Array<ChatStructureType>>(`/api/chats`, getChatList);
   const { mutate } = useSWRConfig();
   const my_id = useUser();
   const [seller_id, set_seller_id] = useState<number>();
@@ -40,11 +42,11 @@ const ItemDetail = () => {
   useEffect(() => {
     if (!product_detail.data) return;
 
-    set_seller_id(product_detail.data.product.userId)
+    set_seller_id(product_detail.data.product.userId);
   }, [product_detail]);
 
-  if (product_detail.error) return <div>...error</div>;
-  if (!product_detail.data) return <Loading />
+  if (product_detail.error || chat_data.error) return <div>...error</div>;
+  if (!product_detail.data || !chat_data.data) return <Loading />;
 
   const onUpdateFav = () => {
     updateFavorite(router.query.id as string)
@@ -58,12 +60,13 @@ const ItemDetail = () => {
   };
 
   const isMyProduct = () => {
-    if(!product_detail.data) return;
-    if(!seller_id) return;
+    if (!product_detail.data || !chat_data.data) return;
+    if (!seller_id) return;
 
-    if(product_detail.data.product.userId === Number(my_id)) return true;
+    if (chat_data.data.filter((v) => Number(v.productId) === Number(router.query.id)).length >= 1) return true;
+    if (product_detail.data.product.userId === Number(my_id)) return true;
     else return false;
-  }
+  };
 
   const onCreateChat = () => {
     if (isMyProduct()) {
@@ -121,19 +124,19 @@ const ItemDetail = () => {
       </DetailContainer>
       {/* 가격 및 채팅 */}
       <TabbarContainer>
-          <TabbarWrap>
-            <TabbarItemBox>
-              <button onClick={onUpdateFav}>
-                <FavoriteBorderIcon style={{ fill: product_detail.data.isLiked ? 'red' : 'black' }} />
-              </button>
-              <p>{currencify(product_detail.data.product.price)}원</p>
-            </TabbarItemBox>
-            <TabbarItemBox>
-              <button style={{ width: '140px', height: '40px' }} onClick={onCreateChat}>
-                {isMyProduct() ? '채팅 목록으로' : '채팅하기'}
-              </button>
-            </TabbarItemBox>
-          </TabbarWrap>
+        <TabbarWrap>
+          <TabbarItemBox>
+            <button onClick={onUpdateFav}>
+              <FavoriteBorderIcon style={{ fill: product_detail.data.isLiked ? 'red' : 'black' }} />
+            </button>
+            <p>{currencify(product_detail.data.product.price)}원</p>
+          </TabbarItemBox>
+          <TabbarItemBox>
+            <button style={{ width: '140px', height: '40px', cursor: 'pointer' }} onClick={onCreateChat}>
+              {isMyProduct() ? '채팅 목록으로' : '채팅하기'}
+            </button>
+          </TabbarItemBox>
+        </TabbarWrap>
       </TabbarContainer>
     </>
   );
