@@ -29,6 +29,7 @@ interface ProductRegisterType {
   price: number;
   description: string;
   photoId?: string;
+  status: 'live' | 'close',
 }
 
 export const createProduct = async (product_info: ProductRegisterType) => {
