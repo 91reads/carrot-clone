@@ -24,7 +24,7 @@ const Write = () => {
     createPost({ ...data })
       .then(() => {
         alert('Create Post Success');
-        router.push(`/community`);
+        router.push(`/community/list`);
       })
       .catch(() => {
         alert('Error');
