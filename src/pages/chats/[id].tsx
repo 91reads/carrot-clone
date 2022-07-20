@@ -62,8 +62,7 @@ const ChatDetail = () => {
       buyer_id: router.query.user_id,
       status: e.target.value,
     })
-      .then(() => {
-      })
+      .then(() => {})
       .catch((e) => {
         console.error('statusUpdate:', e);
       });
