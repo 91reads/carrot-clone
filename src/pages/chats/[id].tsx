@@ -40,12 +40,16 @@ const ChatDetail = () => {
     set_valid_button(true);
   }, [watch_message]);
 
+  // useEffect(() => {
+  //   if(!room_message_data.data) return;
+
+  //   console.log('asdf:', room_message_data.data.filter((v) => Number(v.userId) === Number(user_id))[0]);
+  // }, [room_message_data])
+
   if (room_message_data.error) return <div>에러</div>;
   if (!room_message_data.data) return <Loading />;
 
-  const filtered_data = room_message_data.data
-    .filter((v) => Number(v.productId) === Number(router.query.product_id))
-    .filter((v) => Number(v.userId) === Number(user_id))[0];
+  const filtered_data = room_message_data.data.filter((v) => Number(v.userId) === Number(user_id))[0];
 
   const onChangeProductStatus = (e: any) => {
     set_product_status(e.target.value);
@@ -72,8 +76,6 @@ const ChatDetail = () => {
 
   const onCreateMessage = (data: any) => {
     if (!router.query.id || !router.query.product_id) return;
-
-    console.log(router.query.chat_id);
 
     createMessage(router.query.chat_id as string, router.query.product_id as string, data.message)
       .then(() => {
@@ -104,7 +106,7 @@ const ChatDetail = () => {
             <strong>{filtered_data?.product.name}</strong>
             <p>{currencify(filtered_data?.product.price)}원</p>
           </div>
-          <select onChange={onChangeProductStatus} value={product_status} disabled={true}>
+          <select onChange={onChangeProductStatus} value={product_status}>
             <option value="live">판매중</option>
             <option value="close">판매완료</option>
           </select>
