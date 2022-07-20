@@ -1,19 +1,24 @@
 import { UserStructure } from "./profile_type";
 
 export interface ProductStructure {
-  name: string;
-  price: number;
-  image: string;
   id: number;
-  description: string;
-  userId: number;
   createdAt: Date;
   updatedAt: Date;
+  userId: number;
+  image: string;
+  name: string;
+  price: number;
+  status: string;
+  buyer: number | null;
+  description: string;
+}
+
+interface ProductWithUser extends ProductStructure {
   user: UserStructure;
 }
 
 export interface ProductDetailStructure {
+  product: ProductWithUser;
   isLiked: boolean;
-  product: ProductStructure;
   relatedProducts: Array<ProductStructure>;
 }
