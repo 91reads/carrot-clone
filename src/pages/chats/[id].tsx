@@ -82,7 +82,6 @@ const ChatDetail = () => {
         alert('Failure Sending Message');
       });
   };
-
   return (
     <>
       <Appbar title={filtered_data?.product.user.name} />
@@ -102,14 +101,16 @@ const ChatDetail = () => {
             <strong>{filtered_data?.product.name}</strong>
             <p>{currencify(filtered_data?.product.price)}원</p>
           </div>
-          <select
-            onChange={onChangeProductStatus}
-            value={product_status}
-            disabled={filtered_data.sellerId === user_id ? true : false}
-          >
-            <option value="live">판매중</option>
-            <option value="close">판매완료</option>
-          </select>
+          {filtered_data.sellerId === user_id && (
+            <select
+              onChange={onChangeProductStatus}
+              value={product_status}
+              disabled={filtered_data.product.status === 'close'}
+            >
+              <option value="live">판매중</option>
+              <option value="close">판매완료</option>
+            </select>
+          )}
         </RoomProductInfo>
         {filtered_data?.messages?.map((v: MessageStructureType, i: number) => {
           return <Message key={i} message={v.message} mymessage={v.user.id === user_id} />;
