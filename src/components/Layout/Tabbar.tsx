@@ -55,7 +55,7 @@ const TabbarItemBox = styled.div`
 
 const Tabbar = () => {
   const router = useRouter();
-  // HACK: 웹에서 모바일 처럼 보이기 위한 처리.
+  // XXX: 웹에서 모바일 처럼 보이기 위한 처리.
   const ref = useRef<HTMLHeadingElement>(null);
   const [parent_width, set_parent_width] = useState<any>(0);
 
@@ -75,10 +75,8 @@ const Tabbar = () => {
   const checkParentOffset = () => {
     set_parent_width((prev: any) => {
       if (prev !== ref.current?.offsetWidth) {
-        console.log('new');
         return ref.current?.offsetWidth;
       }
-      console.log('not new');
       return prev;
     });
   };

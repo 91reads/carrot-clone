@@ -41,7 +41,7 @@ const FloattingInner = styled.div<InnerWrapStyle>`
 `;
 
 export default function FloatingButton({ href }: FloatingButtonType) {
-  // HACK: 웹에서 모바일 처럼 보이기 위한 처리.
+  // XXX: 웹에서 모바일 처럼 보이기 위한 처리.
   const ref = useRef<HTMLHeadingElement>(null);
   const [parent_width, set_parent_width] = useState(0);
 

@@ -96,7 +96,6 @@ const EditProfile: NextPage = () => {
     setValue('name', user_data.data.name);
     setValue('email', user_data.data.email);
     setValue('phone', user_data.data.phone);
-    // set_avatar_preview(user_data.data.avatar);
   }, [setValue, user_data]);
 
   useEffect(() => {
