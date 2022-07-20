@@ -9,7 +9,6 @@ export const DetailProfileImage = styled.div`
   width: 5rem;
   height: 5rem;
   border-radius: 50%;
-  background-color: green;
   position: relative;
 `;
 

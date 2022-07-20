@@ -5,6 +5,7 @@ export const ProductContainer = styled.div`
   padding: 2rem;
   display: flex;
   justify-content: space-between;
+  cursor: pointer;
 `;
 
 export const ProductBox = styled.div`

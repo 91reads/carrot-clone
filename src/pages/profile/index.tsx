@@ -50,6 +50,7 @@ const ProfileHistoryBox = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    cursor: pointer;
     span {
       display: flex;
       position: relative;
@@ -79,7 +80,6 @@ const ProfileImage = styled.div`
   width: 5rem;
   height: 5rem;
   border-radius: 50%;
-  background-color: red;
 `;
 
 const Profile: NextPage = () => {
@@ -88,7 +88,7 @@ const Profile: NextPage = () => {
   const user_review = useSWR('/api/reviews', getUserReview);
 
   if (user_data.error || user_review.error) return <div>...에러</div>;
-  if (!user_data.data && !user_review.data) return  <Loading />
+  if (!user_data.data && !user_review.data) return <Loading />;
 
   const HISTORY_TABLE = [
     {
@@ -114,20 +114,20 @@ const Profile: NextPage = () => {
       <ProfileContainer>
         <ProfileBox>
           <ProfileBoxContent>
-            {user_data.data?.avatar ? (
-              <ProfileImage>
-                <Image
-                  src={`${process.env.NEXT_PUBLIC_CF_IMAGE}/${user_data.data?.avatar}/avatar`}
-                  width={20}
-                  height={20}
-                  alt=""
-                  layout="responsive"
-                  style={{borderRadius: '50%'}}
-                />
-              </ProfileImage>
-            ) : (
-              <div style={{ width: '5rem', height: '5rem', backgroundColor: 'red', borderRadius: '50%' }} />
-            )}
+            <ProfileImage>
+              <Image
+                src={
+                  user_data.data?.avatar
+                    ? `${process.env.NEXT_PUBLIC_CF_IMAGE}/${user_data.data?.avatar}/avatar`
+                    : `${process.env.NEXT_PUBLIC_CF_IMAGE}/74514a95-ce9a-471d-b000-b927ff295500/avatar`
+                }
+                width={20}
+                height={20}
+                alt=""
+                layout="responsive"
+                style={{ borderRadius: '50%' }}
+              />
+            </ProfileImage>
             <ProfileBoxTitle>
               <strong>{user_data.data?.name}</strong>
               <p># {user_data.data?.id}</p>
