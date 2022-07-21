@@ -12,7 +12,7 @@ Link : https://carrot-clone-seven.vercel.app <br>
 
 #### 기술 스택
 * React
-* Next
+* Next - Typescript
 * SWR
 * React-hook-form
 * Styled Components
