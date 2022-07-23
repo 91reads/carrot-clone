@@ -1,12 +1,15 @@
 import type { NextPage } from 'next';
 import useSWR from 'swr';
-import Appbar from '@components/Layout/Appbar';
 import styled from 'styled-components';
+import { ProductWithCount } from 'src/pages';
+// components
+import Appbar from '@components/Layout/Appbar';
 import ProductCard from '@components/Card/Product/ProductCard';
 import Loading from '@components/Loading/Loading';
-import useUser from '@libs/client/useUser';
+// api
 import { getProductList } from 'src/api/product';
-import { ProductWithCount } from 'src/pages';
+// lib
+import useUser from '@libs/client/useUser';
 import { ProductStructure } from '@libs/type/product_type';
 
 const BoughtContainer = styled.div`

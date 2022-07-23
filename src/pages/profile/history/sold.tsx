@@ -1,11 +1,14 @@
 import type { NextPage } from 'next';
 import useSWR from 'swr';
+import styled from 'styled-components';
+import { ProductWithCount } from 'src/pages';
+// components
 import ProductCard from '@components/Card/Product/ProductCard';
 import Appbar from '@components/Layout/Appbar';
-import styled from 'styled-components';
 import Loading from '@components/Loading/Loading';
-import { ProductWithCount } from 'src/pages';
+// api
 import { getProductList } from 'src/api/product';
+// lib
 import useUser from '@libs/client/useUser';
 import { ProductStructure } from '@libs/type/product_type';
 
@@ -14,7 +17,6 @@ const SoldContainer = styled.div`
 `;
 
 const Sold: NextPage = () => {
-  // const history_data = useSWR(`/api/users/me/sales`, () => getUserHistory('sales'));
   const product_data = useSWR<Array<ProductWithCount>>('/api/products', getProductList);
   const user_id = useUser();
 

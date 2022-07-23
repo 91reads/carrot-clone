@@ -2,14 +2,23 @@ import type { NextPage } from 'next';
 import { useForm } from 'react-hook-form';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import { getUserDetail, updateUser } from 'src/api/user';
 import useSWR from 'swr';
-import styled from 'styled-components';
-import Appbar from '@components/Layout/Appbar';
-import { getCFToken } from 'src/api/cloudflare';
-import Loading from '@components/Loading/Loading';
-import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import { useRouter } from 'next/router';
+// components
+import Appbar from '@components/Layout/Appbar';
+import Loading from '@components/Loading/Loading';
+// api
+import { getUserDetail, updateUser } from 'src/api/user';
+import { getCFToken } from 'src/api/cloudflare';
+// assets
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
+// styles
+import {
+  ProfileEditContainer,
+  FormContainer,
+  DetailProfileImage,
+  DetailProfileImageIcon,
+} from 'assets/pages/profile/edit_styles';
 
 interface EditProfileForm {
   name: string;
@@ -19,78 +28,22 @@ interface EditProfileForm {
   formErrors?: string;
 }
 
-const ProfileEditContainer = styled.form`
-  margin-top: 5rem;
-`;
-
-const FormContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
-
-  div {
-    width: 100%;
-    margin-top: 1rem;
-    font-size: 1.4rem;
-    font-weight: var(--weight-600);
-    input {
-      width: 100%;
-      margin-top: 1rem;
-      padding: 0.6rem 1rem;
-      border-radius: var(--br-6);
-
-      border: 1px solid var(--gray-2);
-      font-size: 1.8rem;
-      line-height: 3rem;
-    }
-  }
-`;
-
-const DetailProfileImage = styled.label`
-  display: flex;
-  position: relative;
-  align-items: center !important;
-  justify-content: center;
-  width: 10rem;
-  height: 10rem;
-  border-radius: 50%;
-  position: relative;
-  border: 1px solid #e8e8e8;
-`;
-
-const DetailProfileImageIcon = styled.div`
-  position: relative;
-  right: -3.8rem;
-  bottom: -3rem;
-  background-color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  max-width: 2.8rem;
-  min-width: 2.8rem;
-  max-height: 2.8rem;
-  min-height: 2.8rem;
-  border: 1px solid #e8e8e8;
-  border-radius: 50%;
-`;
-
 const EditProfile: NextPage = () => {
   const router = useRouter();
   const user_data = useSWR('/api/users/me', getUserDetail);
   const { register, setValue, handleSubmit, watch } = useForm<EditProfileForm>();
-  const avatar = watch('avatar');
   const [avatar_preview, set_avatar_preview] = useState('');
   const [error, set_error] = useState(false);
   const [loading, set_loading] = useState(false);
-
+  const avatar = watch('avatar');
+  
   const refSubmitButton = useRef<HTMLButtonElement>(null);
 
   const triggerSubmit = () => {
     refSubmitButton?.current?.click();
   };
 
+  // form 에 기존 값 넣어줌
   useEffect(() => {
     if (!user_data.data) return;
     setValue('name', user_data.data.name);
@@ -98,6 +51,7 @@ const EditProfile: NextPage = () => {
     setValue('phone', user_data.data.phone);
   }, [setValue, user_data]);
 
+  // 이미지 업로드 시 미리보기
   useEffect(() => {
     if (avatar && avatar.length > 0) {
       const file = avatar[0];
@@ -108,6 +62,7 @@ const EditProfile: NextPage = () => {
   if (user_data.error) return <div>...에러</div>;
   if (!user_data.data) return <Loading />;
 
+  // 프로필 업데이트
   const onUpdateUser = async ({ email, phone, name, avatar }: EditProfileForm) => {
     set_loading(true);
     if (email === '' || name === '') {

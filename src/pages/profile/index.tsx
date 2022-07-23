@@ -1,86 +1,29 @@
 import type { NextPage } from 'next';
 import Image from 'next/image';
 import useSWR from 'swr';
-import { getUserDetail, getUserReview } from 'src/api/user';
+import styled from 'styled-components';
+import { useRouter } from 'next/router';
+// components
 import Appbar from '@components/Layout/Appbar';
 import Tabbar from '@components/Layout/Tabbar';
-import styled from 'styled-components';
+import Loading from '@components/Loading/Loading';
+// api
+import { getUserDetail, getUserReview } from 'src/api/user';
+// assets
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { useRouter } from 'next/router';
-
 import ArticleIcon from '@mui/icons-material/Article';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import Loading from '@components/Loading/Loading';
-
-const ProfileContainer = styled.div`
-  padding-top: 5rem;
-`;
-const ProfileBox = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 2rem;
-`;
-const ProfileBoxContent = styled.div`
-  display: flex;
-  align-items: center;
-`;
-const ProfileBoxTitle = styled.div`
-  padding-left: 2rem;
-  font-size: 1.4rem;
-  strong {
-    font-weight: var(--weight-600);
-    line-height: 2.8rem;
-  }
-  p {
-    font-weight: var(--weight-400);
-    color: var(--gray-3);
-  }
-`;
-const ProfileBoxEdit = styled.div`
-  cursor: pointer;
-`;
-
-const ProfileHistoryBox = styled.div`
-  display: flex;
-  justify-content: space-around;
-  padding-top: 2rem;
-  div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    span {
-      display: flex;
-      position: relative;
-      width: 5rem;
-      height: 5rem;
-      background-color: rgba(255, 126, 53, 0.2);
-      border-radius: 50%;
-      strong {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        svg {
-          color: var(--primary);
-          font-size: 2.2rem;
-        }
-      }
-    }
-  }
-  p {
-    font-size: 1.4rem;
-    line-height: 2.8rem;
-  }
-`;
-
-const ProfileImage = styled.div`
-  width: 5rem;
-  height: 5rem;
-  border-radius: 50%;
-`;
+// styles
+import {
+  ProfileContainer,
+  ProfileBox,
+  ProfileBoxContent,
+  ProfileBoxTitle,
+  ProfileBoxEdit,
+  ProfileHistoryBox,
+  ProfileImage,
+} from 'assets/pages/profile/index_styles';
 
 const Profile: NextPage = () => {
   const router = useRouter();
@@ -103,7 +46,7 @@ const Profile: NextPage = () => {
     },
     {
       icon: <FavoriteIcon />,
-      link: '/profile/history/loved',
+      link: '/profile/history/favs',
       content: '관심 내역',
     },
   ];
