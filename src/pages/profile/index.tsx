@@ -3,8 +3,8 @@ import Image from 'next/image';
 import useSWR from 'swr';
 import { useRouter } from 'next/router';
 // components
-import Appbar from '@components/Layout/Appbar';
-import Tabbar from '@components/Layout/Tabbar';
+import Appbar from '@components/Layout/Appbar/Appbar';
+import Tabbar from '@components/Layout/Tabbar/Tabbar';
 import Loading from '@components/Loading/Loading';
 // api
 import { getUserDetail, getUserReview } from 'src/api/user';

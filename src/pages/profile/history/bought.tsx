@@ -3,7 +3,7 @@ import useSWR from 'swr';
 import styled from 'styled-components';
 import { ProductWithCount } from 'src/pages';
 // components
-import Appbar from '@components/Layout/Appbar';
+import Appbar from '@components/Layout/Appbar/Appbar';
 import ProductCard from '@components/Card/Product/ProductCard';
 import Loading from '@components/Loading/Loading';
 // api

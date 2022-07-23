@@ -3,8 +3,8 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import useSWR from 'swr';
 // components
-import Appbar from 'src/components/Layout/Appbar';
-import Tabbar from 'src/components/Layout/Tabbar';
+import Appbar from '@components/Layout/Appbar/Appbar';
+import Tabbar from '@components/Layout/Tabbar/Tabbar';
 import Loading from '@components/Loading/Loading';
 import ProductCard from '@components/Card/Product/ProductCard';
 import FloatingButton from 'src/components/FloattingButton';

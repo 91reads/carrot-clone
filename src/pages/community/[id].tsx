@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import Image from 'next/image';
 // components
-import Appbar from '@components/Layout/Appbar';
+import Appbar from '@components/Layout/Appbar/Appbar';
 import Loading from '@components/Loading/Loading';
 // api
 import { createAnswer, getPostDetail, updateWonder } from 'src/api/community';

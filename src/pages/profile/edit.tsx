@@ -5,7 +5,7 @@ import Image from 'next/image';
 import useSWR from 'swr';
 import { useRouter } from 'next/router';
 // components
-import Appbar from '@components/Layout/Appbar';
+import Appbar from '@components/Layout/Appbar/Appbar';
 import Loading from '@components/Loading/Loading';
 // api
 import { getUserDetail, updateUser } from 'src/api/user';

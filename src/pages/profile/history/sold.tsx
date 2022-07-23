@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { ProductWithCount } from 'src/pages';
 // components
 import ProductCard from '@components/Card/Product/ProductCard';
-import Appbar from '@components/Layout/Appbar';
+import Appbar from '@components/Layout/Appbar/Appbar';
 import Loading from '@components/Loading/Loading';
 // api
 import { getProductList } from 'src/api/product';

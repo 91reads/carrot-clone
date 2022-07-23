@@ -5,7 +5,7 @@ import Image from 'next/image';
 import useSWR, { useSWRConfig } from 'swr';
 // components
 import Message from 'src/components/Message';
-import Appbar from '@components/Layout/Appbar';
+import Appbar from '@components/Layout/Appbar/Appbar';
 import Loading from '@components/Loading/Loading';
 // api
 import { createMessage, getRoomMessage } from 'src/api/message';

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import useSWR, { useSWRConfig } from 'swr';
 import Image from 'next/image';
 // components
-import Appbar from '@components/Layout/Appbar';
+import Appbar from '@components/Layout/Appbar/Appbar';
 import Loading from '@components/Loading/Loading';
 // api
 import { getProductDetail } from 'src/api/product';

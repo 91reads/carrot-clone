@@ -2,8 +2,8 @@ import useSWR from 'swr';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 // components
-import Tabbar from '@components/Layout/Tabbar';
-import Appbar from '@components/Layout/Appbar';
+import Tabbar from '@components/Layout/Tabbar/Tabbar';
+import Appbar from '@components/Layout/Appbar/Appbar';
 import Loading from '@components/Loading/Loading';
 // api
 import { getChatList } from 'src/api/chat';
