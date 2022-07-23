@@ -22,3 +22,16 @@ export const getPrevDate = (date: Date) => {
 export function currencify(number: number) {
   return Math.floor(number).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
+export const throttle = (callback: { (): void; call?: any }, limit: number | undefined) => {
+  let wait = false;
+  return function () {
+    if (!wait) {
+      callback.call();
+      wait = true;
+      setTimeout(function () {
+        wait = false;
+      }, limit);
+    }
+  };
+};

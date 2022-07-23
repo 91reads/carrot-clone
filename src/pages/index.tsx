@@ -42,7 +42,7 @@ const Home = () => {
 
   const isSearch = (product: ProductStructure) => {
     if (!watch_search) return true;
-    if (product.name.includes(watch_search)) return true;
+    if (product.name.includes(watch_search.trim())) return true;
     else return false;
   };
 

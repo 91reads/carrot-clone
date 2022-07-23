@@ -7,8 +7,6 @@ export interface ResponseType {
 
 type method = 'GET' | 'POST' | 'DELETE';
 
-// next.js 에서 api router 는 function 을 리턴해야 한다.
-
 interface ConfigType {
   methods: method[]
   handler: (req: NextApiRequest, res: NextApiResponse) => void,
