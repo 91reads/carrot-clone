@@ -1,15 +1,20 @@
-## Commit Convention
-**커밋은 작업 단위**
-| 이름 | 내용 |
-| ------ | ------ | 
-|✨ Feat:   |새로운 기능에 대한 커밋 |
-|🐛 Fix: | 버그 수정 |
-|💄 Design: | CSS 등, UI 변경의 경우 |
-|♻️ Refactor: | 코드 구조, 형식 개선 |
-|💡 Comment: | 필요한 주석 추가, 변경 |
-|🚚 Rename: | 파일 혹은 폴더명 수정 |
-|🔥 Remove: | 파일 삭제 |
-|🏷 Type: | 타입 추가 및 수정 |
-|📝 Doc: | 문서 수정 |
+### 당근 마켓 클론
 
-수정일: 2022-04-30
+#### NextJS Serverless 로 제작되었습니다.
+Link : https://carrot-clone-seven.vercel.app <br>
+포트폴리오용으로 제작된 사이트이며,
+일회용 토큰을 자동으로 입력해 로그인(회원가입) 합니다.
+
+#### 테스트 계정 정보
+* test2@gmail.com
+* test3@gmail.com
+
+
+#### 기술 스택
+* React
+* Next - Typescript
+* SWR
+* React-hook-form
+* Styled Components
+* Next API
+* Planet Scale - Prisma - MySQL
