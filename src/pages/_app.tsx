@@ -1,5 +1,4 @@
 import type { AppProps } from 'next/app'
-// import { SWRConfig } from 'swr';
 import styled, { createGlobalStyle } from 'styled-components';
 import reset from 'styled-reset';
 
@@ -51,11 +50,6 @@ const AppInnerLayout = styled.div`
 
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 `;
-// <SWRConfig
-//   value={{
-//     fetcher: (url: string) => fetch(url).then(res => res.json())
-//   }}>
-  {/* </SWRConfig> */}
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
