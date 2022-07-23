@@ -3,13 +3,22 @@ import { useForm } from 'react-hook-form';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useSWRConfig } from 'swr';
-import styled from 'styled-components';
-// lib
-import { getCFToken } from 'src/api/cloudflare';
-import { createProduct } from 'src/api/product';
-import { CustomInput } from 'assets/pages/enter/styles';
+// components
 import Appbar from '@components/Layout/Appbar';
 import Loading from '@components/Loading/Loading';
+// api
+import { getCFToken } from 'src/api/cloudflare';
+import { createProduct } from 'src/api/product';
+// assets
+import { CustomInput } from 'assets/pages/enter/styles';
+// styles
+import {
+  RegisterContainer,
+  RegisterForm,
+  RegisterImage,
+  RegisterItemBox,
+  RegisterTextArea,
+} from 'assets/pages/products/register_styles';
 
 interface UploadProductForm {
   name: string;
@@ -17,38 +26,6 @@ interface UploadProductForm {
   description: string;
   photo: string;
 }
-
-const RegisterContainer = styled.div`
-  padding-top: 5rem;
-`;
-
-const RegisterForm = styled.form`
-  padding: 2rem;
-
-  label {
-    font-size: 1.6rem;
-  }
-`;
-
-const RegisterItemBox = styled.div`
-  margin-bottom: 1rem;
-`;
-
-const RegisterImage = styled.div`
-  width: 100%;
-  padding-bottom: 2rem;
-`;
-
-const RegisterTextArea = styled.textarea`
-  border-radius: var(--br-6);
-  border: 1px solid var(--gray-2);
-  width: 100%;
-  height: 14rem;
-  margin-top: 1.6rem;
-  resize: none;
-  font-size: 1.8rem;
-  line-height: 3rem;
-`;
 
 const Register = () => {
   const router = useRouter();
@@ -61,6 +38,7 @@ const Register = () => {
     refSubmitButton?.current?.click();
   };
 
+  // 상품 등록
   const onCreateProduct = async ({ name, price, description }: UploadProductForm) => {
     if (photo && photo.length > 0) {
       set_loading(true);

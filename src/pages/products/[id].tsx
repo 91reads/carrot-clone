@@ -26,7 +26,7 @@ import {
   TabbarContainer,
   TabbarWrap,
   TabbarItemBox,
-} from 'assets/pages/products/detail/styles';
+} from 'assets/pages/products/detail_styles';
 
 const ItemDetail = () => {
   const router = useRouter();
