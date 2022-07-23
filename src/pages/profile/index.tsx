@@ -1,7 +1,6 @@
 import type { NextPage } from 'next';
 import Image from 'next/image';
 import useSWR from 'swr';
-import styled from 'styled-components';
 import { useRouter } from 'next/router';
 // components
 import Appbar from '@components/Layout/Appbar';

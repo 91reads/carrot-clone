@@ -7,7 +7,7 @@ import Image from 'next/image';
 import Appbar from '@components/Layout/Appbar';
 import Loading from '@components/Loading/Loading';
 // api
-import { AnswerStructureType, createAnswer, getPostDetail, updateWonder } from 'src/api/community';
+import { createAnswer, getPostDetail, updateWonder } from 'src/api/community';
 // lib
 import { getPrevDate } from '@libs/format';
 // assets
@@ -26,6 +26,7 @@ import {
   DetailProfileImage,
   AnswerProfileImage,
 } from 'assets/pages/community/detail_styles';
+import { AnswerStructureType } from '@libs/type/community_type';
 
 interface AnswerForm {
   answer: string;
@@ -42,6 +43,7 @@ const CommunityPostDetail = () => {
   if (post_data.error) return <div>...error</div>;
   if (!post_data.data) return  <Loading />
 
+  // 궁금해요 업데이트
   const onUpdateWonder = (id: string) => {
     if (!id) return;
 
@@ -54,6 +56,7 @@ const CommunityPostDetail = () => {
       });
   };
 
+  // 답변 등록
   const onCreateAnswer = (id: string, data: { answer: string }) => {
     if (!id || !data) return;
 

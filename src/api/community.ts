@@ -1,39 +1,5 @@
+import { PostRegisterType } from "@libs/type/community_type";
 import { callAPI } from "./api";
-
-export interface PostStructureType {
-  createdAt: string;
-  id: number;
-  latitude?: number;
-  longitude?: number;
-  question: string;
-  updatedAt: Date;
-  user: {
-    id: number;
-    name: string;
-    avatar?: string;
-    userId: number;
-  }
-  _count: {
-    wondering: number;
-    answers: number;
-  }
-}
-
-export interface AnswerStructureType {
-  answer: string;
-  id: number;
-  user: {
-    id: number;
-    name: string;
-    avatar?: string;
-  }
-}
-
-export interface PostRegisterType {
-  question: string;
-  latitude?: number;
-  longitude?: number;
-}
 
 export const getPostList = async () => {
   const uri = `/api/posts`;

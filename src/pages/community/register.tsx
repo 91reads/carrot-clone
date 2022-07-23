@@ -4,7 +4,9 @@ import { useRouter } from 'next/router';
 // components
 import Appbar from '@components/Layout/Appbar';
 // api
-import { createPost, PostRegisterType } from 'src/api/community';
+import { createPost } from 'src/api/community';
+// lib
+import { PostRegisterType } from '@libs/type/community_type';
 // styles
 import {
   RegisterContainer,
@@ -20,6 +22,7 @@ const Write = () => {
     refSubmitButton?.current?.click();
   };
 
+  // 동네생활 글 등록
   const onRegisterPost = (data: PostRegisterType) => {
     createPost({ ...data })
       .then(() => {
