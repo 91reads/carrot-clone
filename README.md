@@ -1,7 +1,9 @@
 ### 당근 마켓 클론
 
 #### NextJS Serverless 로 제작되었습니다.
-Link : https://carrot-clone-seven.vercel.app <br>
+
+서버는 닫힌 상태입니다.
+Link : ~~ https://carrot-clone-seven.vercel.app ~~ <br>
 포트폴리오 사이트로 별도의 인증 없이 토큰을 자동으로 받아와 로그인(회원가입) 합니다.
 GIF 화면 이후 테스트 계정 정보가 있습니다.
 
